@@ -4,6 +4,6 @@ class Logger {
     static std::string __filename;
 
    public:
-    static void log(std::string message);
-    static void log(std::string message, std::string filename);
+    static void log(const std::string &message);
+    static void log(const std::string &message, const std::string &filename);
 };
