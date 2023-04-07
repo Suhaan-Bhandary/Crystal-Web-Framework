@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "java.saveActions.organizeImports": true,
+  "editor.tabSize": 4,
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
+  "files.associations": {
+    "*.ejs": "html",
+    "string": "cpp"
+  }
+}
