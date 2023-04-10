@@ -5,6 +5,10 @@
   "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
   "files.associations": {
     "*.ejs": "html",
-    "string": "cpp"
-  }
+    "string": "cpp",
+    "iostream": "cpp",
+    "bitset": "cpp",
+    "string_view": "cpp"
+  },
+  "cSpell.words": ["TCPSERVER"]
 }
