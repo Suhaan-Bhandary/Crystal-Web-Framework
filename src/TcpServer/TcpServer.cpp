@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "../Logger/Logger.h"
-#include "../Utils/Utils.h"
+#include "../Request/Request.h"
 
 // Define a size for the request buffer
 #define REQUEST_Buffer_SIZE 1024
@@ -89,14 +89,8 @@ void TcpServer::startListen() {
             continue;
         }
 
-        // ! Checking if split works or not
-        std::vector<std::string> res =
-            Utils::split(std::string(requestBuffer), "\r\n\r\n");
-
-        for (auto block : res) {
-            std::cout << "-----------------------------" << std::endl;
-            std::cout << block << std::endl;
-        }
+        // Reading the request
+        http::Request request = http::Request(requestBuffer);
 
         // Returning the response
         std::string htmlResponse =
