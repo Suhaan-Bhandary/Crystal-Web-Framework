@@ -3,13 +3,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <vector>
-
 #include "../Logger/Logger.h"
-#include "../Request/Request.h"
-
-// Define a size for the request buffer
-#define REQUEST_Buffer_SIZE 1024
+#include "../Router/Router.h"
 
 namespace http {
 TcpServer::TcpServer(const std::string &ip_address, int port)
@@ -61,7 +56,7 @@ void TcpServer::startListen() {
     while (true) {
         // Waiting for a connection
         // and then creating a new socket for the request
-        struct sockaddr_in client_address;
+        sockaddr_in client_address;
         socklen_t size = sizeof(client_address);
         int client_socket =
             accept(server_socket, (sockaddr *)&client_address, &size);
@@ -80,28 +75,8 @@ void TcpServer::startListen() {
                     (std::string)inet_ntoa(client_address.sin_addr) +
                     " Port: " + std::to_string(client_address.sin_port));
 
-        // Reading the request
-        // Read the request from the client
-        char requestBuffer[REQUEST_Buffer_SIZE] = {0};
-        if (read(client_socket, requestBuffer, REQUEST_Buffer_SIZE) == -1) {
-            std::cerr << "Request Read Failed!!" << std::endl;
-            close(client_socket);
-            continue;
-        }
-
-        // Reading the request
-        http::Request request = http::Request(requestBuffer);
-
-        // Returning the response
-        std::string htmlResponse =
-            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-        htmlResponse +=
-            "<html><head><title>Hello World</title></head><body><h1>Hello "
-            "World!</h1></body></html>\r\n";
-
-        // Sending response
-        long bytesSent =
-            write(client_socket, htmlResponse.c_str(), htmlResponse.size());
+        // Router to handle request
+        http::router(client_socket);
 
         // Clearing the new request socket
         close(client_socket);

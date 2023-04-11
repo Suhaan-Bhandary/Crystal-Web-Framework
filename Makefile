@@ -6,14 +6,17 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Request.o build/Utils.o build/Logger.o
-	${CC} build/main.o build/TcpServer.o build/Request.o build/Utils.o build/Logger.o -o server
+server: build/main.o build/TcpServer.o build/Router.o build/Request.o build/Utils.o build/Logger.o
+	${CC} build/main.o build/TcpServer.o build/Router.o build/Request.o build/Utils.o build/Logger.o -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
 
 build/TcpServer.o: src/TcpServer/TcpServer.cpp
 	${CC} ${CFLAGS} src/TcpServer/TcpServer.cpp -o build/TcpServer.o
+
+build/Router.o: src/Router/Router.cpp
+	${CC} ${CFLAGS} src/Router/Router.cpp -o build/Router.o
 
 build/Request.o: src/Request/Request.cpp
 	${CC} ${CFLAGS} src/Request/Request.cpp -o build/Request.o
