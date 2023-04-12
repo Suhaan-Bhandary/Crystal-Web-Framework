@@ -16,6 +16,11 @@ http::Router::Router() {}
 
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
+    Logger::log("Method: " + request.getValue("method"));
+    Logger::log("Path: " + request.getValue("path"));
+    Logger::log("Host: " + request.getValue("Host"));
+    Logger::log("");
+
     // Send html response to the client
     std::string htmlContent =
         "<html>"

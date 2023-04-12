@@ -3,14 +3,19 @@
 #define INCLUDED_REQUEST
 
 #include <iostream>
+#include <unordered_map>
 
 namespace http {
 class Request {
+    std::unordered_map<std::string, std::string> valueMap;
+
    public:
     std::string header, body;
 
     Request(char requestBuffer[]);
     void readRequest(char requestBuffer[]);
+    void parseDataFromHeader();
+    std::string getValue(std::string key);
 };
 }  // namespace http
 
