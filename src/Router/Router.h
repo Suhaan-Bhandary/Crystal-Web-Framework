@@ -2,5 +2,10 @@
 #include <unistd.h>
 
 namespace http {
-void router(int &client_socket);
+class Router {
+   private:
+   public:
+    Router();
+    void route(int &client_socket);
+};
 }  // namespace http

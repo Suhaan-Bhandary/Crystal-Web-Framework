@@ -11,12 +11,15 @@
 // Define a size for the request buffer
 #define REQUEST_Buffer_SIZE 1024
 
-void http::router(int &client_socket) {
+http::Router::Router() {}
+
+// The function will contain the routing logic for the application
+void http::Router::route(int &client_socket) {
     // Reading the request
     // Read the request from the client
     char requestBuffer[REQUEST_Buffer_SIZE] = {0};
     if (read(client_socket, requestBuffer, REQUEST_Buffer_SIZE) == -1) {
-        std::cerr << "Request Read Failed!!" << std::endl;
+        Logger::log("Request Read Failed!!");
         close(client_socket);
         return;
     }

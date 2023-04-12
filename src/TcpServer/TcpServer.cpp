@@ -76,7 +76,8 @@ void TcpServer::startListen() {
                     " Port: " + std::to_string(client_address.sin_port));
 
         // Router to handle request
-        http::router(client_socket);
+        http::Router router = http::Router();
+        router.route(client_socket);
 
         // Clearing the new request socket
         close(client_socket);
