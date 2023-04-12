@@ -4,7 +4,12 @@
 #include <unistd.h>
 
 #include "../Logger/Logger.h"
+#include "../Request/Request.h"
+#include "../Response/Response.h"
 #include "../Router/Router.h"
+
+// Define a size for the request buffer
+#define REQUEST_Buffer_SIZE 1024
 
 namespace http {
 TcpServer::TcpServer(const std::string &ip_address, int port)
@@ -75,9 +80,22 @@ void TcpServer::startListen() {
                     (std::string)inet_ntoa(client_address.sin_addr) +
                     " Port: " + std::to_string(client_address.sin_port));
 
+        // Reading the request
+        // Read the request from the client
+        char requestBuffer[REQUEST_Buffer_SIZE] = {0};
+        if (read(client_socket, requestBuffer, REQUEST_Buffer_SIZE) == -1) {
+            Logger::log("Request Read Failed!!");
+            close(client_socket);
+            return;
+        }
+
+        // Reading the request, and creating response
+        http::Request request = http::Request(requestBuffer);
+        http::Response response = http::Response(client_socket);
+
         // Router to handle request
         http::Router router = http::Router();
-        router.route(client_socket);
+        router.route(request, response);
 
         // Clearing the new request socket
         close(client_socket);
