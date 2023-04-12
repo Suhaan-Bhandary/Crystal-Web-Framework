@@ -7,6 +7,7 @@
 
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"
+#include "../Response/Response.h"
 
 // Define a size for the request buffer
 #define REQUEST_Buffer_SIZE 1024
@@ -28,13 +29,9 @@ void http::Router::route(int &client_socket) {
     http::Request request = http::Request(requestBuffer);
 
     // Returning the response
-    std::string htmlResponse =
-        "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-    htmlResponse +=
+    http::Response response = http::Response(client_socket);
+    std::string htmlContent =
         "<html><head><title>Hello World</title></head><body><h1>Hello "
         "World!</h1></body></html>\r\n";
-
-    // Sending response
-    long bytesSent =
-        write(client_socket, htmlResponse.c_str(), htmlResponse.size());
+    response.sendHTML(htmlContent);
 }
