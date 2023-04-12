@@ -18,8 +18,10 @@ http::Router::Router() {}
 void http::Router::route(http::Request &request, http::Response &response) {
     // Send html response to the client
     std::string htmlContent =
-        "<html><head><title>Hello World</title></head><body><h1>Hello "
-        "World!</h1></body></html>\r\n";
+        "<html>"
+        "<head><title>Hello World</title></head>"
+        "<body><h1>Hello World!</h1></body>"
+        "</html>\r\n";
 
     response.sendHTML(htmlContent);
 }
