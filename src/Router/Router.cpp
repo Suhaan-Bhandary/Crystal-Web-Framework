@@ -6,18 +6,6 @@
 #include "../Response/Response.h"
 #include "../Utils/Utils.h"
 
-// Path registration
-http::Router::Router() {
-    // Initialize the root
-    root = new http::PathTrie("ROOT");
-
-    registerPath("GET", "/", Controller::getHome);
-    registerPath("GET", "/home", Controller::getHome);
-    registerPath("GET", "/user/photos", Controller::getHome);
-    registerPath("GET", "/user/:id", Controller::getHome);
-    registerPath("GET", "*", Controller::getHome);
-}
-
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
     Logger::log("Method: " + request.getValue("method"));

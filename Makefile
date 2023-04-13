@@ -6,8 +6,8 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Router.o build/Request.o build/Response.o build/Controller.o build/Utils.o build/Logger.o
-	${CC} build/main.o build/TcpServer.o build/Router.o build/Request.o build/Response.o build/Controller.o build/Utils.o build/Logger.o -o server
+server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/Controller.o build/Utils.o build/Logger.o
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/Controller.o build/Utils.o build/Logger.o -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -17,6 +17,9 @@ build/TcpServer.o: src/TcpServer/TcpServer.cpp
 
 build/Router.o: src/Router/Router.cpp
 	${CC} ${CFLAGS} src/Router/Router.cpp -o build/Router.o
+
+build/UserRouter.o: src/Router/UserRouter.cpp
+	${CC} ${CFLAGS} src/Router/UserRouter.cpp -o build/UserRouter.o
 
 build/Request.o: src/Request/Request.cpp
 	${CC} ${CFLAGS} src/Request/Request.cpp -o build/Request.o
