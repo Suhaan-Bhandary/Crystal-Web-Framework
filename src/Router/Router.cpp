@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+#include "../Controller/Controller.h"
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"
 #include "../Response/Response.h"
@@ -21,12 +22,9 @@ void http::Router::route(http::Request &request, http::Response &response) {
     Logger::log("Host: " + request.getValue("Host"));
     Logger::log("");
 
-    // Send html response to the client
-    std::string htmlContent =
-        "<html>"
-        "<head><title>Hello World</title></head>"
-        "<body><h1>Hello World!</h1></body>"
-        "</html>\r\n";
-
-    response.sendHTML(htmlContent);
+    if (request.getValue("path") == "/") {
+        Controller::getHome(request, response);
+    } else {
+        Controller::getNotFound(request, response);
+    }
 }
