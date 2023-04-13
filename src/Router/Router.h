@@ -2,9 +2,6 @@
 #ifndef INCLUDED_ROUTER
 #define INCLUDED_ROUTER
 
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 

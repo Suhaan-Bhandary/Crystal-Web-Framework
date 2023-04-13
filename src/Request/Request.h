@@ -2,7 +2,7 @@
 #ifndef INCLUDED_REQUEST
 #define INCLUDED_REQUEST
 
-#include <iostream>
+#include <string>
 #include <unordered_map>
 
 namespace http {

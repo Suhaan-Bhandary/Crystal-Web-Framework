@@ -1,13 +1,6 @@
 #include "./Response.h"
 
-#include <sys/socket.h>
 #include <unistd.h>
-
-#include <iostream>
-#include <vector>
-
-#include "../Logger/Logger.h"
-#include "../Utils/Utils.h"
 
 http::Response::Response(int client_socket) {
     this->client_socket = client_socket;

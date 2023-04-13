@@ -1,8 +1,5 @@
 #include "./Request.h"
 
-#include <iostream>
-#include <vector>
-
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
 

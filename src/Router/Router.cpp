@@ -1,10 +1,5 @@
 #include "./Router.h"
 
-#include <sys/socket.h>
-#include <unistd.h>
-
-#include <iostream>
-
 #include "../Controller/Controller.h"
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"

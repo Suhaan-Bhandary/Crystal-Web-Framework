@@ -2,7 +2,7 @@
 #ifndef INCLUDED_Response
 #define INCLUDED_Response
 
-#include <iostream>
+#include <string>
 
 namespace http {
 class Response {

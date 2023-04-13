@@ -2,7 +2,7 @@
 #ifndef INCLUDED_LOGGER
 #define INCLUDED_LOGGER
 
-#include <iostream>
+#include <string>
 class Logger {
    private:
     static std::string __filename;
