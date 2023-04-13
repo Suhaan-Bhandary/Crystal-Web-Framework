@@ -57,6 +57,10 @@ void TcpServer::startListen() {
                 (std::string)inet_ntoa(server_socketAddress.sin_addr));
     Logger::log("Port: " + std::to_string(server_port));
 
+    // Router to handle request
+    http::Router router = http::Router();
+    router.displayAllRoutes();
+
     // Infinite loop to keep on listening
     while (true) {
         // Waiting for a connection
@@ -93,8 +97,6 @@ void TcpServer::startListen() {
         http::Request request = http::Request(requestBuffer);
         http::Response response = http::Response(client_socket);
 
-        // Router to handle request
-        http::Router router = http::Router();
         router.route(request, response);
 
         // Clearing the new request socket
