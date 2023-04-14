@@ -16,6 +16,7 @@ struct PathTrie {
    public:
     std::string value;
     bool isEnd;
+    int weight;
 
     // controller function stores the controller for the specified path
     controller_type controllerFunction;
@@ -26,7 +27,7 @@ struct PathTrie {
     // gives the param name and next
     std::unordered_map<std::string, PathTrie *> pathParamChildrens;
 
-    PathTrie(const std::string &value);
+    PathTrie(const std::string &value, int weight);
 };
 
 class Router {
@@ -41,7 +42,7 @@ class Router {
     void registerPath(const std::string &method, const std::string &path,
                       controller_type controllerFunction);
     void displayAllRoutes();
-    void displayAllRoutesCallback(PathTrie *node, std::string path, int weight,
+    void displayAllRoutesCallback(PathTrie *node, std::string path,
                                   bool isStart);
 
     controller_type getControllerFromPathTrie(const std::string &method,

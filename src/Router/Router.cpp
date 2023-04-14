@@ -46,15 +46,21 @@ void http::Router::registerPath(const std::string &method,
     while (tokens.size() > 0 && tokens.back() == "") tokens.pop_back();
 
     http::PathTrie *curr = root;
+    int weight = 0;
     for (auto token : tokens) {
         if (!token.empty() && token[0] == ':') {
             if (curr->pathParamChildrens.count(token) == 0) {
-                curr->pathParamChildrens[token] = new http::PathTrie(token);
+                curr->pathParamChildrens[token] =
+                    new http::PathTrie(token, weight);
             }
             curr = curr->pathParamChildrens[token];
         } else {
+            // weight only increases when normal node is present in path
+            weight++;
+
             if (curr->normalChildrens.count(token) == 0) {
-                curr->normalChildrens[token] = new http::PathTrie(token);
+                curr->normalChildrens[token] =
+                    new http::PathTrie(token, weight);
             }
             curr = curr->normalChildrens[token];
         }
@@ -66,25 +72,25 @@ void http::Router::registerPath(const std::string &method,
 
 void http::Router::displayAllRoutes() {
     Logger::log("\n----------------------- Paths -----------------------");
-    displayAllRoutesCallback(root, "", 0, true);
+    displayAllRoutesCallback(root, "", true);
     Logger::log("-----------------------------------------------------");
 }
 
 void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
-                                            int weight, bool isStart = false) {
+                                            bool isStart = false) {
     if (node->isEnd) {
-        Logger::log(path + node->value, std::to_string(weight));
+        Logger::log(path + node->value, std::to_string(node->weight));
     }
 
     if (!isStart) path += (node->value + "/");
 
     // Call all the childrens
     for (auto p : node->normalChildrens) {
-        displayAllRoutesCallback(p.second, path, weight + 1);
+        displayAllRoutesCallback(p.second, path);
     }
 
     for (auto p : node->pathParamChildrens) {
-        displayAllRoutesCallback(p.second, path, weight);
+        displayAllRoutesCallback(p.second, path);
     }
 }
 
@@ -92,6 +98,15 @@ controller_type http::Router::getControllerFromPathTrie(
     const std::string &method, const std::string &path) {
     std::string triePath = method + path;
     Logger::log(triePath);
+
+    // get tokens for the trie path
+    std::vector<std::string> tokens = Utils::split(triePath, "/");
+
+    // remove the last empty ones if any
+    while (tokens.size() > 0 && tokens.back() == "") tokens.pop_back();
+
+    // Using recursive function call the
+    controller_type controllerFunction = nullptr;
 
     // TODO: Find the controller from the pathTrie, and return the controller
     // For now we are returning hard coded controllers
@@ -103,8 +118,9 @@ controller_type http::Router::getControllerFromPathTrie(
 }
 
 // Trie Definition
-http::PathTrie::PathTrie(const std::string &value) {
+http::PathTrie::PathTrie(const std::string &value, int weight) {
     this->value = value;
     this->isEnd = false;
+    this->weight = weight;
     this->controllerFunction = nullptr;
 }
