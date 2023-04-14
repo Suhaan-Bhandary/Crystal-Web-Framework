@@ -46,11 +46,15 @@ class Router {
     void displayAllRoutesCallback(PathTrie *node, std::string path,
                                   bool isStart);
 
-    controller_type getControllerFromPathTrie(const std::string &method,
-                                              const std::string &path);
+    controller_type getControllerFromPathTrie(
+        const std::string &method, const std::string &path,
+        std::unordered_map<std::string, std::string> &pathParams);
+
     void getControllerFromPathTrieCallback(
         int idx, const std::vector<std::string> &tokens, PathTrie *node,
-        controller_type &controllerFunction, int &minWeight);
+        controller_type &controllerFunction, int &minWeight,
+        std::unordered_map<std::string, std::string> &pathParams,
+        std::unordered_map<std::string, std::string> tempParams);
 
     controller_type getNotFoundRoute(const std::string &method);
 };

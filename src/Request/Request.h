@@ -11,6 +11,7 @@ class Request {
 
    public:
     std::string header, body;
+    std::unordered_map<std::string, std::string> pathParams;
 
     Request(char requestBuffer[]);
     void readRequest(char requestBuffer[]);

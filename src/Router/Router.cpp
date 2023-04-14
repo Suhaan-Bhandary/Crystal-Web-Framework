@@ -20,7 +20,13 @@ void http::Router::route(http::Request &request, http::Response &response) {
     std::string path = request.getValue("path");
 
     // Get the controller from the user
-    controller_type controller = getControllerFromPathTrie(method, path);
+    std::unordered_map<std::string, std::string> pathParams;
+
+    controller_type controller =
+        getControllerFromPathTrie(method, path, pathParams);
+
+    // Add path params to request
+    request.pathParams = pathParams;
 
     // Running the controller
     if (controller) controller(request, response);
@@ -95,9 +101,9 @@ void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
 }
 
 controller_type http::Router::getControllerFromPathTrie(
-    const std::string &method, const std::string &path) {
+    const std::string &method, const std::string &path,
+    std::unordered_map<std::string, std::string> &pathParams) {
     std::string triePath = method + path;
-    Logger::log(triePath);
 
     // get tokens for the trie path
     std::vector<std::string> tokens = Utils::split(triePath, "/");
@@ -108,8 +114,9 @@ controller_type http::Router::getControllerFromPathTrie(
     // Using recursive function call the
     controller_type controllerFunction = nullptr;
     int minWeight = -1;
-    getControllerFromPathTrieCallback(0, tokens, root, controllerFunction,
-                                      minWeight);
+    getControllerFromPathTrieCallback(
+        0, tokens, root, controllerFunction, minWeight, pathParams,
+        std::unordered_map<std::string, std::string>());
 
     // For now we are returning hard coded controllers
     if (controllerFunction != nullptr) return controllerFunction;
@@ -123,12 +130,12 @@ controller_type http::Router::getNotFoundRoute(const std::string &method) {
 
 void http::Router::getControllerFromPathTrieCallback(
     int idx, const std::vector<std::string> &tokens, PathTrie *node,
-    controller_type &controllerFunction, int &minWeight) {
+    controller_type &controllerFunction, int &minWeight,
+    std::unordered_map<std::string, std::string> &pathParams,
+    std::unordered_map<std::string, std::string> tempParams) {
     if (idx == tokens.size()) {
-        Logger::log("-----------------");
-        Logger::log(node->value);
-
         if (controllerFunction == nullptr || node->weight > minWeight) {
+            pathParams = tempParams;
             minWeight = node->weight;
             controllerFunction = node->controllerFunction;
         }
@@ -140,15 +147,19 @@ void http::Router::getControllerFromPathTrieCallback(
 
     // Go to the matching child node
     if (node->normalChildrens.count(currentToken)) {
-        getControllerFromPathTrieCallback(idx + 1, tokens,
-                                          node->normalChildrens[currentToken],
-                                          controllerFunction, minWeight);
+        getControllerFromPathTrieCallback(
+            idx + 1, tokens, node->normalChildrens[currentToken],
+            controllerFunction, minWeight, pathParams, tempParams);
     }
 
     // Go to all available path params
     for (auto p : node->pathParamChildrens) {
+        std::unordered_map<std::string, std::string> currParams = tempParams;
+        currParams[p.first] = currentToken;
+
         getControllerFromPathTrieCallback(idx + 1, tokens, p.second,
-                                          controllerFunction, minWeight);
+                                          controllerFunction, minWeight,
+                                          pathParams, currParams);
     }
 }
 

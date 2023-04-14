@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+#include <iostream>
+
 void Controller::getHome(http::Request &request, http::Response &response) {
     // Send html response to the client
     std::string htmlContent =
@@ -15,12 +17,17 @@ void Controller::getHome(http::Request &request, http::Response &response) {
 }
 
 void Controller::getUser(http::Request &request, http::Response &response) {
+    std::string userId = request.pathParams[":id"];
+
     // Send html response to the client
     std::string htmlContent =
         "<html>"
         "<head><title>User</title></head>"
         "<body>"
         "<h1>User Profile Page</h1>"
+        "<h2>Welcome, " +
+        userId +
+        " !!</h2>"
         "<p>Made with C++</p>"
         "</body>"
         "</html>\r\n";
