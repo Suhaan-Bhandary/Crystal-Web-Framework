@@ -107,13 +107,48 @@ controller_type http::Router::getControllerFromPathTrie(
 
     // Using recursive function call the
     controller_type controllerFunction = nullptr;
+    int minWeight = -1;
+    getControllerFromPathTrieCallback(0, tokens, root, controllerFunction,
+                                      minWeight);
 
-    // TODO: Find the controller from the pathTrie, and return the controller
     // For now we are returning hard coded controllers
-    if (method == "GET" && path == "/") {
-        return Controller::getHome;
-    } else {
-        return Controller::getNotFound;
+    if (controllerFunction != nullptr) return controllerFunction;
+    return getNotFoundRoute(method);
+}
+
+controller_type http::Router::getNotFoundRoute(const std::string &method) {
+    if (notFoundRoutes.count(method) == 0) return Controller::defaultNotFound;
+    return notFoundRoutes[method];
+}
+
+void http::Router::getControllerFromPathTrieCallback(
+    int idx, const std::vector<std::string> &tokens, PathTrie *node,
+    controller_type &controllerFunction, int &minWeight) {
+    if (idx == tokens.size()) {
+        Logger::log("-----------------");
+        Logger::log(node->value);
+
+        if (controllerFunction == nullptr || node->weight > minWeight) {
+            minWeight = node->weight;
+            controllerFunction = node->controllerFunction;
+        }
+        return;
+    }
+
+    // Current token
+    std::string currentToken = tokens[idx];
+
+    // Go to the matching child node
+    if (node->normalChildrens.count(currentToken)) {
+        getControllerFromPathTrieCallback(idx + 1, tokens,
+                                          node->normalChildrens[currentToken],
+                                          controllerFunction, minWeight);
+    }
+
+    // Go to all available path params
+    for (auto p : node->pathParamChildrens) {
+        getControllerFromPathTrieCallback(idx + 1, tokens, p.second,
+                                          controllerFunction, minWeight);
     }
 }
 

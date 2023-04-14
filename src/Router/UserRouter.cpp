@@ -7,8 +7,7 @@ http::Router::Router() {
     root = new http::PathTrie("ROOT", 0);
 
     registerPath("GET", "/", Controller::getHome);
-    registerPath("GET", "/home", Controller::getHome);
-    registerPath("GET", "/user/photos", Controller::getHome);
-    registerPath("GET", "/user/:id", Controller::getHome);
-    registerPath("GET", "*", Controller::getHome);
+    registerPath("GET", "/user/:id", Controller::getUser);
+    registerPath("GET", "/user/chat", Controller::getUserChat);
+    registerPath("GET", "*", Controller::getNotFound);
 }

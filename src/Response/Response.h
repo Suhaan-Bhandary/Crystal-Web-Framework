@@ -11,6 +11,7 @@ class Response {
    public:
     Response(int client_socket);
     void sendHTML(const std::string &html);
+    void send404();
 };
 }  // namespace http
 

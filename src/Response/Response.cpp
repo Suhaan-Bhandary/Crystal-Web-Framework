@@ -15,3 +15,14 @@ void http::Response::sendHTML(const std::string &html) {
     long bytesSent =
         write(client_socket, httpResponse.c_str(), httpResponse.size());
 }
+
+void http::Response::send404() {
+    std::string httpResponse = "";
+    httpResponse +=
+        "HTTP/1.1 404 NOT FOUND\r\nContent-Type: text/plain\r\n\r\n";
+    httpResponse += "Page Not Found!!";
+
+    // Sending response
+    long bytesSent =
+        write(client_socket, httpResponse.c_str(), httpResponse.size());
+}

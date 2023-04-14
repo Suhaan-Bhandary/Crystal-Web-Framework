@@ -4,6 +4,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "../Request/Request.h"
 #include "../Response/Response.h"
@@ -47,6 +48,11 @@ class Router {
 
     controller_type getControllerFromPathTrie(const std::string &method,
                                               const std::string &path);
+    void getControllerFromPathTrieCallback(
+        int idx, const std::vector<std::string> &tokens, PathTrie *node,
+        controller_type &controllerFunction, int &minWeight);
+
+    controller_type getNotFoundRoute(const std::string &method);
 };
 }  // namespace http
 
