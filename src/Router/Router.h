@@ -8,6 +8,9 @@
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 
+typedef void (*controller_type)(http::Request &request,
+                                http::Response &response);
+
 namespace http {
 struct PathTrie {
    public:
@@ -45,8 +48,8 @@ class Router {
     void displayAllRoutesCallback(PathTrie *node, std::string path, int weight,
                                   bool isStart);
 
-    void matchPathAndRunController(const std::string &method,
-                                   const std::string &path);
+    controller_type getControllerFromPathTrie(const std::string &method,
+                                              const std::string &path);
 };
 }  // namespace http
 

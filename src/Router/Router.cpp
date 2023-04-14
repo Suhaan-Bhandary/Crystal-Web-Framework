@@ -6,6 +6,9 @@
 #include "../Response/Response.h"
 #include "../Utils/Utils.h"
 
+typedef void (*controller_type)(http::Request &request,
+                                http::Response &response);
+
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
     Logger::log("Method: " + request.getValue("method"));
@@ -13,12 +16,15 @@ void http::Router::route(http::Request &request, http::Response &response) {
     Logger::log("Host: " + request.getValue("Host"));
     Logger::log("");
 
-    // TODO: Match path with given path
-    if (request.getValue("path") == "/") {
-        Controller::getHome(request, response);
-    } else {
-        Controller::getNotFound(request, response);
-    }
+    std::string method = request.getValue("method");
+    std::string path = request.getValue("path");
+
+    // Get the controller from the user
+    void (*controller)(http::Request & request, http::Response & response) =
+        getControllerFromPathTrie(method, path);
+
+    // Running the controller
+    if (controller) controller(request, response);
 }
 
 // Function to register a path with controller
@@ -84,10 +90,18 @@ void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
     }
 }
 
-void http::Router::matchPathAndRunController(const std::string &method,
-                                             const std::string &path) {
+controller_type http::Router::getControllerFromPathTrie(
+    const std::string &method, const std::string &path) {
     std::string triePath = method + path;
     Logger::log(triePath);
+
+    // TODO: Find the controller from the pathTrie, and return the controller
+    // For now we are returning hard coded controllers
+    if (method == "GET" && path == "/") {
+        return Controller::getHome;
+    } else {
+        return Controller::getNotFound;
+    }
 }
 
 // Trie Definition
