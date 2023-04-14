@@ -18,8 +18,7 @@ struct PathTrie {
     bool isEnd;
 
     // controller function stores the controller for the specified path
-    void (*controllerFunction)(http::Request &request,
-                               http::Response &response);
+    controller_type controllerFunction;
 
     // gives the path component and next
     std::unordered_map<std::string, PathTrie *> normalChildrens;
@@ -33,17 +32,14 @@ struct PathTrie {
 class Router {
    private:
     PathTrie *root;
-    std::unordered_map<std::string, void (*)(http::Request &request,
-                                             http::Response &response)>
-        notFoundRoutes;
+    std::unordered_map<std::string, controller_type> notFoundRoutes;
 
    public:
     Router();
     void route(http::Request &request, http::Response &response);
 
     void registerPath(const std::string &method, const std::string &path,
-                      void (*controllerFunction)(http::Request &request,
-                                                 http::Response &response));
+                      controller_type controllerFunction);
     void displayAllRoutes();
     void displayAllRoutesCallback(PathTrie *node, std::string path, int weight,
                                   bool isStart);

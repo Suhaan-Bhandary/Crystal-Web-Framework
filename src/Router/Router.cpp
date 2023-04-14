@@ -20,18 +20,16 @@ void http::Router::route(http::Request &request, http::Response &response) {
     std::string path = request.getValue("path");
 
     // Get the controller from the user
-    void (*controller)(http::Request & request, http::Response & response) =
-        getControllerFromPathTrie(method, path);
+    controller_type controller = getControllerFromPathTrie(method, path);
 
     // Running the controller
     if (controller) controller(request, response);
 }
 
 // Function to register a path with controller
-void http::Router::registerPath(
-    const std::string &method, const std::string &path,
-    void (*controllerFunction)(http::Request &request,
-                               http::Response &response)) {
+void http::Router::registerPath(const std::string &method,
+                                const std::string &path,
+                                controller_type controllerFunction) {
     // Special path when no other path matches
     if (path == "*") {
         notFoundRoutes[method] = controllerFunction;
