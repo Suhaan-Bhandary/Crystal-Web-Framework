@@ -7,6 +7,8 @@
 namespace Utils {
 std::vector<std::string> split(const std::string &sentence,
                                const std::string &separator);
+
+std::string get_current_dir();
 }  // namespace Utils
 
 #endif

@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 #include <string>
 #include <vector>
 
@@ -33,5 +35,12 @@ std::vector<std::string> split(const std::string &sentence,
     }
 
     return tokens;
+}
+
+std::string get_current_dir() {
+    char buff[FILENAME_MAX];  // create string buffer to hold path
+    getcwd(buff, FILENAME_MAX);
+    std::string current_working_dir(buff);
+    return current_working_dir;
 }
 }  // namespace Utils
