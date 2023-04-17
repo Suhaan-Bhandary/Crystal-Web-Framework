@@ -1,0 +1,23 @@
+body {
+  text-align: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: red;
+}
+
+a {
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  color: black;
+  font-weight: 500;
+  background-color: lightblue;
+}

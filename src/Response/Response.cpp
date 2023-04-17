@@ -1,5 +1,6 @@
 #include "./Response.h"
 
+#include <sys/socket.h>
 #include <unistd.h>
 
 #include <fstream>
@@ -34,7 +35,7 @@ void http::Response::send404() {
 
 void http::Response::sendTemplate(const std::string& templateName) {
     // Read the file
-    std::string rootDir = Utils::get_current_dir();
+    std::string rootDir = Utils::getCurrentDirectory();
     std::string templateURL = rootDir + "/src/templates/" + templateName;
     std::ifstream HTMLFile(templateURL);
 
@@ -56,4 +57,41 @@ void http::Response::sendTemplate(const std::string& templateName) {
     // Sending response
     long bytesSent =
         write(client_socket, httpResponse.c_str(), httpResponse.size());
+}
+
+void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
+    Logger::log(relativePathToPublic);
+
+    // Find the type of the file
+    std::string extension = Utils::split(relativePathToPublic, ".")[1];
+
+    std::string type = "application/octet-stream";
+
+    // TODO: Only this 3 file types are supported for now
+    if (extension == "html") {
+        type = "text/html";
+    } else if (extension == "js") {
+        type = "text/javascript";
+    } else if (extension == "css") {
+        type = "text/css";
+    }
+
+    // Send HTTP header
+    std::string header;
+    header += "HTTP/1.1 200 OK\r\n";
+    header += "Content-Type: " + type + "\r\n";
+    header += "\r\n";
+
+    send(client_socket, header.c_str(), header.size(), 0);
+
+    std::ifstream file(Utils::getCurrentDirectory() + "/src/public" +
+                       relativePathToPublic);
+
+    // Send file contents
+    std::string line;
+    while (getline(file, line)) {
+        send(client_socket, line.c_str(), line.length(), 0);
+    }
+
+    file.close();
 }

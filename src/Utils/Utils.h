@@ -8,7 +8,8 @@ namespace Utils {
 std::vector<std::string> split(const std::string &sentence,
                                const std::string &separator);
 
-std::string get_current_dir();
+std::string getCurrentDirectory();
+void listFiles(const std::string &path, std::vector<std::string> &filePaths);
 }  // namespace Utils
 
 #endif

@@ -6,6 +6,10 @@ http::Router::Router() {
     // Initialize the root
     root = new http::PathTrie("ROOT", 0);
 
+    // Register public files
+    registerPublicPath();
+
+    // Register path
     registerPath("GET", "/", Controller::getHome);
     registerPath("GET", "/user/:id", Controller::getUser);
     registerPath("GET", "/user/chat", Controller::getUserChat);

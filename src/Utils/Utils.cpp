@@ -1,3 +1,4 @@
+#include <dirent.h>
 #include <unistd.h>
 
 #include <string>
@@ -37,10 +38,29 @@ std::vector<std::string> split(const std::string &sentence,
     return tokens;
 }
 
-std::string get_current_dir() {
+std::string getCurrentDirectory() {
     char buff[FILENAME_MAX];  // create string buffer to hold path
     getcwd(buff, FILENAME_MAX);
     std::string current_working_dir(buff);
     return current_working_dir;
+}
+
+void listFiles(const std::string &path, std::vector<std::string> &filePaths) {
+    if (auto dir = opendir(path.c_str())) {
+        while (auto f = readdir(dir)) {
+            if (!f->d_name || f->d_name[0] == '.') continue;
+
+            if (f->d_type == DT_DIR) {
+                listFiles(path + f->d_name + "/", filePaths);
+            }
+
+            if (f->d_type == DT_REG) {
+                std::string filePath = path;
+                filePath += f->d_name;
+                filePaths.push_back(filePath);
+            }
+        }
+        closedir(dir);
+    }
 }
 }  // namespace Utils

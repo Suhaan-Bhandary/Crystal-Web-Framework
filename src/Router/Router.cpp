@@ -163,6 +163,24 @@ void http::Router::getControllerFromPathTrieCallback(
     }
 }
 
+void http::Router::registerPublicPath() {
+    Logger::log("Registering Public Paths");
+    std::vector<std::string> publicFilesPath;
+    std::string path = Utils::getCurrentDirectory() + "/src/public/";
+    Utils::listFiles(path, publicFilesPath);
+
+    // register each file
+    for (auto filePath : publicFilesPath) {
+        std::vector<std::string> tokens = Utils::split(filePath, path);
+        if (tokens.size() < 2) continue;
+
+        std::string relativePath = "/" + tokens[1];
+        Logger::log(relativePath);
+
+        registerPath("GET", relativePath, Controller::getPublicFile);
+    }
+}
+
 // Trie Definition
 http::PathTrie::PathTrie(const std::string &value, int weight) {
     this->value = value;

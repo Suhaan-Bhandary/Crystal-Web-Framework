@@ -57,6 +57,8 @@ class Router {
         std::unordered_map<std::string, std::string> tempParams);
 
     controller_type getNotFoundRoute(const std::string &method);
+
+    void registerPublicPath();
 };
 }  // namespace http
 

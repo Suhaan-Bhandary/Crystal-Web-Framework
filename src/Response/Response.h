@@ -10,9 +10,10 @@ class Response {
 
    public:
     Response(int client_socket);
-    void sendHTML(const std::string& html);
+    void sendHTML(const std::string &html);
     void send404();
-    void sendTemplate(const std::string& templateName);
+    void sendTemplate(const std::string &templateName);
+    void sendPublicFile(const std::string &relativePathToPublic);
 };
 }  // namespace http
 
