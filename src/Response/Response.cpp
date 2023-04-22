@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include <fstream>
+#include <sstream>
 
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
@@ -74,6 +75,8 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
         type = "text/javascript";
     } else if (extension == "css") {
         type = "text/css";
+    } else if (extension == "jpg") {
+        type = "image/jpeg";
     }
 
     // Send HTTP header
@@ -84,14 +87,18 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
 
     send(client_socket, header.c_str(), header.size(), 0);
 
-    std::ifstream file(Utils::getCurrentDirectory() + "/src/public" +
-                       relativePathToPublic);
+    // * File is opened in binary format as images will deform in text format
+    std::ifstream file(
+        Utils::getCurrentDirectory() + "/src/public" + relativePathToPublic,
+        std::ios::binary);
+
+    // Read the file contents
+    std::ostringstream file_stream;
+    file_stream << file.rdbuf();
+    std::string response_body = file_stream.str();
 
     // Send file contents
-    std::string line;
-    while (getline(file, line)) {
-        send(client_socket, line.c_str(), line.length(), 0);
-    }
+    send(client_socket, response_body.c_str(), response_body.length(), 0);
 
     file.close();
 }

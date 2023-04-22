@@ -1,3 +1,147 @@
-h1 {
-  color: red;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
+
+.banner {
+  text-align: center;
+}
+
+.banner > h2 {
+  margin-bottom: 0.5rem;
+}
+
+.banner > p {
+  margin-bottom: 1rem;
+}
+
+.defaultButton {
+  text-decoration: none;
+  padding: 1rem 2rem;
+  background-color: rgb(91, 47, 240);
+  border-radius: 6px;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px 0 rgb(117 76 255 / 25%);
+
+  color: #fff;
+  cursor: pointer;
+
+  border: none;
+  outline: none;
+
+  display: block;
+  position: relative;
+  text-align: center;
+
+  transition: all 0.2s, box-shadow 0.08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  margin-top: 1rem;
+  margin-inline: auto;
+}
+
+.defaultButton:hover {
+  background-color: rgb(60, 19, 197);
+}
+
+/* popup */
+
+.popUp {
+  display: none;
+
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+.popUp.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popUpContainer {
+  position: relative;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 25%);
+
+  background-color: #fff;
+  max-width: 500px;
+
+  text-align: left;
+}
+
+.popUpContainer > div {
+  padding-inline: 1rem;
+}
+
+.popUpContainer a {
+  text-decoration: none;
+  color: black;
+}
+
+a.anchorButton {
+  text-transform: capitalize;
+  color: #fff;
+  font-weight: 500;
+}
+
+.popUpContainer > * + * {
+  margin-bottom: 0.5rem;
+}
+
+.popUpContainer > img {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  object-position: top right;
+}
+
+.closeButton {
+  color: #fff;
+
+  cursor: pointer;
+  text-align: center;
+
+  width: 30px;
+  aspect-ratio: 1/1;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  font-weight: 600;
+
+  border: 2px solid #fff;
+  border-radius: 50%;
 }
