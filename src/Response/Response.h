@@ -3,10 +3,13 @@
 #define INCLUDED_Response
 
 #include <string>
+#include <unordered_map>
 
 namespace http {
 class Response {
     int client_socket;
+    int statusCode = 200;  // Default status code is 200
+    const static std::unordered_map<int, std::string> statusCodes;
 
    public:
     Response(int client_socket);
@@ -16,6 +19,8 @@ class Response {
     void sendPublicFile(const std::string &relativePathToPublic);
     void sendResponse(const std::string &response_body,
                       const std::string &response_type);
+
+    void setStatusCode(int status);
 };
 }  // namespace http
 

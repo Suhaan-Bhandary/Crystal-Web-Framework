@@ -3,6 +3,7 @@
 #include <iostream>
 
 void Controller::getHome(http::Request &request, http::Response &response) {
+    response.setStatusCode(200);
     response.sendTemplate("home.html");
 }
 
@@ -22,6 +23,7 @@ void Controller::getUser(http::Request &request, http::Response &response) {
         "</body>"
         "</html>\r\n";
 
+    response.setStatusCode(200);
     response.sendHTML(htmlContent);
 }
 
@@ -36,10 +38,12 @@ void Controller::getUserChat(http::Request &request, http::Response &response) {
         "</body>"
         "</html>\r\n";
 
+    response.setStatusCode(200);
     response.sendHTML(htmlContent);
 }
 
 void Controller::getNotFound(http::Request &request, http::Response &response) {
+    response.setStatusCode(404);
     response.sendTemplate("404NotFound.html");
 }
 

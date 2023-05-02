@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
@@ -18,15 +19,12 @@ void http::Response::sendHTML(const std::string& html) {
     sendResponse(html, "text/html");
 }
 
-// TODO: Have to do this when status is final
 void http::Response::send404() {
-    std::string httpResponse = "";
-    httpResponse +=
-        "HTTP/1.1 404 NOT FOUND\r\nContent-Type: text/plain\r\n\r\n";
-    httpResponse += "Page Not Found!!";
+    std::string response_body = "Page Not Found!!";
 
-    // Sending response
-    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
+    // Send Response
+    setStatusCode(404);
+    sendResponse(response_body, "text/plain");
 }
 
 void http::Response::sendTemplate(const std::string& templateName) {
@@ -81,14 +79,18 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     file.close();
 
     // Send Response
+    setStatusCode(200);
     sendResponse(response_body, response_type);
 }
 
 void http::Response::sendResponse(const std::string& response_body,
                                   const std::string& response_type) {
+    // Get the status code, if not found out of range exception
+    std::string response_status = statusCodes.at(statusCode);
+
     // Send HTTP response_header
     std::string response_header;
-    response_header += "HTTP/1.1 200 OK\r\n";
+    response_header += "HTTP/1.1 " + response_status + "\r\n";
     response_header += "Content-Type: " + response_type + "\r\n";
     response_header += "\r\n";
 
@@ -98,3 +100,5 @@ void http::Response::sendResponse(const std::string& response_body,
     // Send file contents
     send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 }
+
+void http::Response::setStatusCode(int status) { statusCode = status; }
