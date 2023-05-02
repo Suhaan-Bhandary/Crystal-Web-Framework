@@ -14,14 +14,11 @@ http::Response::Response(int client_socket) {
 }
 
 void http::Response::sendHTML(const std::string& html) {
-    std::string httpResponse = "";
-    httpResponse += "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-    httpResponse += html;
-
-    // Sending response
-    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
+    // Send Response
+    sendResponse(html, "text/html");
 }
 
+// TODO: Have to do this when status is final
 void http::Response::send404() {
     std::string httpResponse = "";
     httpResponse +=
@@ -49,12 +46,8 @@ void http::Response::sendTemplate(const std::string& templateName) {
     // close the file
     HTMLFile.close();
 
-    std::string httpResponse = "";
-    httpResponse += "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
-    httpResponse += HTMLContent;
-
-    // Sending response
-    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
+    // Send Response
+    sendResponse(HTMLContent, "text/html");
 }
 
 void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
@@ -63,24 +56,18 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     // Find the type of the file
     std::string extension = Utils::split(relativePathToPublic, ".")[1];
 
-    std::string type = "application/octet-stream";
+    std::string response_type = "application/octet-stream";
 
     // TODO: Only this 3 file types are supported for now
     if (extension == "html") {
-        type = "text/html";
+        response_type = "text/html";
     } else if (extension == "js") {
-        type = "text/javascript";
+        response_type = "text/javascript";
     } else if (extension == "css") {
-        type = "text/css";
+        response_type = "text/css";
     } else if (extension == "jpg") {
-        type = "image/jpeg";
+        response_type = "image/jpeg";
     }
-
-    // Send HTTP header
-    std::string header;
-    header += "HTTP/1.1 200 OK\r\n";
-    header += "Content-Type: " + type + "\r\n";
-    header += "\r\n";
 
     // * File is opened in binary format as images will deform in text format
     std::ifstream file(
@@ -91,12 +78,23 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     std::ostringstream file_stream;
     file_stream << file.rdbuf();
     std::string response_body = file_stream.str();
+    file.close();
 
-    std::string httpResponse = header;
-    httpResponse += response_body;
+    // Send Response
+    sendResponse(response_body, response_type);
+}
+
+void http::Response::sendResponse(const std::string& response_body,
+                                  const std::string& response_type) {
+    // Send HTTP response_header
+    std::string response_header;
+    response_header += "HTTP/1.1 200 OK\r\n";
+    response_header += "Content-Type: " + response_type + "\r\n";
+    response_header += "\r\n";
+
+    // Create reponse
+    std::string httpResponse = response_header + response_body;
 
     // Send file contents
     send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
-
-    file.close();
 }

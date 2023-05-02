@@ -14,6 +14,8 @@ class Response {
     void send404();
     void sendTemplate(const std::string &templateName);
     void sendPublicFile(const std::string &relativePathToPublic);
+    void sendResponse(const std::string &response_body,
+                      const std::string &response_type);
 };
 }  // namespace http
 

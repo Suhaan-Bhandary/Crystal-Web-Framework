@@ -54,7 +54,12 @@
     "numeric": "cpp",
     "random": "cpp",
     "ratio": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "numbers": "cpp"
   },
-  "cSpell.words": ["TCPSERVER"]
+  "cSpell.words": [
+    "TCPSERVER"
+  ]
 }
