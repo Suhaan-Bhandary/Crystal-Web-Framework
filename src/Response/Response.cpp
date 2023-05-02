@@ -19,8 +19,7 @@ void http::Response::sendHTML(const std::string& html) {
     httpResponse += html;
 
     // Sending response
-    long bytesSent =
-        write(client_socket, httpResponse.c_str(), httpResponse.size());
+    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 }
 
 void http::Response::send404() {
@@ -30,8 +29,7 @@ void http::Response::send404() {
     httpResponse += "Page Not Found!!";
 
     // Sending response
-    long bytesSent =
-        write(client_socket, httpResponse.c_str(), httpResponse.size());
+    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 }
 
 void http::Response::sendTemplate(const std::string& templateName) {
@@ -56,8 +54,7 @@ void http::Response::sendTemplate(const std::string& templateName) {
     httpResponse += HTMLContent;
 
     // Sending response
-    long bytesSent =
-        write(client_socket, httpResponse.c_str(), httpResponse.size());
+    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 }
 
 void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
@@ -85,8 +82,6 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     header += "Content-Type: " + type + "\r\n";
     header += "\r\n";
 
-    send(client_socket, header.c_str(), header.size(), 0);
-
     // * File is opened in binary format as images will deform in text format
     std::ifstream file(
         Utils::getCurrentDirectory() + "/src/public" + relativePathToPublic,
@@ -97,8 +92,11 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     file_stream << file.rdbuf();
     std::string response_body = file_stream.str();
 
+    std::string httpResponse = header;
+    httpResponse += response_body;
+
     // Send file contents
-    send(client_socket, response_body.c_str(), response_body.length(), 0);
+    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 
     file.close();
 }
