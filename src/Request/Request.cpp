@@ -37,8 +37,17 @@ void http::Request::parseDataFromHeader() {
 
     // Read the first line
     std::vector<std::string> tokens = Utils::split(lines[0], " ");
+
+    // Handle the query if exits
+    std::vector<std::string> pathAndSearchQuery = Utils::split(tokens[1], "?");
+
+    if (pathAndSearchQuery.size() == 2) {
+        // Handle the search queries
+        processSearchQuery(pathAndSearchQuery[1]);
+    }
+
     valueMap["method"] = tokens[0];
-    valueMap["path"] = tokens[1];
+    valueMap["path"] = pathAndSearchQuery[0];
     valueMap["http-version"] = tokens[2];
 
     for (int i = 1; i < lines.size(); i++) {
@@ -51,4 +60,15 @@ void http::Request::parseDataFromHeader() {
 std::string http::Request::getValue(std::string key) {
     if (valueMap.count(key) == 0) return nullptr;
     return valueMap[key];
+}
+
+void http::Request::processSearchQuery(const std::string &queryString) {
+    std::vector<std::string> tokens = Utils::split(queryString, "&");
+
+    for (int i = 0; i < tokens.size(); i++) {
+        std::vector<std::string> keyAndValue = Utils::split(tokens[i], "=");
+        if (keyAndValue.size() < 2) continue;
+
+        searchQueries.insert({keyAndValue[0], keyAndValue[1]});
+    }
 }

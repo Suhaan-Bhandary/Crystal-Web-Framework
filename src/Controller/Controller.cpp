@@ -9,6 +9,7 @@ void Controller::getHome(http::Request &request, http::Response &response) {
 
 void Controller::getUser(http::Request &request, http::Response &response) {
     std::string userId = request.pathParams[":id"];
+    std::string rollno = request.searchQueries["rollno"];
 
     // Send html response to the client
     std::string htmlContent =
@@ -20,6 +21,8 @@ void Controller::getUser(http::Request &request, http::Response &response) {
         userId +
         " !!</h2>"
         "<p>Made with C++</p>"
+        "Your Rollno is: " +
+        rollno +
         "</body>"
         "</html>\r\n";
 

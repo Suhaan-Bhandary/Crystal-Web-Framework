@@ -12,11 +12,13 @@ class Request {
    public:
     std::string header, body;
     std::unordered_map<std::string, std::string> pathParams;
+    std::unordered_map<std::string, std::string> searchQueries;
 
     Request(char requestBuffer[]);
     void readRequest(char requestBuffer[]);
     void parseDataFromHeader();
     std::string getValue(std::string key);
+    void processSearchQuery(const std::string &queryString);
 };
 }  // namespace http
 
