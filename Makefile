@@ -6,8 +6,8 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o -o server
+server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o 
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o  -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -38,6 +38,9 @@ build/Utils.o: src/Utils/Utils.cpp
 
 build/Logger.o: src/Logger/Logger.cpp
 	${CC} ${CFLAGS} src/Logger/Logger.cpp -o build/Logger.o
+
+build/Json.o: src/Json/Json.cpp
+	${CC} ${CFLAGS} src/Json/Json.cpp -o build/Json.o
 
 clean:
 	rm -rf build/*o server

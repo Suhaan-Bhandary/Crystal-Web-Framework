@@ -1,11 +1,13 @@
 #include "./Request.h"
 
+#include "../Json/Json.h"
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
 
 http::Request::Request(char requestBuffer[]) {
     readRequest(requestBuffer);
     parseDataFromHeader();
+    parseDataFromBody();
 }
 
 void http::Request::readRequest(char requestBuffer[]) {
@@ -54,6 +56,18 @@ void http::Request::parseDataFromHeader() {
         std::vector<std::string> tokens = Utils::split(lines[i], ": ");
         std::string key = tokens[0], value = tokens[1];
         valueMap[key] = value;
+    }
+}
+
+void http::Request::parseDataFromBody() {
+    std::string contentType = getValue("Content-Type");
+
+    // Check if contentType is valid
+    if (contentType.size() == 0) return;
+
+    // Check the type of content
+    if (contentType == "application/json") {
+        jsonData = new Json::Json(body);
     }
 }
 
