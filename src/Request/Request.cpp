@@ -58,7 +58,7 @@ void http::Request::parseDataFromHeader() {
 }
 
 std::string http::Request::getValue(std::string key) {
-    if (valueMap.count(key) == 0) return nullptr;
+    if (valueMap.count(key) == 0) return "";
     return valueMap[key];
 }
 
