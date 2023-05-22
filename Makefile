@@ -42,5 +42,22 @@ build/Logger.o: src/Logger/Logger.cpp
 build/Json.o: src/Json/Json.cpp
 	${CC} ${CFLAGS} src/Json/Json.cpp -o build/Json.o
 
+# Cleaning the build
 clean:
 	rm -rf build/*o server
+
+# Testing code
+testProject: compileTests
+	./testProject && rm ./testProject
+
+compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o
+	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o -o testProject
+
+build/tests.o: tests/tests.cpp
+	${CC} ${CFLAGS} tests/tests.cpp -o build/tests.o
+
+build/JsonTests.o: tests/JsonTests/JsonTests.cpp
+	${CC} ${CFLAGS} tests/JsonTests/JsonTests.cpp -o build/JsonTests.o
+
+build/TrimTests.o: tests/TrimTests/TrimTests.cpp
+	${CC} ${CFLAGS} tests/TrimTests/TrimTests.cpp -o build/TrimTests.o
