@@ -5,6 +5,31 @@
 #include <vector>
 
 namespace Utils {
+std::string trim(const std::string &original) {
+    int n = original.size();
+
+    // Now Find the first non space in the original from start
+    int nonSpaceIndexFromStart = 0;
+    while (nonSpaceIndexFromStart < n &&
+           original[nonSpaceIndexFromStart] == ' ') {
+        nonSpaceIndexFromStart++;
+    }
+
+    // Now Find the first non space in the original from end
+    int nonSpaceIndexFromEnd = original.size() - 1;
+    while (nonSpaceIndexFromEnd >= 0 && original[nonSpaceIndexFromEnd] == ' ') {
+        nonSpaceIndexFromEnd--;
+    }
+
+    // Start from non space till end
+    std::string trimmed = "";
+    for (int i = nonSpaceIndexFromStart; i <= nonSpaceIndexFromEnd; i++) {
+        trimmed.push_back(original[i]);
+    }
+
+    return trimmed;
+}
+
 std::vector<std::string> split(const std::string &sentence,
                                const std::string &separator) {
     std::string currentToken = "";
