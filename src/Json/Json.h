@@ -57,6 +57,9 @@ class Json {
     std::vector<std::string> getElementsOfJsonArrayString(
         const std::string &jsonString);
 
+    std::vector<std::pair<std::string, std::string>>
+    getKeyAndValuePairsOfJsonArrayObject(const std::string &jsonString);
+
     // TODO: Create a Destructure
 };
 }  // namespace Json

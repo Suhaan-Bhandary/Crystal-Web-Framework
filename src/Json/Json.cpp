@@ -153,6 +153,223 @@ std::vector<std::string> Json::Json::getElementsOfJsonArrayString(
     return tokens;
 }
 
+// Function to get key value pairs of a json string object
+// the key will be returned as a string json, eg: "hi" and not hi
+std::vector<std::pair<std::string, std::string>>
+Json::Json::getKeyAndValuePairsOfJsonArrayObject(
+    const std::string &jsonString) {
+    int n = jsonString.size();
+    std::vector<std::pair<std::string, std::string>> keyAndValuePairs;
+
+    // first get the key till :
+    // then get the value till ,
+    int i = 1;
+    while (i <= n - 2) {
+        std::stack<char> stk;
+        std::string key = "";
+
+        // go till "
+        while (i <= n - 2 && jsonString[i] != '"') i++;
+
+        // Find the key till we get : and stack is empty
+        bool keyStringCompleted = false;
+        while (i <= n - 2 && !keyStringCompleted) {
+            char ch = jsonString[i];
+
+            switch (ch) {
+                case '[':
+                    if (!stk.empty() && stk.top() == '"') {
+                        key.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        key.push_back(ch);
+                    }
+                    break;
+
+                case ']':
+                    if (stk.empty()) {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+
+                    if (stk.top() == '[') {
+                        stk.pop();
+                        key.push_back(ch);
+                    } else if (stk.top() == '"') {
+                        key.push_back(ch);
+                    } else {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+                    break;
+
+                case '{':
+                    if (!stk.empty() && stk.top() == '"') {
+                        key.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        key.push_back(ch);
+                    }
+
+                    break;
+
+                case '}':
+                    if (stk.empty()) {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+
+                    if (stk.top() == '{') {
+                        stk.pop();
+                        key.push_back(ch);
+                    } else if (stk.top() == '"') {
+                        key.push_back(ch);
+                    } else {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+                    break;
+
+                case '"':
+                    if (!stk.empty() && stk.top() == '"') {
+                        stk.pop();
+                        key.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        key.push_back(ch);
+                    }
+                    break;
+
+                case ',':
+                    if (stk.empty() || stk.top() != '"') {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+                    key.push_back(ch);
+                    break;
+
+                case ':':
+                    if (!stk.empty()) {
+                        if (stk.top() == '"') {
+                            key.push_back(ch);
+                        } else {
+                            throw std::invalid_argument(
+                                "Invalid Json Object: While parsing");
+                        }
+                    } else {
+                        keyStringCompleted = true;
+                    }
+
+                    break;
+
+                default:
+                    key.push_back(ch);
+                    break;
+            }
+            i++;
+        }
+
+        if (!stk.empty() || !keyStringCompleted) {
+            throw std::invalid_argument("Invalid Json Object: While parsing");
+        }
+
+        // extract the value
+        std::string value = "";
+
+        bool valueStringCompleted = false;
+        while (i <= n - 2 && !valueStringCompleted) {
+            char ch = jsonString[i];
+
+            switch (ch) {
+                case '[':
+                    if (!stk.empty() && stk.top() == '"') {
+                        value.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        value.push_back(ch);
+                    }
+                    break;
+
+                case ']':
+                    if (stk.empty()) {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+
+                    if (stk.top() == '[') {
+                        stk.pop();
+                        value.push_back(ch);
+                    } else if (stk.top() == '"') {
+                        value.push_back(ch);
+                    } else {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+                    break;
+
+                case '{':
+                    if (!stk.empty() && stk.top() == '"') {
+                        value.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        value.push_back(ch);
+                    }
+
+                    break;
+
+                case '}':
+                    if (stk.empty()) {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+
+                    if (stk.top() == '{') {
+                        stk.pop();
+                        value.push_back(ch);
+                    } else if (stk.top() == '"') {
+                        value.push_back(ch);
+                    } else {
+                        throw std::invalid_argument(
+                            "Invalid Json Object: While parsing");
+                    }
+                    break;
+
+                case '"':
+                    if (!stk.empty() && stk.top() == '"') {
+                        stk.pop();
+                        value.push_back(ch);
+                    } else {
+                        stk.push(ch);
+                        value.push_back(ch);
+                    }
+                    break;
+
+                case ',':
+                    if (stk.empty()) {
+                        valueStringCompleted = true;
+                    } else {
+                        value.push_back(ch);
+                    }
+                    break;
+
+                default:
+                    value.push_back(ch);
+                    break;
+            }
+            i++;
+        }
+
+        if (!stk.empty() && !valueStringCompleted) {
+            throw std::invalid_argument("Invalid Json Object: While parsing");
+        }
+
+        // std::cout << key << ":" << value << std::endl;
+        keyAndValuePairs.push_back({key, value});
+    }
+
+    return keyAndValuePairs;
+}
+
 void Json::Json::parseJsonFromString(const std::string &jsonString) {
     // TODO: Delete the tree if present
     data = parseJsonFromStringCallback(jsonString);
@@ -207,23 +424,12 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
             break;
 
         case JsonType::OBJECT:
-            std::vector<std::string> keyValuePairs =
-                Utils::split(stringWithFirstAndLastCharTrimmed, ",");
+            std::vector<std::pair<std::string, std::string>> keyValuePairs =
+                getKeyAndValuePairsOfJsonArrayObject(cleanedJsonString);
 
-            for (std::string pair : keyValuePairs) {
-                std::vector<std::string> keyAndValue = Utils::split(pair, ":");
-
-                if (keyAndValue.size() != 2) {
-                    throw std::invalid_argument("Invalid Json Object");
-                }
-
-                std::string key = keyAndValue[0];
-                std::string value = keyAndValue[1];
-
-                Logger::log(value);
-
-                // Time key
-                key = Utils::trim(key);
+            for (std::pair<std::string, std::string> pair : keyValuePairs) {
+                std::string key = pair.first;
+                std::string value = pair.second;
 
                 if (getJsonTokenType(key) != JsonType::STRING) {
                     throw std::invalid_argument("Invalid Json String");
