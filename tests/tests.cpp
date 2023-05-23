@@ -5,8 +5,8 @@
 int main() {
     Logger::log("\n\nTesting Project");
 
-    Test::JsonTests();
     Test::TrimTests();
+    Test::JsonTests();
 
     return 0;
 }

@@ -50,8 +50,8 @@ clean:
 testProject: compileTests
 	./testProject && rm ./testProject
 
-compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o
-	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o -o testProject
+compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o
+	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o -o testProject
 
 build/tests.o: tests/tests.cpp
 	${CC} ${CFLAGS} tests/tests.cpp -o build/tests.o
