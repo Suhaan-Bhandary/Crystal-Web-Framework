@@ -57,7 +57,8 @@
     "iomanip": "cpp",
     "compare": "cpp",
     "concepts": "cpp",
-    "numbers": "cpp"
+    "numbers": "cpp",
+    "unordered_set": "cpp"
   },
   "cSpell.words": [
     "TCPSERVER"

@@ -494,3 +494,82 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
 
     return node;
 }
+
+// Function to get string representation
+std::string Json::Json::getJsonString() {
+    return getJsonStringCallback(data, 0, 4);
+}
+
+std::string Json::Json::getJsonStringCallback(JsonNode *root,
+                                              int indentationLevel,
+                                              int indentSpaces) {
+    std::string indentation = std::string(indentationLevel * indentSpaces, ' ');
+    std::string nextLevelIndentation =
+        std::string((indentationLevel + 1) * indentSpaces, ' ');
+
+    // If root primitive type then return it
+    if (root->type == JsonType::NULL_VALUE) return "null";
+    if (root->type == JsonType::INT) return std::to_string(root->intValue);
+    if (root->type == JsonType::DOUBLE) {
+        return std::to_string(root->doubleValue);
+    }
+    if (root->type == JsonType::BOOL) {
+        return root->boolValue ? "true" : "false";
+    }
+    if (root->type == JsonType::STRING) {
+        return "\"" + root->stringValue + "\"";
+    }
+
+    // Array
+    if (root->type == JsonType::ARRAY) {
+        int n = root->arrayValue.size();
+
+        std::string arrayJsonString = "";
+        arrayJsonString += "[\n";
+
+        for (int i = 0; i < n; i++) {
+            arrayJsonString += (nextLevelIndentation +
+                                getJsonStringCallback(root->arrayValue[i],
+                                                      indentationLevel + 1, 4));
+
+            // append a comma if it is not last element
+            if (i != n - 1) arrayJsonString += ",\n";
+        }
+
+        arrayJsonString += "\n" + indentation + "]";
+
+        return arrayJsonString;
+    }
+
+    // Object
+    if (root->type == JsonType::OBJECT) {
+        int n = root->objectValue.size();
+        int counter = 0;
+
+        std::string objectJsonString = "";
+
+        objectJsonString += "{\n";
+
+        for (auto p : root->objectValue) {
+            std::string key = p.first;
+            JsonNode *value = p.second;
+            counter++;
+
+            objectJsonString += nextLevelIndentation + "\"" + key + "\"";
+
+            objectJsonString += ": ";
+            objectJsonString +=
+                getJsonStringCallback(value, indentationLevel + 1, 4);
+
+            if (counter != n) {
+                objectJsonString += ",\n";
+            }
+        }
+
+        objectJsonString += "\n" + indentation + "}";
+
+        return objectJsonString;
+    }
+
+    return "null";
+}

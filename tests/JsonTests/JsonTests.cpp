@@ -255,6 +255,9 @@ void Test::JsonTests() {
         // Creating a json object from the json file
         Json::Json jsonObject(jsonValue);
 
+        // Print string
+        Logger::log(jsonObject.getJsonString());
+
         bool isJsonParsedCorrectly = true;
 
         if (jsonObject.data->getType() != Json::JsonType::OBJECT) {

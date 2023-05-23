@@ -55,6 +55,8 @@ struct JsonNode {
     JsonNode *getArrayElement(int index);
     JsonNode *getObjectValue(const std::string &key);
 
+    // TODO: Create a function to get string representation of the json tree
+
     // friend class declaration, so that it can access private variables
     friend class Json;
 };
@@ -70,6 +72,10 @@ class Json {
     JsonType getJsonTokenType(const std::string &jsonToken);
     void parseJsonFromString(const std::string &jsonString);
     JsonNode *parseJsonFromStringCallback(const std::string &jsonString);
+
+    std::string getJsonString();
+    std::string getJsonStringCallback(JsonNode *root, int indentationLevel,
+                                      int indentSpaces);
 
     // Json utility functions
     std::vector<std::string> getElementsOfJsonArrayString(
