@@ -60,3 +60,22 @@ void Controller::getPublicFile(http::Request &request,
     std::string path = request.getValue("path");
     response.sendPublicFile(path);
 }
+
+void Controller::saveUserData(http::Request &request,
+                              http::Response &response) {
+    try {
+        // Load data from json
+        std::string name =
+            request.jsonData->data->objectValue["name"]->stringValue;
+
+        std::string email =
+            request.jsonData->data->objectValue["email"]->stringValue;
+
+        response.setStatusCode(200);
+        response.sendHTML("<h1>Data: " + name + " and " + email + "</h1>");
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+        response.setStatusCode(500);
+        response.sendHTML("<h1>Error</h1>");
+    }
+}
