@@ -1,12 +1,140 @@
 #include "Json.h"
 
+#include <iostream>
+#include <stdexcept>
+
 #include "../Logger/Logger.h"
+#include "../Utils/Utils.h"
 
+// Json Node
+// Setting all the values to nullptr
+Json::JsonNode::JsonNode() { type = JsonType::NULL_VALUE; }
+
+// Json
 Json::Json::Json(const std::string &body) {
-    Logger::log("--------------------------------------");
+    data = nullptr;
+    parseJsonFromString(body);
+}
 
-    Logger::log("Json Data: ");
-    Logger::log(body);
+Json::JsonType Json::Json::getJsonTokenType(const std::string &jsonToken) {
+    // Note:
+    // long long / double: Starts with number
+    // Array: Starts with [
+    // Bool: string is true or false
+    // String: Starts with "
+    // Object: Starts with {
+    // Else Invalid
 
-    Logger::log("--------------------------------------");
+    int n = jsonToken.size();
+    char firstChar = jsonToken[0];
+    char lastChar = jsonToken[n - 1];
+
+    bool isFirstCharDigit = firstChar >= '0' && firstChar <= '9';
+    bool isInteger =
+        isFirstCharDigit ? jsonToken.find('.') == std::string::npos : false;
+
+    if (isFirstCharDigit && isInteger) {
+        return JsonType::INT;
+    } else if (isFirstCharDigit && !isInteger) {
+        return JsonType::DOUBLE;
+    } else if (firstChar == '[' && lastChar == ']') {
+        return JsonType::ARRAY;
+    } else if (jsonToken == "true" || jsonToken == "false") {
+        return JsonType::BOOL;
+    } else if (firstChar == '"' && lastChar == '"') {
+        return JsonType::STRING;
+    } else if (firstChar == '{' && lastChar == '}') {
+        return JsonType::OBJECT;
+    } else {
+        Logger::log(jsonToken);
+        throw std::invalid_argument("Invalid Json");
+    }
+}
+
+void Json::Json::parseJsonFromString(const std::string &jsonString) {
+    // TODO: Delete the tree if present
+    data = parseJsonFromStringCallback(jsonString);
+}
+
+Json::JsonNode *Json::Json::parseJsonFromStringCallback(
+    const std::string &jsonString) {
+    JsonNode *node = new JsonNode();
+
+    // Handling the null type
+    if (jsonString.size() == 0) {
+        node->type = JsonType::NULL_VALUE;
+        return node;
+    }
+
+    // Clean the jsonString: Removing the extra spaces if any around it
+    std::string cleanedJsonString = Utils::trim(jsonString);
+
+    // Get the type of token
+    JsonType tokenType = getJsonTokenType(cleanedJsonString);
+
+    // Temp variables used in switch
+    std::vector<std::string> tokens;
+    std::string stringWithFirstAndLastCharTrimmed =
+        cleanedJsonString.substr(1, cleanedJsonString.size() - 2);
+
+    // Set the node type
+    node->type = tokenType;
+
+    switch (tokenType) {
+        case JsonType::INT:
+            node->intValue = std::stoll(cleanedJsonString);
+            break;
+
+        case JsonType::DOUBLE:
+            node->doubleValue = std::stod(cleanedJsonString);
+            break;
+
+        case JsonType::BOOL:
+            node->boolValue = (cleanedJsonString == "true" ? true : false);
+            break;
+
+        case JsonType::STRING:
+            node->stringValue = stringWithFirstAndLastCharTrimmed;
+            break;
+
+        case JsonType::ARRAY:
+            tokens = Utils::split(stringWithFirstAndLastCharTrimmed, ",");
+            for (std::string token : tokens) {
+                node->arrayValue.push_back(parseJsonFromStringCallback(token));
+            }
+            break;
+
+        case JsonType::OBJECT:
+            std::vector<std::string> keyValuePairs =
+                Utils::split(stringWithFirstAndLastCharTrimmed, ",");
+
+            for (std::string pair : keyValuePairs) {
+                std::vector<std::string> keyAndValue = Utils::split(pair, ":");
+
+                if (keyAndValue.size() != 2) {
+                    throw std::invalid_argument("Invalid Json Object");
+                }
+
+                std::string key = keyAndValue[0];
+                std::string value = keyAndValue[1];
+
+                Logger::log(value);
+
+                // Time key
+                key = Utils::trim(key);
+
+                if (getJsonTokenType(key) != JsonType::STRING) {
+                    throw std::invalid_argument("Invalid Json String");
+                }
+
+                // remove the " from the string
+                key = key.substr(1, key.size() - 2);
+
+                // Recursively call value to parse it
+                node->objectValue[key] = parseJsonFromStringCallback(value);
+            }
+            break;
+    }
+
+    return node;
 }

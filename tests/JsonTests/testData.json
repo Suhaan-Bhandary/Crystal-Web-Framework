@@ -1,0 +1,21 @@
+{
+    "language": "C++",
+    "tests": [
+        "trim",
+        "json"
+    ],
+    "project": {
+        "creator": "Suhaan Ramdas Bhandary",
+        "name": "HTTP Server C++",
+        "stars": 6,
+        "isInDevelopment": true
+    },
+    "systems": [
+        {
+            "name": "ubuntu"
+        },
+        {
+            "name": "vscode"
+        }
+    ]
+}
