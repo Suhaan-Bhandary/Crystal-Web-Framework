@@ -2,28 +2,34 @@
 #include <unistd.h>
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace Utils {
+// The trim is used to all \r\n, \n and " " from both sides
 std::string trim(const std::string &original) {
     int n = original.size();
 
+    // chars to trim
+    std::unordered_set<char> charsToTrim = {' ', '\n', '\r'};
+
     // Now Find the first non space in the original from start
-    int nonSpaceIndexFromStart = 0;
-    while (nonSpaceIndexFromStart < n &&
-           original[nonSpaceIndexFromStart] == ' ') {
-        nonSpaceIndexFromStart++;
+    int nonTrimFromStart = 0;
+    while (nonTrimFromStart < n &&
+           charsToTrim.count(original[nonTrimFromStart]) == 1) {
+        nonTrimFromStart++;
     }
 
     // Now Find the first non space in the original from end
-    int nonSpaceIndexFromEnd = original.size() - 1;
-    while (nonSpaceIndexFromEnd >= 0 && original[nonSpaceIndexFromEnd] == ' ') {
-        nonSpaceIndexFromEnd--;
+    int nonTrimFromEnd = original.size() - 1;
+    while (nonTrimFromEnd >= 0 &&
+           charsToTrim.count(original[nonTrimFromEnd]) == 1) {
+        nonTrimFromEnd--;
     }
 
     // Start from non space till end
     std::string trimmed = "";
-    for (int i = nonSpaceIndexFromStart; i <= nonSpaceIndexFromEnd; i++) {
+    for (int i = nonTrimFromStart; i <= nonTrimFromEnd; i++) {
         trimmed.push_back(original[i]);
     }
 

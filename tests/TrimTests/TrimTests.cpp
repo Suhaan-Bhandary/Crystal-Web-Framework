@@ -20,7 +20,7 @@ void Test::TrimTests() {
     }
 
     // Full Trim
-    if (Utils::trim("    ") != "") {
+    if (Utils::trim("    \n\n\r") != "") {
         totalTestFails += 1;
         Logger::log("Test Failed: Full Trim");
     }
