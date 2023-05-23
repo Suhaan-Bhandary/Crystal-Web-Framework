@@ -67,7 +67,11 @@ void http::Request::parseDataFromBody() {
 
     // Check the type of content
     if (contentType == "application/json") {
-        jsonData = new Json::Json(body);
+        try {
+            jsonData = new Json::Json(body);
+        } catch (const std::exception &e) {
+            jsonData = new Json::Json("");
+        }
     }
 }
 
