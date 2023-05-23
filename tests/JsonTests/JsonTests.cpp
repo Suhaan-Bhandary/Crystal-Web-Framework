@@ -19,7 +19,7 @@ void Test::JsonTests() {
         std::string jsonValue = "";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::NULL_VALUE) {
+        if (jsonObject.data->getType() != Json::JsonType::NULL_VALUE) {
             totalTestFails += 1;
             Logger::log("Test Failed: Empty Json");
         }
@@ -30,8 +30,8 @@ void Test::JsonTests() {
         std::string jsonValue = "100";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::INT ||
-            jsonObject.data->intValue != 100) {
+        if (jsonObject.data->getType() != Json::JsonType::INT ||
+            jsonObject.data->getIntValue() != 100) {
             totalTestFails += 1;
             Logger::log("Test Failed: Number Json");
         }
@@ -42,8 +42,8 @@ void Test::JsonTests() {
         std::string jsonValue = "100.25";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::DOUBLE ||
-            jsonObject.data->doubleValue != 100.25) {
+        if (jsonObject.data->getType() != Json::JsonType::DOUBLE ||
+            jsonObject.data->getDoubleValue() != 100.25) {
             totalTestFails += 1;
             Logger::log("Test Failed: Double Json");
         }
@@ -54,8 +54,8 @@ void Test::JsonTests() {
         std::string jsonValue = "true";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::BOOL ||
-            jsonObject.data->boolValue != true) {
+        if (jsonObject.data->getType() != Json::JsonType::BOOL ||
+            jsonObject.data->getBoolValue() != true) {
             totalTestFails += 1;
             Logger::log("Test Failed: Bool Json");
         }
@@ -66,8 +66,8 @@ void Test::JsonTests() {
         std::string jsonValue = "\"Http Server C++\"";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::STRING ||
-            jsonObject.data->stringValue != "Http Server C++") {
+        if (jsonObject.data->getType() != Json::JsonType::STRING ||
+            jsonObject.data->getStringValue() != "Http Server C++") {
             totalTestFails += 1;
             Logger::log("Test Failed: String Json");
         }
@@ -82,14 +82,14 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->arrayValue.size() == arrSize;
+            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->arrayValue[i];
-                if (element->intValue != compareArray[i]) {
+                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
+                if (element->getIntValue() != compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -113,15 +113,15 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->arrayValue.size() == arrSize;
+            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->arrayValue[i];
-                if (element->doubleValue != compareArray[i]) {
+                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
+                if (element->getDoubleValue() != compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -145,14 +145,14 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->arrayValue.size() == arrSize;
+            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->arrayValue[i];
-                if (element->stringValue != compareArray[i]) {
+                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
+                if (element->getStringValue() != compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -176,14 +176,14 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->arrayValue.size() == arrSize;
+            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->arrayValue[i];
-                if (element->boolValue != compareArray[i]) {
+                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
+                if (element->getBoolValue() != compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -204,9 +204,10 @@ void Test::JsonTests() {
         std::string jsonValue = "{\"language\": \"C++\", \"number\": 1}";
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::OBJECT ||
-            jsonObject.data->objectValue["language"]->stringValue != "C++" ||
-            jsonObject.data->objectValue["number"]->intValue != 1) {
+        if (jsonObject.data->getType() != Json::JsonType::OBJECT ||
+            jsonObject.data->getObjectValue("language")->getStringValue() !=
+                "C++" ||
+            jsonObject.data->getObjectValue("number")->getIntValue() != 1) {
             totalTestFails += 1;
             Logger::log("Test Failed: Object as Json");
         }
@@ -219,12 +220,12 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
             // get the value 6
-            if (jsonObject.data->arrayValue[1]
-                    ->arrayValue[3]
-                    ->arrayValue[0]
-                    ->intValue != 6) {
+            if (jsonObject.data->getArrayElement(1)
+                    ->getArrayElement(3)
+                    ->getArrayElement(0)
+                    ->getIntValue() != 6) {
                 totalTestFails += 1;
                 Logger::log("Test Failed: Array Array Json");
             }
@@ -256,44 +257,45 @@ void Test::JsonTests() {
 
         bool isJsonParsedCorrectly = true;
 
-        if (jsonObject.data->type != Json::JsonType::OBJECT) {
+        if (jsonObject.data->getType() != Json::JsonType::OBJECT) {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.data->objectValue["language"]->stringValue != "C++") {
+            jsonObject.data->getObjectValue("language")->getStringValue() !=
+                "C++") {
+            isJsonParsedCorrectly = false;
+        }
+
+        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("tests")
+                                             ->getArrayElement(0)
+                                             ->getStringValue() != "trim") {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.data->objectValue["tests"]->arrayValue[0]->stringValue !=
-                "trim") {
+            jsonObject.data->getObjectValue("project")
+                    ->getObjectValue("creator")
+                    ->getStringValue() != "Suhaan Ramdas Bhandary") {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly &&
-            jsonObject.data->objectValue["project"]
-                    ->objectValue["creator"]
-                    ->stringValue != "Suhaan Ramdas Bhandary") {
+        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("project")
+                                             ->getObjectValue("stars")
+                                             ->getIntValue() != 6) {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.data->objectValue["project"]
-                                             ->objectValue["stars"]
-                                             ->intValue != 6) {
+        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("project")
+                                             ->getObjectValue("isInDevelopment")
+                                             ->getBoolValue() != true) {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.data->objectValue["project"]
-                                             ->objectValue["isInDevelopment"]
-                                             ->boolValue != true) {
-            isJsonParsedCorrectly = false;
-        }
-
-        if (isJsonParsedCorrectly && jsonObject.data->objectValue["systems"]
-                                             ->arrayValue[0]
-                                             ->objectValue["name"]
-                                             ->stringValue != "ubuntu") {
+        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("systems")
+                                             ->getArrayElement(0)
+                                             ->getObjectValue("name")
+                                             ->getStringValue() != "ubuntu") {
             isJsonParsedCorrectly = false;
         }
 

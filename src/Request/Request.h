@@ -11,21 +11,24 @@ namespace http {
 class Request {
     std::unordered_map<std::string, std::string> valueMap;
 
-   public:
-    std::string header, body;
-
     // This stores the json data if we have json in body
     Json::Json *jsonData = nullptr;
+
+   public:
+    std::string header, body;
 
     std::unordered_map<std::string, std::string> pathParams;
     std::unordered_map<std::string, std::string> searchQueries;
 
     Request(char requestBuffer[]);
+
     void readRequest(char requestBuffer[]);
     void parseDataFromHeader();
     void parseDataFromBody();
     std::string getValue(std::string key);
     void processSearchQuery(const std::string &queryString);
+
+    Json::JsonNode *getJsonData();
 };
 }  // namespace http
 

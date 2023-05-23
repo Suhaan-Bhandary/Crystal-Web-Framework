@@ -1,5 +1,7 @@
 #include "./Request.h"
 
+#include <stdexcept>
+
 #include "../Json/Json.h"
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
@@ -89,4 +91,12 @@ void http::Request::processSearchQuery(const std::string &queryString) {
 
         searchQueries.insert({keyAndValue[0], keyAndValue[1]});
     }
+}
+
+// Getter for getting json data from body
+Json::JsonNode *http::Request::getJsonData() {
+    if (jsonData == nullptr) {
+        throw std::invalid_argument("Body Json Data not available");
+    }
+    return jsonData->data;
 }

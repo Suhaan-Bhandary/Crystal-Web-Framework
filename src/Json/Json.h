@@ -2,6 +2,7 @@
 #ifndef INCLUDED_JSON
 #define INCLUDED_JSON
 
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -29,7 +30,7 @@ struct JsonNode {
         5: arrayValue
         6: objectValue
     */
-
+   private:
     JsonType type;
 
     long long intValue;
@@ -40,13 +41,30 @@ struct JsonNode {
     std::vector<JsonNode *> arrayValue;
     std::unordered_map<std::string, JsonNode *> objectValue;
 
+   public:
     JsonNode();
+
+    // Getter functions
+    JsonType getType();
+    long long getIntValue();
+    double getDoubleValue();
+    bool getBoolValue();
+    std::string getStringValue();
+
+    std::vector<JsonNode *> getArray();
+    JsonNode *getArrayElement(int index);
+    JsonNode *getObjectValue(const std::string &key);
+
+    // friend class declaration, so that it can access private variables
+    friend class Json;
 };
 
 class Json {
    public:
     JsonNode *data;
     Json(const std::string &body);
+
+    // TODO: Create Destructure to free up memory, Very important
 
     // Function to parse the string and convert to json object
     JsonType getJsonTokenType(const std::string &jsonToken);

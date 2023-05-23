@@ -66,10 +66,10 @@ void Controller::saveUserData(http::Request &request,
     try {
         // Load data from json
         std::string name =
-            request.jsonData->data->objectValue["name"]->stringValue;
+            request.getJsonData()->getObjectValue("name")->getStringValue();
 
         std::string email =
-            request.jsonData->data->objectValue["email"]->stringValue;
+            request.getJsonData()->getObjectValue("email")->getStringValue();
 
         response.setStatusCode(200);
         response.sendHTML("<h1>Data: " + name + " and " + email + "</h1>");

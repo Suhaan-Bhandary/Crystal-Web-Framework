@@ -11,6 +11,54 @@
 // Setting all the values to nullptr
 Json::JsonNode::JsonNode() { type = JsonType::NULL_VALUE; }
 
+Json::JsonType Json::JsonNode::getType() { return type; }
+
+long long Json::JsonNode::getIntValue() {
+    if (type != JsonType::INT) {
+        throw std::invalid_argument("Json Value not found");
+    }
+    return intValue;
+}
+
+double Json::JsonNode::getDoubleValue() {
+    if (type != JsonType::DOUBLE) {
+        throw std::invalid_argument("Json Value not found");
+    }
+    return doubleValue;
+}
+
+bool Json::JsonNode::getBoolValue() {
+    if (type != JsonType::BOOL) {
+        throw std::invalid_argument("Json Value not found");
+    }
+    return boolValue;
+}
+
+std::string Json::JsonNode::getStringValue() {
+    if (type != JsonType::STRING) {
+        throw std::invalid_argument("Json Value not found");
+    }
+    return stringValue;
+}
+
+std::vector<Json::JsonNode *> Json::JsonNode::getArray() { return arrayValue; }
+
+Json::JsonNode *Json::JsonNode::getArrayElement(int index) {
+    if (type != JsonType::ARRAY || index >= arrayValue.size()) {
+        throw std::invalid_argument("Json Value not found");
+    }
+
+    return arrayValue[index];
+}
+
+Json::JsonNode *Json::JsonNode::getObjectValue(const std::string &key) {
+    if (type != JsonType::OBJECT || objectValue.count(key) == 0) {
+        throw std::invalid_argument("Json Value not found");
+    }
+
+    return objectValue[key];
+}
+
 // Json
 Json::Json::Json(const std::string &body) {
     data = nullptr;
