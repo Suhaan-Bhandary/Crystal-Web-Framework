@@ -82,7 +82,7 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::ARRAY) {
+        if (jsonObject.data->type == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
@@ -99,22 +99,26 @@ void Test::JsonTests() {
                 totalTestFails += 1;
                 Logger::log("Test Failed: Number Array Json");
             }
+        } else {
+            totalTestFails += 1;
+            Logger::log("Test Failed: Number Array Json");
         }
     }
 
     // Array of double
     {
-        int arrSize = 5;
+        int arrSize = 6;
         std::string jsonValue = "[1.1,2.5,5.6,3.5,4.4,5.8]";
         double compareArray[] = {1.1, 2.5, 5.6, 3.5, 4.4, 5.8};
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::ARRAY) {
+        if (jsonObject.data->type == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
             arrayIsSimilar = jsonObject.data->arrayValue.size() == arrSize;
+
             for (int i = 0; i < arrSize; i++) {
                 Json::JsonNode *element = jsonObject.data->arrayValue[i];
                 if (element->doubleValue != compareArray[i]) {
@@ -127,6 +131,9 @@ void Test::JsonTests() {
                 totalTestFails += 1;
                 Logger::log("Test Failed: Double Array Json");
             }
+        } else {
+            totalTestFails += 1;
+            Logger::log("Test Failed: Double Array Json");
         }
     }
 
@@ -138,7 +145,7 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::ARRAY) {
+        if (jsonObject.data->type == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
@@ -155,6 +162,9 @@ void Test::JsonTests() {
                 totalTestFails += 1;
                 Logger::log("Test Failed: String Array Json");
             }
+        } else {
+            totalTestFails += 1;
+            Logger::log("Test Failed: String Array Json");
         }
     }
 
@@ -166,7 +176,7 @@ void Test::JsonTests() {
 
         Json::Json jsonObject(jsonValue);
 
-        if (jsonObject.data->type != Json::JsonType::ARRAY) {
+        if (jsonObject.data->type == Json::JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
@@ -183,6 +193,9 @@ void Test::JsonTests() {
                 totalTestFails += 1;
                 Logger::log("Test Failed: Bool Array Json");
             }
+        } else {
+            totalTestFails += 1;
+            Logger::log("Test Failed: Bool Array Json");
         }
     }
 
@@ -196,6 +209,28 @@ void Test::JsonTests() {
             jsonObject.data->objectValue["number"]->intValue != 1) {
             totalTestFails += 1;
             Logger::log("Test Failed: Object as Json");
+        }
+    }
+
+    // Array of Array Json
+    {
+        int arrSize = 5;
+        std::string jsonValue = "[1,[1,2,3,[6]],3,4,5]";
+
+        Json::Json jsonObject(jsonValue);
+
+        if (jsonObject.data->type == Json::JsonType::ARRAY) {
+            // get the value 6
+            if (jsonObject.data->arrayValue[1]
+                    ->arrayValue[3]
+                    ->arrayValue[0]
+                    ->intValue != 6) {
+                totalTestFails += 1;
+                Logger::log("Test Failed: Array Array Json");
+            }
+        } else {
+            totalTestFails += 1;
+            Logger::log("Test Failed: Array Array Json");
         }
     }
 

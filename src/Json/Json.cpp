@@ -1,6 +1,7 @@
 #include "Json.h"
 
 #include <iostream>
+#include <stack>
 #include <stdexcept>
 
 #include "../Logger/Logger.h"
@@ -51,6 +52,107 @@ Json::JsonType Json::Json::getJsonTokenType(const std::string &jsonToken) {
     }
 }
 
+// Function to get elements from an array
+std::vector<std::string> Json::Json::getElementsOfJsonArrayString(
+    const std::string &jsonString) {
+    int n = jsonString.size();
+
+    std::string token = "";
+    std::vector<std::string> tokens;
+
+    std::stack<char> stk;
+    for (int i = 1; i <= n - 2; i++) {
+        char ch = jsonString[i];
+
+        switch (ch) {
+            case '[':
+                if (!stk.empty() && stk.top() == '"') {
+                    token.push_back(ch);
+                } else {
+                    stk.push(ch);
+                    token.push_back(ch);
+                }
+                break;
+
+            case ']':
+                if (stk.empty()) {
+                    throw std::invalid_argument(
+                        "Invalid Json Array: While parsing");
+                }
+
+                if (stk.top() == '[') {
+                    stk.pop();
+                    token.push_back(ch);
+                } else if (stk.top() == '"') {
+                    token.push_back(ch);
+                } else {
+                    throw std::invalid_argument(
+                        "Invalid Json Array: While parsing");
+                }
+                break;
+
+            case '{':
+                if (!stk.empty() && stk.top() == '"') {
+                    token.push_back(ch);
+                } else {
+                    stk.push(ch);
+                    token.push_back(ch);
+                }
+
+                break;
+
+            case '}':
+                if (stk.empty()) {
+                    throw std::invalid_argument(
+                        "Invalid Json Array: While parsing");
+                }
+
+                if (stk.top() == '{') {
+                    stk.pop();
+                    token.push_back(ch);
+                } else if (stk.top() == '"') {
+                    token.push_back(ch);
+                } else {
+                    throw std::invalid_argument(
+                        "Invalid Json Array: While parsing");
+                }
+                break;
+
+            case '"':
+                if (!stk.empty() && stk.top() == '"') {
+                    stk.pop();
+                    token.push_back(ch);
+                } else {
+                    stk.push(ch);
+                    token.push_back(ch);
+                }
+                break;
+
+            case ',':
+                if (stk.empty()) {
+                    tokens.push_back(token);
+                    token.clear();
+                } else {
+                    token.push_back(ch);
+                }
+                break;
+
+            default:
+                token.push_back(ch);
+                break;
+        }
+    }
+
+    if (!stk.empty()) {
+        throw std::invalid_argument("Invalid Json Array: While parsing");
+    }
+
+    // Insert the last token
+    if (token.size() > 0) tokens.push_back(token);
+
+    return tokens;
+}
+
 void Json::Json::parseJsonFromString(const std::string &jsonString) {
     // TODO: Delete the tree if present
     data = parseJsonFromStringCallback(jsonString);
@@ -98,7 +200,7 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
             break;
 
         case JsonType::ARRAY:
-            tokens = Utils::split(stringWithFirstAndLastCharTrimmed, ",");
+            tokens = getElementsOfJsonArrayString(cleanedJsonString);
             for (std::string token : tokens) {
                 node->arrayValue.push_back(parseJsonFromStringCallback(token));
             }

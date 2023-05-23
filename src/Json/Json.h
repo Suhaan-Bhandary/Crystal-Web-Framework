@@ -53,6 +53,10 @@ class Json {
     void parseJsonFromString(const std::string &jsonString);
     JsonNode *parseJsonFromStringCallback(const std::string &jsonString);
 
+    // Json utility functions
+    std::vector<std::string> getElementsOfJsonArrayString(
+        const std::string &jsonString);
+
     // TODO: Create a Destructure
 };
 }  // namespace Json
