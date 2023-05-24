@@ -6,8 +6,8 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o 
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o  -o server
+server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -42,6 +42,9 @@ build/Logger.o: src/Logger/Logger.cpp
 build/Json.o: src/Json/Json.cpp
 	${CC} ${CFLAGS} src/Json/Json.cpp -o build/Json.o
 
+build/JsonNode.o: src/Json/JsonNode.cpp
+	${CC} ${CFLAGS} src/Json/JsonNode.cpp -o build/JsonNode.o
+
 # Cleaning the build
 clean:
 	rm -rf build/*o server
@@ -50,8 +53,8 @@ clean:
 testProject: compileTests
 	./testProject && rm ./testProject
 
-compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o
-	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o -o testProject
+compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o
+	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o -o testProject
 
 build/tests.o: tests/tests.cpp
 	${CC} ${CFLAGS} tests/tests.cpp -o build/tests.o
