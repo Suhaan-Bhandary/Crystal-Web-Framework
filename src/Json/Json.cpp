@@ -8,6 +8,8 @@
 #include "../Utils/Utils.h"
 
 // Json
+Json::Json::Json() { data = new JsonNode(); }
+
 Json::Json::Json(const std::string &body) {
     data = nullptr;
     parseJsonFromString(body);

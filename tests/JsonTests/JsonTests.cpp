@@ -256,7 +256,7 @@ void Test::JsonTests() {
         Json::Json jsonObject(jsonValue);
 
         // Print string
-        Logger::log(jsonObject.getJsonString());
+        // Logger::log(jsonObject.getJsonString());
 
         bool isJsonParsedCorrectly = true;
 
@@ -321,5 +321,36 @@ void Test::JsonTests() {
             // If it catches it means it is working correctly
         }
     }
+
+    // Test for json object creation
+    {
+        try {
+            Json::Json jsonObject;
+            jsonObject.data->setAsObject();
+
+            jsonObject.data->insertInObject("name", "suhaan");
+            jsonObject.data->insertInObject("email", "suhaan");
+            jsonObject.data->insertEmptyArray("colors");
+
+            jsonObject.data->getObjectValue("colors")->insertInArray("red");
+            jsonObject.data->getObjectValue("colors")->insertInArray("blue");
+            jsonObject.data->getObjectValue("colors")->insertInArray("green");
+
+            // Logger::log(jsonObject.getJsonString());
+
+            if (jsonObject.data->getObjectValue("colors")
+                    ->getArrayElement(0)
+                    ->getStringValue() != "red") {
+                totalTestFails += 1;
+                Logger::log("Test Failed: Json Object Creation");
+            }
+
+        } catch (const std::exception &e) {
+            totalTestFails += 1;
+            Logger::log(e.what());
+            Logger::log("Test Failed: Json Object Creation");
+        }
+    }
+
     Logger::log("\nTotal Fails: " + std::to_string(totalTestFails));
 }

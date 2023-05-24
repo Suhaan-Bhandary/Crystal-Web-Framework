@@ -13,6 +13,7 @@ namespace Json {
 class Json {
    public:
     JsonNode *data;
+    Json();
     Json(const std::string &body);
     ~Json();
 

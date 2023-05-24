@@ -56,6 +56,39 @@ struct JsonNode {
     JsonNode *getArrayElement(int index);
     JsonNode *getObjectValue(const std::string &key);
 
+    // Clear the node and set it to given type
+    void clearJsonNodeAndSetNewType(JsonType newType);
+
+    // Initially in the node we can set the data type to other
+    void setValue(long long value);
+    void setValue(double value);
+    void setValue(bool value);
+    void setValue(const std::string &value);
+    void setValue(const char *value);
+
+    // Create array and object
+    void setAsArray();
+    void setAsObject();
+
+    // Insert element in array
+    void insertInArray(long long value);
+    void insertInArray(double value);
+    void insertInArray(bool value);
+    void insertInArray(const std::string &value);
+    void insertInArray(const char *value);
+
+    void insertEmptyArray();
+    void insertEmptyObject();
+
+    // Insert key value in object
+    void insertInObject(const std::string &key, long long value);
+    void insertInObject(const std::string &key, double value);
+    void insertInObject(const std::string &key, bool value);
+    void insertInObject(const std::string &key, const std::string &value);
+    void insertInObject(const std::string &key, const char *value);
+    void insertEmptyArray(const std::string &key);
+    void insertEmptyObject(const std::string &key);
+
     // String representation
     std::string getJsonString(int indentationLevel, int indentSpaces);
 
