@@ -83,6 +83,11 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     sendResponse(response_body, response_type);
 }
 
+void http::Response::sendJson(const std::string& jsonString) {
+    std::string response_type = "application/json";
+    sendResponse(jsonString, response_type);
+}
+
 void http::Response::sendResponse(const std::string& response_body,
                                   const std::string& response_type) {
     // Get the status code, if not found out of range exception

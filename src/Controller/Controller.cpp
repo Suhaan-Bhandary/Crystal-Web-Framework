@@ -72,7 +72,7 @@ void Controller::saveUserData(http::Request &request,
             request.getJsonData()->getObjectValue("email")->getStringValue();
 
         response.setStatusCode(200);
-        response.sendHTML("<h1>Data: " + name + " and " + email + "</h1>");
+        response.sendJson(request.getJsonData()->getJsonString(0, 4));
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         response.setStatusCode(500);
