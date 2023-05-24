@@ -71,8 +71,17 @@ void Controller::saveUserData(http::Request &request,
         std::string email =
             request.getJsonData()->getObjectValue("email")->getStringValue();
 
+        Json::Json responseData;
+        responseData.data->setAsObject();
+        responseData.data->insertInObject("message", "Successful");
+        responseData.data->insertInObject("name", name);
+        responseData.data->insertInObject("email", email);
+        responseData.data->insertEmptyObject("colors");
+        responseData.data->getObjectValue("colors")->insertInObject("red",
+                                                                    "redo");
+
         response.setStatusCode(200);
-        response.sendJson(request.getJsonData()->getJsonString(0, 4));
+        response.sendJson(responseData.getJsonString());
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         response.setStatusCode(500);
