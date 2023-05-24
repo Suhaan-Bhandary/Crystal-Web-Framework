@@ -13,6 +13,13 @@ Json::Json::Json(const std::string &body) {
     parseJsonFromString(body);
 }
 
+Json::Json::~Json() {
+    // Logger::log("Json Destructor");
+    if (data != nullptr) {
+        delete data;
+    }
+}
+
 Json::JsonType Json::Json::getJsonTokenType(const std::string &jsonToken) {
     // Note:
     // long long / double: Starts with number
@@ -367,7 +374,7 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
 }
 
 void Json::Json::parseJsonFromString(const std::string &jsonString) {
-    // TODO: Delete the tree if present
+    if (data != nullptr) delete data;
     data = parseJsonFromStringCallback(jsonString);
 }
 

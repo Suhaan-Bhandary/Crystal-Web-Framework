@@ -14,8 +14,7 @@ class Json {
    public:
     JsonNode *data;
     Json(const std::string &body);
-
-    // TODO: Create Destructure to free up memory, Very important
+    ~Json();
 
     // Function to parse the string and convert to json object
     JsonType getJsonTokenType(const std::string &jsonToken);
@@ -31,8 +30,6 @@ class Json {
 
     std::vector<std::pair<std::string, std::string>>
     getKeyAndValuePairsOfJsonArrayObject(const std::string &jsonString);
-
-    // TODO: Create a Destructure
 };
 }  // namespace Json
 

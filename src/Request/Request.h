@@ -21,6 +21,7 @@ class Request {
     std::unordered_map<std::string, std::string> searchQueries;
 
     Request(char requestBuffer[]);
+    ~Request();
 
     void readRequest(char requestBuffer[]);
     void parseDataFromHeader();

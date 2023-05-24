@@ -12,6 +12,13 @@ http::Request::Request(char requestBuffer[]) {
     parseDataFromBody();
 }
 
+http::Request::~Request() {
+    // Logger::log("Request Destructor");
+    if (jsonData != nullptr) {
+        delete jsonData;
+    }
+}
+
 void http::Request::readRequest(char requestBuffer[]) {
     std::vector<std::string> blocks =
         Utils::split(std::string(requestBuffer), "\r\n\r\n");

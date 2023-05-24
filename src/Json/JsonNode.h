@@ -43,6 +43,7 @@ struct JsonNode {
 
    public:
     JsonNode();
+    ~JsonNode();
 
     // Getter functions
     JsonType getType();

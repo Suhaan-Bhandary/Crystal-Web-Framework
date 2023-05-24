@@ -1,8 +1,22 @@
 #include "JsonNode.h"
 
+#include "../Logger/Logger.h"
+
 // Json Node
 // Setting all the values to nullptr
 Json::JsonNode::JsonNode() { type = JsonType::NULL_VALUE; }
+Json::JsonNode::~JsonNode() {
+    // Logger::log("\nJsonNode Destructor");
+    // Logger::log(getJsonString(0, 4));
+
+    if (type == JsonType::ARRAY) {
+        for (auto element : arrayValue) delete element;
+        arrayValue.clear();
+    } else if (type == JsonType::OBJECT) {
+        for (auto pair : objectValue) delete pair.second;
+        objectValue.clear();
+    }
+}
 
 Json::JsonType Json::JsonNode::getType() { return type; }
 
