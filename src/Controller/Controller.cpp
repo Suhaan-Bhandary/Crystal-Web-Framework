@@ -88,3 +88,11 @@ void Controller::saveUserData(http::Request &request,
         response.sendHTML("<h1>Error</h1>");
     }
 }
+
+void Controller::redirectUserToGoogle(http::Request &request,
+                                      http::Response &response) {
+    std::string url = request.searchQueries["url"];
+    if (url.size() == 0) url = "/";
+
+    response.redirect(url);
+}

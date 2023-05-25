@@ -107,3 +107,18 @@ void http::Response::sendResponse(const std::string& response_body,
 }
 
 void http::Response::setStatusCode(int status) { statusCode = status; }
+
+void http::Response::redirect(const std::string& redirect_url) {
+    std::string httpResponse = "";
+
+    // Add header to define redirect
+    httpResponse += "HTTP/1.1 " + statusCodes.at(301) + "\r\n";
+    httpResponse += "Location: " + redirect_url + "\r\n";
+    httpResponse += "Content-Type: text/html\r\n";
+    httpResponse += "Content-Length: 0\r\n";
+    httpResponse += "Connection: close\r\n";
+    httpResponse += "\r\n";
+
+    // send to client
+    send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
+}

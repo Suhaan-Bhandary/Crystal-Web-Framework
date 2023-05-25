@@ -13,6 +13,7 @@ http::Router::Router() {
     registerPath("GET", "/", Controller::getHome);
     registerPath("GET", "/user/:id", Controller::getUser);
     registerPath("GET", "/user/chat", Controller::getUserChat);
+    registerPath("GET", "/redirect-user", Controller::redirectUserToGoogle);
     registerPath("POST", "/user", Controller::saveUserData);
 
     registerPath("GET", "*", Controller::getNotFound);

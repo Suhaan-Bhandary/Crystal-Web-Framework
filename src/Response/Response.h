@@ -22,6 +22,7 @@ class Response {
                       const std::string &response_type);
 
     void setStatusCode(int status);
+    void redirect(const std::string &redirect_url);
 };
 }  // namespace http
 
