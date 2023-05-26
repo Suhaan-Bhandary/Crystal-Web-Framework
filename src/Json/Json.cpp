@@ -68,6 +68,7 @@ std::vector<std::string> Json::Json::getElementsOfJsonArrayString(
     std::stack<char> stk;
     for (int i = 1; i <= n - 2; i++) {
         char ch = jsonString[i];
+        char preCh = jsonString[i - 1];
 
         switch (ch) {
             case '[':
@@ -124,7 +125,10 @@ std::vector<std::string> Json::Json::getElementsOfJsonArrayString(
                 break;
 
             case '"':
-                if (!stk.empty() && stk.top() == '"') {
+                if (preCh == '\\') {
+                    // escape condition
+                    token.push_back(ch);
+                } else if (!stk.empty() && stk.top() == '"') {
                     stk.pop();
                     token.push_back(ch);
                 } else {
@@ -180,6 +184,7 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
         bool keyStringCompleted = false;
         while (i <= n - 2 && !keyStringCompleted) {
             char ch = jsonString[i];
+            char preCh = jsonString[i - 1];
 
             switch (ch) {
                 case '[':
@@ -236,7 +241,10 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
                     break;
 
                 case '"':
-                    if (!stk.empty() && stk.top() == '"') {
+                    if (preCh == '\\') {
+                        // escape condition
+                        key.push_back(ch);
+                    } else if (!stk.empty() && stk.top() == '"') {
                         stk.pop();
                         key.push_back(ch);
                     } else {
@@ -281,10 +289,11 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
         // extract the value
         std::string value = "";
 
-        bool valueStringCompleted = false;
-        while (i <= n - 2 && !valueStringCompleted) {
+        while (i <= n - 2) {
             char ch = jsonString[i];
+            char preCh = jsonString[i - 1];
 
+            bool shouldBreakLoop = false;
             switch (ch) {
                 case '[':
                     if (!stk.empty() && stk.top() == '"') {
@@ -340,7 +349,10 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
                     break;
 
                 case '"':
-                    if (!stk.empty() && stk.top() == '"') {
+                    if (preCh == '\\') {
+                        // escape condition
+                        value.push_back(ch);
+                    } else if (!stk.empty() && stk.top() == '"') {
                         stk.pop();
                         value.push_back(ch);
                     } else {
@@ -351,7 +363,7 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
 
                 case ',':
                     if (stk.empty()) {
-                        valueStringCompleted = true;
+                        shouldBreakLoop = true;
                     } else {
                         value.push_back(ch);
                     }
@@ -362,13 +374,14 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
                     break;
             }
             i++;
+
+            if (shouldBreakLoop) break;
         }
 
-        if (!stk.empty() && !valueStringCompleted) {
+        if (!stk.empty()) {
             throw std::invalid_argument("Invalid Json Object: While parsing");
         }
 
-        // std::cout << key << ":" << value << std::endl;
         keyAndValuePairs.push_back({key, value});
     }
 
