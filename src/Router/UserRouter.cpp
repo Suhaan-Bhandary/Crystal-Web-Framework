@@ -16,5 +16,9 @@ http::Router::Router() {
     registerPath("GET", "/redirect-user", Controller::redirectUserToGoogle);
     registerPath("POST", "/user", Controller::saveUserData);
 
+    // XO Game
+    registerPath("GET", "/xo-game", Controller::getXOGame);
+
+    // Not Found
     registerPath("GET", "*", Controller::getNotFound);
 }

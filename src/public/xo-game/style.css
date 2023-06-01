@@ -1,0 +1,61 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  text-align: center;
+}
+
+main > h1 {
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  border-collapse: collapse;
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+}
+
+.grid td {
+  border: 2px solid black;
+}
+
+.grid td {
+  width: 100px;
+  height: 100px;
+
+  font-size: 3rem;
+
+  cursor: pointer;
+}
+
+.grid td:first-child {
+  border-left: 0;
+}
+
+.grid td:last-child {
+  border-right: 0;
+}
+
+.grid tr:first-child td {
+  border-top: 0;
+}
+
+.grid tr:last-child td {
+  border-bottom: 0;
+}
+
+.restartButton {
+  display: inline-block;
+  margin-inline: auto;
+}
+
+.gameOverContainer {
+  display: none;
+}
+
+.gameOverContainer.active {
+  display: block;
+}

@@ -96,3 +96,8 @@ void Controller::redirectUserToGoogle(http::Request &request,
 
     response.redirect(url);
 }
+
+void Controller::getXOGame(http::Request &request, http::Response &response) {
+    response.setStatusCode(200);
+    response.sendTemplate("xo-game.html");
+}

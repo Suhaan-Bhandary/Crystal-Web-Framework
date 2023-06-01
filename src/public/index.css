@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+.defaultButton {
+  text-decoration: none;
+  padding: 1rem 2rem;
+  background-color: rgb(91, 47, 240);
+  border-radius: 6px;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px 0 rgb(117 76 255 / 25%);
+
+  color: #fff;
+  cursor: pointer;
+
+  border: none;
+  outline: none;
+
+  display: block;
+  position: relative;
+  text-align: center;
+
+  transition: all 0.2s, box-shadow 0.08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  margin-top: 1rem;
+  /* margin-inline: auto; */
+}
+
+.defaultButton:hover {
+  background-color: rgb(60, 19, 197);
+}

@@ -14,6 +14,8 @@ void defaultNotFound(http::Request &request, http::Response &response);
 void getPublicFile(http::Request &request, http::Response &response);
 void saveUserData(http::Request &request, http::Response &response);
 void redirectUserToGoogle(http::Request &request, http::Response &response);
+
+void getXOGame(http::Request &request, http::Response &response);
 }  // namespace Controller
 
 #endif
