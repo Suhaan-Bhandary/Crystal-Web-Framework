@@ -6,8 +6,8 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
+server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -26,6 +26,9 @@ build/Request.o: src/Request/Request.cpp
 
 build/Response.o: src/Response/Response.cpp
 	${CC} ${CFLAGS} src/Response/Response.cpp -o build/Response.o
+
+build/HTMLTemplate.o: src/HTMLTemplate/HTMLTemplate.cpp
+	${CC} ${CFLAGS} src/HTMLTemplate/HTMLTemplate.cpp -o build/HTMLTemplate.o
 
 build/StatusCodes.o: src/Response/StatusCodes.cpp
 	${CC} ${CFLAGS} src/Response/StatusCodes.cpp -o build/StatusCodes.o

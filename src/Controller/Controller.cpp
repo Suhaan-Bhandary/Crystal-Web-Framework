@@ -4,7 +4,9 @@
 
 void Controller::getHome(http::Request &request, http::Response &response) {
     response.setStatusCode(200);
-    response.sendTemplate("home.html");
+
+    Json::Json jsonObject("{}");
+    response.sendTemplate("home.html", jsonObject);
 }
 
 void Controller::getUser(http::Request &request, http::Response &response) {
@@ -46,8 +48,10 @@ void Controller::getUserChat(http::Request &request, http::Response &response) {
 }
 
 void Controller::getNotFound(http::Request &request, http::Response &response) {
+    Json::Json jsonObject("{}");
+
     response.setStatusCode(404);
-    response.sendTemplate("404NotFound.html");
+    response.sendTemplate("404NotFound.html", jsonObject);
 }
 
 void Controller::defaultNotFound(http::Request &request,
@@ -98,6 +102,8 @@ void Controller::redirectUserToGoogle(http::Request &request,
 }
 
 void Controller::getXOGame(http::Request &request, http::Response &response) {
+    Json::Json jsonObject("{}");
+
     response.setStatusCode(200);
-    response.sendTemplate("xo-game.html");
+    response.sendTemplate("xo-game.html", jsonObject);
 }

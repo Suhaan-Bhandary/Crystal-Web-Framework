@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "../Json/Json.h"
+
 namespace http {
 class Response {
     int client_socket;
@@ -15,7 +17,7 @@ class Response {
     Response(int client_socket);
     void sendHTML(const std::string &html);
     void send404();
-    void sendTemplate(const std::string &templateName);
+    void sendTemplate(const std::string &templateName, const Json::Json &data);
     void sendPublicFile(const std::string &relativePathToPublic);
     void sendJson(const std::string &jsonString);
     void sendResponse(const std::string &response_body,

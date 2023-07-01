@@ -7,6 +7,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "../HTMLTemplate/HTMLTemplate.h"
+#include "../Json/Json.h"
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
 
@@ -27,22 +29,16 @@ void http::Response::send404() {
     sendResponse(response_body, "text/plain");
 }
 
-void http::Response::sendTemplate(const std::string& templateName) {
+void http::Response::sendTemplate(const std::string& templateName,
+                                  const Json::Json& data) {
     // Read the file
     std::string rootDir = Utils::getCurrentDirectory();
     std::string templateURL = rootDir + "/src/templates/" + templateName;
-    std::ifstream HTMLFile(templateURL);
 
-    if (!HTMLFile.is_open()) {
-        Logger::log("Error in opening file!!");
-        return;
-    }
+    // Create template object
+    http::HTMLTemplate html_template(templateURL, data);
 
-    std::string HTMLContent((std::istreambuf_iterator<char>(HTMLFile)),
-                            (std::istreambuf_iterator<char>()));
-
-    // close the file
-    HTMLFile.close();
+    std::string HTMLContent = html_template.getHtml();
 
     // Send Response
     sendResponse(HTMLContent, "text/html");
