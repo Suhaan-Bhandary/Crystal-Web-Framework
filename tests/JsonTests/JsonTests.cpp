@@ -352,5 +352,19 @@ void Test::JsonTests() {
         }
     }
 
+    // Try copy constructor
+    {
+        std::string jsonValue = "100";
+        Json::Json jsonObject(jsonValue);
+
+        Json::Json copiedObject = jsonObject;
+
+        if (copiedObject.data->getType() != Json::JsonType::INT ||
+            copiedObject.data->getIntValue() != 100) {
+            totalTestFails += 1;
+            Logger::log("Test Failed: Copy Constructor");
+        }
+    }
+
     Logger::log("\nTotal Fails: " + std::to_string(totalTestFails));
 }

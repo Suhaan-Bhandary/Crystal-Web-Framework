@@ -15,6 +15,11 @@ Json::Json::Json(const std::string &body) {
     parseJsonFromString(body);
 }
 
+Json::Json::Json(Json &object) {
+    data = nullptr;
+    parseJsonFromString(object.getJsonString());
+}
+
 Json::Json::~Json() {
     // Logger::log("Json Destructor");
     if (data != nullptr) {

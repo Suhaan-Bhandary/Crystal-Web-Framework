@@ -15,6 +15,7 @@ class Json {
     JsonNode *data;
     Json();
     Json(const std::string &body);
+    Json(Json &object);
     ~Json();
 
     // Function to parse the string and convert to json object
