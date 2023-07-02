@@ -56,8 +56,8 @@ clean:
 testProject: compileTests
 	./testProject && rm ./testProject
 
-compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o
-	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o -o testProject
+compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/HTMLTemplateTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o build/HTMLTemplate.o
+	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/HTMLTemplateTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o build/HTMLTemplate.o -o testProject
 
 build/tests.o: tests/tests.cpp
 	${CC} ${CFLAGS} tests/tests.cpp -o build/tests.o
@@ -67,3 +67,6 @@ build/JsonTests.o: tests/JsonTests/JsonTests.cpp
 
 build/TrimTests.o: tests/TrimTests/TrimTests.cpp
 	${CC} ${CFLAGS} tests/TrimTests/TrimTests.cpp -o build/TrimTests.o
+
+build/HTMLTemplateTests.o: tests/HTMLTemplateTests/HTMLTemplateTests.cpp
+	${CC} ${CFLAGS} tests/HTMLTemplateTests/HTMLTemplateTests.cpp -o build/HTMLTemplateTests.o

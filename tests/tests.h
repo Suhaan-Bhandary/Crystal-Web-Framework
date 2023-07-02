@@ -7,6 +7,7 @@
 namespace Test {
 void TrimTests();
 void JsonTests();
+void HTMLTemplateTests();
 }  // namespace Test
 
 #endif

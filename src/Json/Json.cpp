@@ -21,7 +21,6 @@ Json::Json::Json(Json &object) {
 }
 
 Json::Json::~Json() {
-    // Logger::log("Json Destructor");
     if (data != nullptr) {
         delete data;
     }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample Template</title>
+  </head>
+  <body>
+    <h1>Sample Template</h1>
+
+    <!-- Variable -->
+    {{ firstName }}
+
+    <!-- Variable -->
+    {{ firstName + " " + lastName }} {{ }}
+
+    <!-- Loop with array -->
+    {{ % for name in names % }}
+    <p>{{ name }}</p>
+    {{ % endFor % }}
+
+    <!-- Loop with num -->
+    {{ % for num in range(0, 5) % }}
+    <p>{{ num }}</p>
+    {{ % endFor % }}
+
+    <!-- If Condition -->
+    {{ % if (name == "suhaan") % }}
+    <p>Admin: {{ variable }}</p>
+    {{ variable }} {{ % else % }}
+    <p>User: {{ variable }}</p>
+    {{ % endIf % }}
+  </body>
+</html>

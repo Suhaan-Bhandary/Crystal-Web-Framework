@@ -7,6 +7,7 @@ int main() {
 
     Test::TrimTests();
     Test::JsonTests();
+    Test::HTMLTemplateTests();
 
     return 0;
 }
