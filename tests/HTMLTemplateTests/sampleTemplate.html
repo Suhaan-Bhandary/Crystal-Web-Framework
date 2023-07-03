@@ -12,7 +12,7 @@
     {{ firstName }}
 
     <!-- Variable -->
-    {{ firstName + " " + lastName }} {{ }}
+    {{ firstName + " " + lastName }}
 
     <!-- Loop with array -->
     {{ % for name in names % }}
@@ -26,9 +26,9 @@
 
     <!-- If Condition -->
     {{ % if (name == "suhaan") % }}
-    <p>Admin: {{ variable }}</p>
-    {{ variable }} {{ % else % }}
-    <p>User: {{ variable }}</p>
+    <p>Admin: {{ name }}</p>
+    {{ % else % }}
+    <p>User: {{ name }}</p>
     {{ % endIf % }}
   </body>
 </html>
