@@ -470,4 +470,6 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
 }
 
 // Function to get string representation
-std::string Json::Json::getJsonString() { return data->getJsonString(0, 4); }
+std::string Json::Json::getJsonString() const {
+    return data->getJsonString(0, 4);
+}

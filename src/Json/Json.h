@@ -24,7 +24,8 @@ class Json {
     JsonNode *parseJsonFromStringCallback(const std::string &jsonString);
 
     // Function to get Json String
-    std::string getJsonString();
+    // Note: Using const so that other const object can use this function
+    std::string getJsonString() const;
 
     // Json utility functions
     std::vector<std::string> getElementsOfJsonArrayString(
