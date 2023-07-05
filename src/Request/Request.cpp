@@ -10,6 +10,9 @@ http::Request::Request(char requestBuffer[]) {
     readRequest(requestBuffer);
     parseDataFromHeader();
     parseDataFromBody();
+
+    // Function to parse cookie
+    parseCookiesData();
 }
 
 http::Request::~Request() {
@@ -81,6 +84,23 @@ void http::Request::parseDataFromBody() {
         } catch (const std::exception &e) {
             jsonData = new Json::Json("");
         }
+    }
+}
+
+void http::Request::parseCookiesData() {
+    std::string cookiesStream = getValue("Cookie");
+    Logger::log(cookiesStream);
+
+    if (cookiesStream.size() == 0) return;
+
+    // Parse the data and store it in cookies
+    std::vector<std::string> tokens = Utils::split(cookiesStream, ";");
+    for (auto token : tokens) {
+        std::vector<std::string> keyAndValue = Utils::split(token, "=");
+        if (keyAndValue.size() < 2) continue;
+
+        // Inserting the cookies
+        cookies.insert({keyAndValue[0], keyAndValue[1]});
     }
 }
 

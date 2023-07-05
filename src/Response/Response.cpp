@@ -93,9 +93,10 @@ void http::Response::sendResponse(const std::string& response_body,
     std::string response_header;
     response_header += "HTTP/1.1 " + response_status + "\r\n";
     response_header += "Content-Type: " + response_type + "\r\n";
+    response_header += getCookiesHeader();
     response_header += "\r\n";
 
-    // Create reponse
+    // Create response
     std::string httpResponse = response_header + response_body;
 
     // Send file contents
@@ -117,4 +118,130 @@ void http::Response::redirect(const std::string& redirect_url) {
 
     // send to client
     send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
+}
+
+// Cookie function
+void http::Response::setCookie(const std::string& name,
+                               const std::string& value,
+                               const std::string& expires,
+                               const std::string& domain, bool isHttpOnly,
+                               bool isSecure, bool isPartitioned,
+                               const std::string& path,
+                               const std::string& sameSite) {
+    // Creating a cookie
+    Cookie cookie(name, value, expires, 0, domain, isHttpOnly, isSecure,
+                  isPartitioned, path, sameSite);
+
+    // Setting the value of the cookie
+    if (cookieData.count(name) != 0) {
+        cookieData.erase(name);
+    }
+
+    cookieData.insert({name, cookie});
+}
+
+void http::Response::setCookie(const std::string& name,
+                               const std::string& value, int maxAgeInSeconds,
+                               const std::string& domain, bool isHttpOnly,
+                               bool isSecure, bool isPartitioned,
+                               const std::string& path,
+                               const std::string& sameSite) {
+    Cookie cookie(name, value, "", maxAgeInSeconds, domain, isHttpOnly,
+                  isSecure, isPartitioned, path, sameSite);
+
+    // Setting the value of the cookie
+    if (cookieData.count(name) != 0) {
+        cookieData.erase(name);
+    }
+
+    cookieData.insert({name, cookie});
+}
+
+void http::Response::clearCookie(const std::string& name) {
+    setCookie(name, "", 0);
+}
+
+std::string http::Response::getCookiesHeader() {
+    std::string cookieHeader = "";
+
+    for (auto p : cookieData) {
+        cookieHeader += p.second.getHeader();
+    }
+
+    return cookieHeader;
+}
+
+// Cookie
+http::Cookie::Cookie(const std::string& name, const std::string& value,
+                     const std::string& expires, int maxAge,
+                     const std::string& domain, bool isHttpOnly, bool isSecure,
+                     bool isPartitioned, const std::string& path,
+                     const std::string& sameSite)
+    : name(name),
+      value(value),
+      expires(expires),
+      maxAge(maxAge),
+      domain(domain),
+      isHttpOnly(isHttpOnly),
+      isSecure(isSecure),
+      isPartitioned(isPartitioned),
+      path(path),
+      sameSite(sameSite) {}
+
+std::string http::Cookie::getHeader() {
+    std::string header = "Set-Cookie: ";
+
+    std::string separator = "; ";
+
+    // Name and value
+    header += (name + "=" + value + separator);
+
+    // Expires
+    if (expires.size() != 0) {
+        header += ("Expires=" + expires + separator);
+    }
+
+    // maxAge
+    if (maxAge != 0 || expires.size() == 0) {
+        header += ("Max-Age=" + std::to_string(maxAge) + separator);
+    }
+
+    // domain
+    if (domain.size() != 0) {
+        header += ("Domain=" + domain + separator);
+    }
+
+    // http only
+    if (isHttpOnly) {
+        header += ("HttpOnly" + separator);
+    }
+
+    // secure
+    if (isSecure) {
+        header += ("Secure" + separator);
+    }
+
+    // partitioned
+    if (isPartitioned) {
+        header += ("Partitioned" + separator);
+    }
+
+    if (path.size() != 0) {
+        header += ("Path=" + path + separator);
+    }
+
+    if (sameSite.size() != 0) {
+        header += ("SameSite=" + sameSite + separator);
+    }
+
+    // Check if "; " is present at last
+    if (header.back() == ' ') {
+        header.pop_back();
+        if (header.back() == ';') header.pop_back();
+    }
+
+    // Add the new line to the header
+    header += "\r\n";
+
+    return header;
 }
