@@ -20,12 +20,20 @@ class Request {
     std::unordered_map<std::string, std::string> pathParams;
     std::unordered_map<std::string, std::string> searchQueries;
 
+    // Cookies are key, value pair with both as string,
+    // note cookies can be publicly accessed
+    std::unordered_map<std::string, std::string> cookies;
+
     Request(char requestBuffer[]);
     ~Request();
 
     void readRequest(char requestBuffer[]);
     void parseDataFromHeader();
     void parseDataFromBody();
+
+    // Function to parse data from valueMap to cookies
+    void parseCookiesData();
+
     std::string getValue(std::string key);
     void processSearchQuery(const std::string &queryString);
 

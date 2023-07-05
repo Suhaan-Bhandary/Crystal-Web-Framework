@@ -2,8 +2,24 @@
 
 #include <iostream>
 
+#include "../Logger/Logger.h"
+
 void Controller::getHome(http::Request &request, http::Response &response) {
     response.setStatusCode(200);
+
+    // Set the cookies
+    if (request.cookies.count("count") != 0) {
+        int count = stoi(request.cookies["count"]);
+
+        // Reset cookie if count is >= 10
+        if (count >= 10) {
+            response.clearCookie("count");
+        } else {
+            response.setCookie("count", std::to_string(count + 1), 10 * 60);
+        }
+    } else {
+        response.setCookie("count", "1", 10 * 60);
+    }
 
     Json::Json jsonObject("{}");
     response.sendTemplate("home.html", jsonObject);
