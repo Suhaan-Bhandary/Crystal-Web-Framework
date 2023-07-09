@@ -1,6 +1,5 @@
 #include "./Router.h"
 
-#include "../Controller/Controller.h"
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"
 #include "../Response/Response.h"
@@ -166,7 +165,7 @@ void http::Router::getControllerFromPathTrieCallback(
 void http::Router::registerPublicPath() {
     Logger::log("Registering Public Paths");
     std::vector<std::string> publicFilesPath;
-    std::string path = Utils::getCurrentDirectory() + "/src/public/";
+    std::string path = Utils::getCurrentDirectory() + "/app/public/";
     Utils::listFiles(path, publicFilesPath);
 
     // register each file

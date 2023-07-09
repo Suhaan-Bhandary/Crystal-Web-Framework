@@ -1,5 +1,5 @@
-#include "../Controller/Controller.h"
-#include "./Router.h"
+#include "../../src/Router/Router.h"
+#include "../Controller/mainController.h"
 
 // Path registration
 http::Router::Router() {

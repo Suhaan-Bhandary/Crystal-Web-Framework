@@ -33,7 +33,7 @@ void http::Response::sendTemplate(const std::string& templateName,
                                   const Json::Json& data) {
     // Read the file
     std::string rootDir = Utils::getCurrentDirectory();
-    std::string templateURL = rootDir + "/src/templates/" + templateName;
+    std::string templateURL = rootDir + "/app/templates/" + templateName;
 
     // Create template object
     http::HTMLTemplate html_template(templateURL, data);
@@ -65,7 +65,7 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
 
     // * File is opened in binary format as images will deform in text format
     std::ifstream file(
-        Utils::getCurrentDirectory() + "/src/public" + relativePathToPublic,
+        Utils::getCurrentDirectory() + "/app/public" + relativePathToPublic,
         std::ios::binary);
 
     // Read the file contents

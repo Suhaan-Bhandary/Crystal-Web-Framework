@@ -6,8 +6,8 @@ CFLAGS=-c
 # run is dependency
 all: server
 
-server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/Controller.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
+server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -18,8 +18,8 @@ build/TcpServer.o: src/TcpServer/TcpServer.cpp
 build/Router.o: src/Router/Router.cpp
 	${CC} ${CFLAGS} src/Router/Router.cpp -o build/Router.o
 
-build/UserRouter.o: src/Router/UserRouter.cpp
-	${CC} ${CFLAGS} src/Router/UserRouter.cpp -o build/UserRouter.o
+build/UserRouter.o: app/Router/UserRouter.cpp
+	${CC} ${CFLAGS} app/Router/UserRouter.cpp -o build/UserRouter.o
 
 build/Request.o: src/Request/Request.cpp
 	${CC} ${CFLAGS} src/Request/Request.cpp -o build/Request.o
@@ -33,8 +33,11 @@ build/HTMLTemplate.o: src/HTMLTemplate/HTMLTemplate.cpp
 build/StatusCodes.o: src/Response/StatusCodes.cpp
 	${CC} ${CFLAGS} src/Response/StatusCodes.cpp -o build/StatusCodes.o
 
-build/Controller.o: src/Controller/Controller.cpp
-	${CC} ${CFLAGS} src/Controller/Controller.cpp -o build/Controller.o
+build/systemController.o: src/Controller/systemController.cpp
+	${CC} ${CFLAGS} src/Controller/systemController.cpp -o build/systemController.o
+
+build/mainController.o: app/Controller/mainController.cpp
+	${CC} ${CFLAGS} app/Controller/mainController.cpp -o build/mainController.o
 
 build/Utils.o: src/Utils/Utils.cpp
 	${CC} ${CFLAGS} src/Utils/Utils.cpp -o build/Utils.o
