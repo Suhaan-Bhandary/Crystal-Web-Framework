@@ -1,14 +1,8 @@
-#include "../Controller/Controller.h"
-#include "./Router.h"
+#include "../../src/Router/Router.h"
+#include "../Controller/mainController.h"
 
 // Path registration
-http::Router::Router() {
-    // Initialize the root
-    root = new http::PathTrie("ROOT", 0);
-
-    // Register public files
-    registerPublicPath();
-
+void http::Router::userRouterPaths() {
     // Register path
     registerPath("GET", "/", Controller::getHome);
     registerPath("GET", "/user/:id", Controller::getUser);

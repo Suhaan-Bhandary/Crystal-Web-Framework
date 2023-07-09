@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../Controller/systemController.h"
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 
@@ -38,6 +39,7 @@ class Router {
 
    public:
     Router();
+    void userRouterPaths();
     void route(http::Request &request, http::Response &response);
 
     void registerPath(const std::string &method, const std::string &path,

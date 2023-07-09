@@ -1,8 +1,4 @@
-#include "Controller.h"
-
-#include <iostream>
-
-#include "../Logger/Logger.h"
+#include "./mainController.h"
 
 void Controller::getHome(http::Request &request, http::Response &response) {
     response.setStatusCode(200);
@@ -68,17 +64,6 @@ void Controller::getNotFound(http::Request &request, http::Response &response) {
 
     response.setStatusCode(404);
     response.sendTemplate("404NotFound.html", jsonObject);
-}
-
-void Controller::defaultNotFound(http::Request &request,
-                                 http::Response &response) {
-    response.send404();
-}
-
-void Controller::getPublicFile(http::Request &request,
-                               http::Response &response) {
-    std::string path = request.getValue("path");
-    response.sendPublicFile(path);
 }
 
 void Controller::saveUserData(http::Request &request,

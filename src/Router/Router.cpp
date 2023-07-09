@@ -1,6 +1,5 @@
 #include "./Router.h"
 
-#include "../Controller/Controller.h"
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"
 #include "../Response/Response.h"
@@ -8,6 +7,18 @@
 
 typedef void (*controller_type)(http::Request &request,
                                 http::Response &response);
+
+// Constructor
+http::Router::Router() {
+    // Initialize the root
+    root = new http::PathTrie("ROOT", 0);
+
+    // Register public files
+    registerPublicPath();
+
+    // Register path
+    userRouterPaths();
+}
 
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
@@ -166,7 +177,7 @@ void http::Router::getControllerFromPathTrieCallback(
 void http::Router::registerPublicPath() {
     Logger::log("Registering Public Paths");
     std::vector<std::string> publicFilesPath;
-    std::string path = Utils::getCurrentDirectory() + "/src/public/";
+    std::string path = Utils::getCurrentDirectory() + "/app/public/";
     Utils::listFiles(path, publicFilesPath);
 
     // register each file

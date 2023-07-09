@@ -82,7 +82,14 @@ To run tests, run the following command
 
 ## Usage/Examples
 
-One can create a Web Application using this project. Router and Controller define routes and control functions for creating a simple web application. HTML and static files are stored in the templates and public folders, respectively.
+To Create a Web Application user can edit the app/ folder in the project.
+
+#### User Folders
+
+- app/Router: Define the routes of the Web Application.
+- app/Controller: Stores the controllers for each route.
+- app/public: Store all the files which are to be made public to the internet.
+- app/templates: It is used to store all the html template.
 
 ## Authors
 
