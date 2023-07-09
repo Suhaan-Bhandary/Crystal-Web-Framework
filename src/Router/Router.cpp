@@ -8,6 +8,18 @@
 typedef void (*controller_type)(http::Request &request,
                                 http::Response &response);
 
+// Constructor
+http::Router::Router() {
+    // Initialize the root
+    root = new http::PathTrie("ROOT", 0);
+
+    // Register public files
+    registerPublicPath();
+
+    // Register path
+    userRouterPaths();
+}
+
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
     Logger::log("Method: " + request.getValue("method"));
