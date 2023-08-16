@@ -1,13 +1,13 @@
 CC=g++
-CFLAGS=-c
+CFLAGS=-c -DDEVELOPMENT_ENVIRONMENT
 # CFLAGS=-c -Wall
 
 # This Target will compile all the file
 # run is dependency
-all: server
+all: httpScratchServer
 
-server: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o server
+httpScratchServer: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
+	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o httpScratchServer
 
 build/main.o: src/main.cpp
 	${CC} ${CFLAGS} src/main.cpp -o build/main.o
@@ -53,7 +53,7 @@ build/JsonNode.o: src/Json/JsonNode.cpp
 
 # Cleaning the build
 clean:
-	rm -rf build/*o server
+	rm -rf build/*o httpScratchServer
 
 # Testing code
 testProject: compileTests
