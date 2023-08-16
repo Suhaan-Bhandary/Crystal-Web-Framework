@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c
+CFLAGS=-c -DDEVELOPMENT_ENVIRONMENT
 # CFLAGS=-c -Wall
 
 # This Target will compile all the file

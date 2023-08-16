@@ -32,6 +32,20 @@ int TcpServer::startServer() {
         exit(1);
     }
 
+#ifdef DEVELOPMENT_ENVIRONMENT
+    Logger::log(
+        "Development Environment: SO_REUSEADDR | SO_REUSEPORT in "
+        "TcpServer::startServer");
+
+    // Forcefully attaching socket to the port 8080
+    int opt = 1;
+    if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
+                   sizeof(opt))) {
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
+#endif
+
     if (bind(server_socket, (sockaddr *)&server_socketAddress,
              sizeof(server_socketAddress))) {
         Logger::log("Cannot connect socket to address");
