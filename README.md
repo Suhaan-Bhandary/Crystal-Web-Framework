@@ -21,6 +21,7 @@ My C++, DSA, and Networking skills were honed by developing this project and I g
 - Request Redirect
 - HTML Page Support
 - Static Fields
+- Monitor for Live Restart [./monitor/DOCUMENTATION.md](./monitor/DOCUMENTATION.md)
 
 ### Note
 
