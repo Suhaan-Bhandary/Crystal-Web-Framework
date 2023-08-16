@@ -1,0 +1,7 @@
+{
+  "outputFileName": "httpScratchServer",
+  "scripts": {
+    "build": "make all",
+    "run": "./httpScratchServer"
+  }
+}
