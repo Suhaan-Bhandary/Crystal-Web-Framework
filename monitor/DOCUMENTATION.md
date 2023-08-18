@@ -25,8 +25,9 @@ monitor uses .monitor file to take variables as input in json format.
 {
   "outputFileName": "httpScratchServer",
   "scripts": {
-    "build": "make",
+    "build": "make all",
     "run": "./httpScratchServer"
-  }
+  },
+  "exclude": ["build", "monitor", ".vscode"] // By Default all files starting from . and .git is ignored
 }
 ```

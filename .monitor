@@ -3,5 +3,10 @@
   "scripts": {
     "build": "make all",
     "run": "./httpScratchServer"
-  }
+  },
+  "exclude": [
+    "build",
+    "monitor",
+    ".vscode"
+  ]
 }

@@ -3,6 +3,8 @@
 server_output=$(jq -r '.outputFileName' .monitor)
 serverStartCommand=$(jq -r '.scripts.run' .monitor)
 buildCommand=$(jq -r '.scripts.build' .monitor)
+excludeList=($(jq -r '.exclude[]' .monitor))
+
 
 # Defining colors
 RED='\033[0;31m'
@@ -91,8 +93,15 @@ function monitor() {
     
     lastEventRunTime=0
     
+    # Reading the exclude list and adding it to the regex
+    excludeString=""
+    for item in "${excludeList[@]}"; do
+        excludeString+="|$item"
+    done
+    excludeRegex="/(\.|.git|$server_output$excludeString)"
+    
     # Listening to the changes in the WATCH_DIR for events (modify,move,create,delete)
-    inotifywait -r -m "$WATCH_DIR" -e modify,move,create,delete --exclude "/(\.|build|monitor|$server_output|.git|.vscode)" -q |
+    inotifywait -r -m "$WATCH_DIR" -e modify,move,create,delete --exclude $excludeRegex -q |
     while read -r directory events filename; do
         currentEventTime=$(date +%s.%N)
         timeSinceLastEventRunSeconds=$(echo "$currentEventTime - $lastEventRunTime" | bc)
