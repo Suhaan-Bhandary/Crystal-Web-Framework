@@ -1,75 +1,88 @@
-CC=g++
-CFLAGS=-c -DDEVELOPMENT_ENVIRONMENT
-# CFLAGS=-c -Wall
+# Notes
+## $@ is Output 
+## $^ is the input or dependencies
+## % is a wild card which will match the command and run
 
-# This Target will compile all the file
-# run is dependency
-all: httpScratchServer
+# Directories
+INCLUDE_DIRS = 
+LIB_DIRS =  
+BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
+BIN_DIR = $(BUILD_DIR)/bin
+TEST_OBJ_DIR = $(BUILD_DIR)/obj
+TEST_BIN_DIR = $(BUILD_DIR)/bin
 
-httpScratchServer: build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o 
-	${CC} build/main.o build/TcpServer.o build/Router.o build/UserRouter.o build/Request.o build/Response.o build/HTMLTemplate.o build/StatusCodes.o build/systemController.o build/mainController.o build/Utils.o build/Logger.o build/Json.o build/JsonNode.o  -o httpScratchServer
+# Toolchain
+CC = g++
 
-build/main.o: src/main.cpp
-	${CC} ${CFLAGS} src/main.cpp -o build/main.o
+# Files
+TARGET = $(BIN_DIR)/httpScratchServer
+TEST_TARGET = $(TEST_BIN_DIR)/test
 
-build/TcpServer.o: src/TcpServer/TcpServer.cpp
-	${CC} ${CFLAGS} src/TcpServer/TcpServer.cpp -o build/TcpServer.o
+SOURCES = src/main.cpp \
+		src/TcpServer/TcpServer.cpp \
+		src/Router/Router.cpp \
+		src/Request/Request.cpp \
+		src/Response/Response.cpp \
+		src/HTMLTemplate/HTMLTemplate.cpp \
+		src/Response/StatusCodes.cpp \
+		src/Controller/systemController.cpp \
+		src/Utils/Utils.cpp \
+		src/Logger/Logger.cpp \
+		src/Json/Json.cpp \
+		src/Json/JsonNode.cpp \
+		app/Router/UserRouter.cpp \
+		app/Controller/mainController.cpp
 
-build/Router.o: src/Router/Router.cpp
-	${CC} ${CFLAGS} src/Router/Router.cpp -o build/Router.o
+TEST_SOURCES = tests/tests.cpp \
+			tests/JsonTests/JsonTests.cpp \
+			tests/TrimTests/TrimTests.cpp \
+			tests/HTMLTemplateTests/HTMLTemplateTests.cpp \
+			src/Utils/Utils.cpp \
+			src/Logger/Logger.cpp \
+			src/Json/Json.cpp \
+			src/Json/JsonNode.cpp \
+			src/HTMLTemplate/HTMLTemplate.cpp \
 
-build/UserRouter.o: app/Router/UserRouter.cpp
-	${CC} ${CFLAGS} app/Router/UserRouter.cpp -o build/UserRouter.o
+# Creating objects from sources
+OBJECT_NAMES = $(SOURCES:.cpp=.o)
+OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
 
-build/Request.o: src/Request/Request.cpp
-	${CC} ${CFLAGS} src/Request/Request.cpp -o build/Request.o
+TEST_OBJECT_NAMES = $(TEST_SOURCES:.cpp=.o)
+TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 
-build/Response.o: src/Response/Response.cpp
-	${CC} ${CFLAGS} src/Response/Response.cpp -o build/Response.o
+# Flags
+# WFLAGS = -Wall -Wextra -Werror -Wshadow
+WFLAGS = 
+CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) -Og -g 
+LDFLAGS = $(addprefix -L, $(LIB_DIRS))
 
-build/HTMLTemplate.o: src/HTMLTemplate/HTMLTemplate.cpp
-	${CC} ${CFLAGS} src/HTMLTemplate/HTMLTemplate.cpp -o build/HTMLTemplate.o
+# Build
+## Linking
+$(TARGET): $(OBJECTS)
+	@mkdir -p $(dir $@)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-build/StatusCodes.o: src/Response/StatusCodes.cpp
-	${CC} ${CFLAGS} src/Response/StatusCodes.cpp -o build/StatusCodes.o
+# Compiling
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $^
 
-build/systemController.o: src/Controller/systemController.cpp
-	${CC} ${CFLAGS} src/Controller/systemController.cpp -o build/systemController.o
+# Testing
+$(TEST_TARGET): ${TEST_OBJECTS}
+	@mkdir -p $(dir $@)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-build/mainController.o: app/Controller/mainController.cpp
-	${CC} ${CFLAGS} app/Controller/mainController.cpp -o build/mainController.o
+$(TEST_OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $^
 
-build/Utils.o: src/Utils/Utils.cpp
-	${CC} ${CFLAGS} src/Utils/Utils.cpp -o build/Utils.o
+# Phonies: Are used so that make doesnot confuse it with a file
+.PHONY: all clean test
 
-build/Logger.o: src/Logger/Logger.cpp
-	${CC} ${CFLAGS} src/Logger/Logger.cpp -o build/Logger.o
+all: $(TARGET)
 
-build/Json.o: src/Json/Json.cpp
-	${CC} ${CFLAGS} src/Json/Json.cpp -o build/Json.o
+test: $(TEST_TARGET)
 
-build/JsonNode.o: src/Json/JsonNode.cpp
-	${CC} ${CFLAGS} src/Json/JsonNode.cpp -o build/JsonNode.o
-
-# Cleaning the build
 clean:
-	rm -rf build/*o httpScratchServer
-
-# Testing code
-testProject: compileTests
-	./testProject && rm ./testProject
-
-compileTests: build/tests.o build/JsonTests.o build/TrimTests.o build/HTMLTemplateTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o build/HTMLTemplate.o
-	${CC} build/tests.o build/JsonTests.o build/TrimTests.o build/HTMLTemplateTests.o build/Logger.o build/Utils.o build/Json.o build/JsonNode.o build/HTMLTemplate.o -o testProject
-
-build/tests.o: tests/tests.cpp
-	${CC} ${CFLAGS} tests/tests.cpp -o build/tests.o
-
-build/JsonTests.o: tests/JsonTests/JsonTests.cpp
-	${CC} ${CFLAGS} tests/JsonTests/JsonTests.cpp -o build/JsonTests.o
-
-build/TrimTests.o: tests/TrimTests/TrimTests.cpp
-	${CC} ${CFLAGS} tests/TrimTests/TrimTests.cpp -o build/TrimTests.o
-
-build/HTMLTemplateTests.o: tests/HTMLTemplateTests/HTMLTemplateTests.cpp
-	${CC} ${CFLAGS} tests/HTMLTemplateTests/HTMLTemplateTests.cpp -o build/HTMLTemplateTests.o
+	rm -r $(BUILD_DIR)

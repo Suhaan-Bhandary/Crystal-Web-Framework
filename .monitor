@@ -2,7 +2,7 @@
   "outputFileName": "httpScratchServer",
   "scripts": {
     "build": "make all",
-    "run": "./httpScratchServer"
+    "run": "./build/bin/httpScratchServer"
   },
   "exclude": [
     "build",
