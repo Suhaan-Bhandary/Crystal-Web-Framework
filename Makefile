@@ -53,7 +53,8 @@ TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 
 # Flags
 # WFLAGS = -Wall -Wextra -Werror -Wshadow
-CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
+# TODO: Turn on Development when developing
+# CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
 WFLAGS = 
 CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) -Og -g $(CUSTOM_MACROS)
 LDFLAGS = $(addprefix -L, $(LIB_DIRS))

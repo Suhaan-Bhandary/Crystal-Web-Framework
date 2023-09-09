@@ -17,7 +17,15 @@ TcpServer::TcpServer(const std::string &ip_address, int port)
     // Creating  a socket address to bind with socket
     server_socketAddress.sin_family = AF_INET;
     server_socketAddress.sin_port = htons(server_port);
+
+// If in development we are binding to the given else all
+// Reference:
+// https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
+#ifdef DEVELOPMENT_ENVIRONMENT
     server_socketAddress.sin_addr.s_addr = inet_addr(server_ip_address.c_str());
+#else
+    server_socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+#endif
 
     startServer();
 }

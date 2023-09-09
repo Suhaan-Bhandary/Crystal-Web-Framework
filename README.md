@@ -73,6 +73,24 @@ Listening on Address: 127.0.0.1
 Port: 8080
 ```
 
+## Running with Live Restart
+
+To use live restart functionality use the monitor bash script.
+Before running the monitor file uncomment the `#CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT` in the Makefile
+
+```bash
+  ./monitor/monitor.sh
+```
+
+## Running on Docker
+
+To run the server on Docker
+
+```bash
+  docker build -t http-server-cpp .
+  docker run -p 8080:8080 -t http-server-cpp
+```
+
 ## Running Tests
 
 To run tests, run the following command
