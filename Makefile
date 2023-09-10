@@ -88,4 +88,4 @@ all: $(TARGET)
 test: $(TEST_TARGET)
 
 clean:
-	rm -r $(BUILD_DIR)
+	rm -r $(BUILD_DIR) || true
