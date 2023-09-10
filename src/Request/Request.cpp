@@ -65,6 +65,12 @@ void http::Request::parseDataFromHeader() {
 
     for (int i = 1; i < lines.size(); i++) {
         std::vector<std::string> tokens = Utils::split(lines[i], ": ");
+
+        // Handling the tokens if overflow occurred
+        if (tokens.size() != 2) {
+            continue;
+        }
+
         std::string key = tokens[0], value = tokens[1];
         valueMap[key] = value;
     }
