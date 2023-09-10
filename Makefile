@@ -55,8 +55,9 @@ TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 # WFLAGS = -Wall -Wextra -Werror -Wshadow
 # TODO: Turn on Development when developing
 # CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
+CUSTOM_MACROS_COMMON = -DFREQUENT_RESTART
 WFLAGS = 
-CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) -Og -g $(CUSTOM_MACROS)
+CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) -Og -g $(CUSTOM_MACROS) $(CUSTOM_MACROS_COMMON)
 LDFLAGS = $(addprefix -L, $(LIB_DIRS))
 
 # Build

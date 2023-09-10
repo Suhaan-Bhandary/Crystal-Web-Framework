@@ -40,7 +40,7 @@ int TcpServer::startServer() {
         exit(1);
     }
 
-#ifdef DEVELOPMENT_ENVIRONMENT
+#ifdef FREQUENT_RESTART
     LOGGER(
         "Development Environment: SO_REUSEADDR | SO_REUSEPORT in "
         "TcpServer::startServer");
