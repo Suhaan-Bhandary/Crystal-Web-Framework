@@ -69,7 +69,7 @@ void TcpServer::closeServer() {
 }
 
 void TcpServer::startListen() {
-    const int BACKLOG_COUNT = 128;
+    const int BACKLOG_COUNT = 512;
     if (listen(server_socket, BACKLOG_COUNT) == -1) {
         LOGGER("Socket Listening Failed");
         exit(1);
