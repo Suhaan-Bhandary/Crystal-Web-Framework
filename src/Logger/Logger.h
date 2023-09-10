@@ -22,10 +22,18 @@ class Logger {
                          int line);
 };
 
+#ifdef DEVELOPMENT_ENVIRONMENT
 #define LOGGER(message) Logger::log(message, __FILE__, __LINE__)
 #define LOGGER_MINIMAL(message) Logger::log(message)
 #define LOGGER_NOTE(message) Logger::logNote(message, __FILE__, __LINE__)
 #define LOGGER_WARNING(message) Logger::logWarn(message, __FILE__, __LINE__)
 #define LOGGER_ERROR(message) Logger::logError(message, __FILE__, __LINE__)
+#else
+#define LOGGER(message)
+#define LOGGER_MINIMAL(message)
+#define LOGGER_NOTE(message)
+#define LOGGER_WARNING(message)
+#define LOGGER_ERROR(message) Logger::logError(message, __FILE__, __LINE__)
+#endif
 
 #endif

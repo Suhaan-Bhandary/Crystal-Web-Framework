@@ -109,13 +109,25 @@ void TcpServer::startListen() {
         // Reading the request
         // Read the request from the client
         char requestBuffer[REQUEST_Buffer_SIZE] = {0};
-        if (read(client_socket, requestBuffer, REQUEST_Buffer_SIZE) == -1) {
+        int bytesRead = read(client_socket, requestBuffer, REQUEST_Buffer_SIZE);
+
+        // TODO: Remove this after testing
+        // Reading the request, and creating response
+        LOGGER_NOTE("Bytes Read: " + std::to_string(bytesRead));
+        LOGGER_NOTE(requestBuffer);
+
+        if (bytesRead == -1) {
             LOGGER_ERROR("Request Read Failed!!");
             close(client_socket);
-            return;
+            continue;
         }
 
-        // Reading the request, and creating response
+        if (bytesRead == 0) {
+            LOGGER_ERROR("Buffer is Empty!!");
+            close(client_socket);
+            continue;
+        }
+
         http::Request request = http::Request(requestBuffer);
         http::Response response = http::Response(client_socket);
 
