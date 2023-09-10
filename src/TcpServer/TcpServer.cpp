@@ -9,7 +9,7 @@
 #include "../Router/Router.h"
 
 // Define a size for the request buffer
-#define REQUEST_Buffer_SIZE 1024
+#define REQUEST_Buffer_SIZE 2048
 
 namespace http {
 TcpServer::TcpServer(const std::string &ip_address, int port)
