@@ -25,7 +25,7 @@ std::string http::HTMLTemplate::readHTMLFromFile(
     const std::string &templatePath) {
     std::ifstream HTMLFile(templatePath);
     if (!HTMLFile.is_open()) {
-        Logger::log("Error in opening file | readHTMLFromFile!!");
+        LOGGER_ERROR("Error in opening file | readHTMLFromFile!!");
         throw std::invalid_argument(
             "Error in opening file | readHTMLFromFile!!");
     }

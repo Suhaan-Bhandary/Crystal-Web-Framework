@@ -7,8 +7,8 @@
 Json::JsonNode::JsonNode() { type = JsonType::NULL_VALUE; }
 
 Json::JsonNode::~JsonNode() {
-    // Logger::log("\nJsonNode Destructor");
-    // Logger::log(getJsonString(0, 4));
+    // LOGGER("\nJsonNode Destructor");
+    // LOGGER(getJsonString(0, 4));
 
     if (type == JsonType::ARRAY) {
         for (auto element : arrayValue) delete element;

@@ -16,7 +16,6 @@ http::Request::Request(char requestBuffer[]) {
 }
 
 http::Request::~Request() {
-    // Logger::log("Request Destructor");
     if (jsonData != nullptr) {
         delete jsonData;
     }
@@ -38,7 +37,7 @@ void http::Request::readRequest(char requestBuffer[]) {
             body = blocks[1];
             break;
         default:
-            Logger::log("Invalid\\Unknown Request from client");
+            LOGGER_ERROR("Invalid\\Unknown Request from client");
             break;
     }
 }
@@ -89,7 +88,7 @@ void http::Request::parseDataFromBody() {
 
 void http::Request::parseCookiesData() {
     std::string cookiesStream = getValue("Cookie");
-    Logger::log(cookiesStream);
+    LOGGER(cookiesStream);
 
     if (cookiesStream.size() == 0) return;
 

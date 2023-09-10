@@ -3,7 +3,7 @@
 #include "../src/Logger/Logger.h"
 
 int main() {
-    Logger::log("\n\nTesting Project");
+    LOGGER_NOTE("\n\nTesting Project");
 
     Test::TrimTests();
     Test::JsonTests();
