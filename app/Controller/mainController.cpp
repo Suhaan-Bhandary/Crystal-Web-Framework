@@ -108,3 +108,17 @@ void Controller::getXOGame(http::Request &request, http::Response &response) {
     response.setStatusCode(200);
     response.sendTemplate("xo-game.html", jsonObject);
 }
+
+void Controller::getHealth(http::Request &request, http::Response &response) {
+    // Send html response to the client
+    std::string htmlContent =
+        "<html>"
+        "<head><title>Server Health</title></head>"
+        "<body>"
+        "<h1>Server is Healthy</h1>"
+        "</body>"
+        "</html>\r\n";
+
+    response.setStatusCode(200);
+    response.sendHTML(htmlContent);
+}

@@ -15,4 +15,7 @@ void http::Router::userRouterPaths() {
 
     // Not Found
     registerPath("GET", "*", Controller::getNotFound);
+
+    // health
+    registerPath("GET", "/health", Controller::getHealth);
 }
