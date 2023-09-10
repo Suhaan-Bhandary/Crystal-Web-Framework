@@ -8,7 +8,7 @@
 #include "../tests.h"
 
 void Test::JsonTests() {
-    Logger::log("\n--------------------- Json Tests ---------------------");
+    LOGGER_MINIMAL("\n--------------------- Json Tests ---------------------");
 
     int totalTestFails = 0;
 
@@ -21,7 +21,7 @@ void Test::JsonTests() {
 
         if (jsonObject.data->getType() != Json::JsonType::NULL_VALUE) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Empty Json");
+            LOGGER_ERROR("Test Failed: Empty Json");
         }
     }
 
@@ -33,7 +33,7 @@ void Test::JsonTests() {
         if (jsonObject.data->getType() != Json::JsonType::INT ||
             jsonObject.data->getIntValue() != 100) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Number Json");
+            LOGGER_ERROR("Test Failed: Number Json");
         }
     }
 
@@ -45,7 +45,7 @@ void Test::JsonTests() {
         if (jsonObject.data->getType() != Json::JsonType::DOUBLE ||
             jsonObject.data->getDoubleValue() != 100.25) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Double Json");
+            LOGGER_ERROR("Test Failed: Double Json");
         }
     }
 
@@ -57,7 +57,7 @@ void Test::JsonTests() {
         if (jsonObject.data->getType() != Json::JsonType::BOOL ||
             jsonObject.data->getBoolValue() != true) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Bool Json");
+            LOGGER_ERROR("Test Failed: Bool Json");
         }
     }
 
@@ -69,7 +69,7 @@ void Test::JsonTests() {
         if (jsonObject.data->getType() != Json::JsonType::STRING ||
             jsonObject.data->getStringValue() != "Http Server C++") {
             totalTestFails += 1;
-            Logger::log("Test Failed: String Json");
+            LOGGER_ERROR("Test Failed: String Json");
         }
     }
 
@@ -97,11 +97,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                Logger::log("Test Failed: Number Array Json");
+                LOGGER_ERROR("Test Failed: Number Array Json");
             }
         } else {
             totalTestFails += 1;
-            Logger::log("Test Failed: Number Array Json");
+            LOGGER_ERROR("Test Failed: Number Array Json");
         }
     }
 
@@ -129,11 +129,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                Logger::log("Test Failed: Double Array Json");
+                LOGGER_ERROR("Test Failed: Double Array Json");
             }
         } else {
             totalTestFails += 1;
-            Logger::log("Test Failed: Double Array Json");
+            LOGGER_ERROR("Test Failed: Double Array Json");
         }
     }
 
@@ -160,11 +160,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                Logger::log("Test Failed: String Array Json");
+                LOGGER_ERROR("Test Failed: String Array Json");
             }
         } else {
             totalTestFails += 1;
-            Logger::log("Test Failed: String Array Json");
+            LOGGER_ERROR("Test Failed: String Array Json");
         }
     }
 
@@ -191,11 +191,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                Logger::log("Test Failed: Bool Array Json");
+                LOGGER_ERROR("Test Failed: Bool Array Json");
             }
         } else {
             totalTestFails += 1;
-            Logger::log("Test Failed: Bool Array Json");
+            LOGGER_ERROR("Test Failed: Bool Array Json");
         }
     }
 
@@ -209,7 +209,7 @@ void Test::JsonTests() {
                 "C++" ||
             jsonObject.data->getObjectValue("number")->getIntValue() != 1) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Object as Json");
+            LOGGER_ERROR("Test Failed: Object as Json");
         }
     }
 
@@ -227,11 +227,11 @@ void Test::JsonTests() {
                     ->getArrayElement(0)
                     ->getIntValue() != 6) {
                 totalTestFails += 1;
-                Logger::log("Test Failed: Array Array Json");
+                LOGGER_ERROR("Test Failed: Array Array Json");
             }
         } else {
             totalTestFails += 1;
-            Logger::log("Test Failed: Array Array Json");
+            LOGGER_ERROR("Test Failed: Array Array Json");
         }
     }
 
@@ -242,7 +242,7 @@ void Test::JsonTests() {
         std::ifstream JsonFile(rootDir + "/tests/JsonTests/testData.json");
 
         if (!JsonFile.is_open()) {
-            Logger::log("Error in opening file!!");
+            LOGGER_ERROR("Error in opening file!!");
             return;
         }
 
@@ -256,7 +256,7 @@ void Test::JsonTests() {
         Json::Json jsonObject(jsonValue);
 
         // Print string
-        // Logger::log(jsonObject.getJsonString());
+        // LOGGER_ERROR(jsonObject.getJsonString());
 
         bool isJsonParsedCorrectly = true;
 
@@ -304,7 +304,7 @@ void Test::JsonTests() {
 
         if (!isJsonParsedCorrectly) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Object as Json");
+            LOGGER_ERROR("Test Failed: Object as Json");
         }
     }
 
@@ -315,9 +315,9 @@ void Test::JsonTests() {
             Json::Json jsonObject(jsonValue);
 
             totalTestFails += 1;
-            Logger::log("Test Failed: Invalid Json");
+            LOGGER_ERROR("Test Failed: Invalid Json");
         } catch (const std::exception &e) {
-            // Logger::log(e.what());
+            // LOGGER_ERROR(e.what());
             // If it catches it means it is working correctly
         }
     }
@@ -336,19 +336,19 @@ void Test::JsonTests() {
             jsonObject.data->getObjectValue("colors")->insertInArray("blue");
             jsonObject.data->getObjectValue("colors")->insertInArray("green");
 
-            // Logger::log(jsonObject.getJsonString());
+            // LOGGER(jsonObject.getJsonString());
 
             if (jsonObject.data->getObjectValue("colors")
                     ->getArrayElement(0)
                     ->getStringValue() != "red") {
                 totalTestFails += 1;
-                Logger::log("Test Failed: Json Object Creation");
+                LOGGER_ERROR("Test Failed: Json Object Creation");
             }
 
         } catch (const std::exception &e) {
             totalTestFails += 1;
-            Logger::log(e.what());
-            Logger::log("Test Failed: Json Object Creation");
+            LOGGER_ERROR(e.what());
+            LOGGER_ERROR("Test Failed: Json Object Creation");
         }
     }
 
@@ -362,9 +362,9 @@ void Test::JsonTests() {
         if (copiedObject.data->getType() != Json::JsonType::INT ||
             copiedObject.data->getIntValue() != 100) {
             totalTestFails += 1;
-            Logger::log("Test Failed: Copy Constructor");
+            LOGGER_ERROR("Test Failed: Copy Constructor");
         }
     }
 
-    Logger::log("\nTotal Fails: " + std::to_string(totalTestFails));
+    LOGGER_NOTE("\nTotal Fails: " + std::to_string(totalTestFails));
 }

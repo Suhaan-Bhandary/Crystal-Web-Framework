@@ -36,12 +36,12 @@ int TcpServer::startServer() {
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (server_socket == -1) {
-        Logger::log("Cannot create Socket");
+        LOGGER_ERROR("Cannot create Socket");
         exit(1);
     }
 
 #ifdef DEVELOPMENT_ENVIRONMENT
-    Logger::log(
+    LOGGER(
         "Development Environment: SO_REUSEADDR | SO_REUSEPORT in "
         "TcpServer::startServer");
 
@@ -56,7 +56,7 @@ int TcpServer::startServer() {
 
     if (bind(server_socket, (sockaddr *)&server_socketAddress,
              sizeof(server_socketAddress))) {
-        Logger::log("Cannot connect socket to address");
+        LOGGER_ERROR("Cannot connect socket to address");
         exit(1);
     }
 
@@ -70,14 +70,14 @@ void TcpServer::closeServer() {
 
 void TcpServer::startListen() {
     if (listen(server_socket, 30) == -1) {
-        Logger::log("Socket Listening Failed");
+        LOGGER("Socket Listening Failed");
         exit(1);
     }
 
     // Listening Started
-    Logger::log("Listening on Address: " +
+    LOGGER_NOTE("Listening on Address: " +
                 (std::string)inet_ntoa(server_socketAddress.sin_addr));
-    Logger::log("Port: " + std::to_string(server_port));
+    LOGGER_NOTE("Port: " + std::to_string(server_port));
 
     // Router to handle request
     http::Router router = http::Router();
@@ -93,7 +93,7 @@ void TcpServer::startListen() {
             accept(server_socket, (sockaddr *)&client_address, &size);
 
         if (client_socket == -1) {
-            Logger::log(
+            LOGGER_ERROR(
                 "Server Failed to accept Incoming Connection "
                 "Address: " +
                 (std::string)inet_ntoa(client_address.sin_addr) +
@@ -102,15 +102,15 @@ void TcpServer::startListen() {
         }
 
         // Reading the new request socket
-        Logger::log("Received Request from client from Address: " +
-                    (std::string)inet_ntoa(client_address.sin_addr) +
-                    " Port: " + std::to_string(client_address.sin_port));
+        LOGGER("Received Request from client from Address: " +
+               (std::string)inet_ntoa(client_address.sin_addr) +
+               " Port: " + std::to_string(client_address.sin_port));
 
         // Reading the request
         // Read the request from the client
         char requestBuffer[REQUEST_Buffer_SIZE] = {0};
         if (read(client_socket, requestBuffer, REQUEST_Buffer_SIZE) == -1) {
-            Logger::log("Request Read Failed!!");
+            LOGGER_ERROR("Request Read Failed!!");
             close(client_socket);
             return;
         }

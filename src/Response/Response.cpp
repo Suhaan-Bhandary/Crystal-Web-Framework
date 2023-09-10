@@ -45,7 +45,7 @@ void http::Response::sendTemplate(const std::string& templateName,
 }
 
 void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
-    Logger::log(relativePathToPublic);
+    LOGGER(relativePathToPublic);
 
     // Find the type of the file
     std::string extension = Utils::split(relativePathToPublic, ".")[1];

@@ -13,7 +13,7 @@ Json::Json getTestJsonData() {
                            "/tests/HTMLTemplateTests/sampleTemplateJson.json");
 
     if (!JsonFile.is_open()) {
-        Logger::log("Error in opening file!!");
+        LOGGER_ERROR("Error in opening file!!");
 
         Json::Json data("{}");
         return data;
@@ -31,7 +31,7 @@ Json::Json getTestJsonData() {
 }
 
 void Test::HTMLTemplateTests() {
-    Logger::log("\n----------------- HTML Template Tests -----------------");
+    LOGGER_MINIMAL("\n----------------- HTML Template Tests -----------------");
     int totalTestFails = 0;
 
     // TODO: Write test
@@ -49,13 +49,13 @@ void Test::HTMLTemplateTests() {
         std::string HTMLContent = html_template.getHtml();
 
         // Print json data
-        Logger::log("Json Data");
-        Logger::log(data.getJsonString());
+        LOGGER("Json Data");
+        LOGGER(data.getJsonString());
 
         // TODO: Check if the html is compiled
-        Logger::log("\n\nHtml Content");
-        Logger::log(HTMLContent);
+        LOGGER("\n\nHtml Content");
+        LOGGER(HTMLContent);
     }
 
-    Logger::log("Total Fails: " + std::to_string(totalTestFails));
+    LOGGER_NOTE("Total Fails: " + std::to_string(totalTestFails));
 }

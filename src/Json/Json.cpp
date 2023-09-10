@@ -56,7 +56,7 @@ Json::JsonType Json::Json::getJsonTokenType(const std::string &jsonToken) {
     } else if (firstChar == '{' && lastChar == '}') {
         return JsonType::OBJECT;
     } else {
-        Logger::log(jsonToken);
+        LOGGER_ERROR("Invalid Token: " + jsonToken);
         throw std::invalid_argument("Invalid Json");
     }
 }

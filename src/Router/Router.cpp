@@ -22,10 +22,10 @@ http::Router::Router() {
 
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
-    Logger::log("Method: " + request.getValue("method"));
-    Logger::log("Path: " + request.getValue("path"));
-    Logger::log("Host: " + request.getValue("Host"));
-    Logger::log("");
+    LOGGER("Method: " + request.getValue("method"));
+    LOGGER("Path: " + request.getValue("path"));
+    LOGGER("Host: " + request.getValue("Host"));
+    LOGGER_MINIMAL("");
 
     std::string method = request.getValue("method");
     std::string path = request.getValue("path");
@@ -88,15 +88,15 @@ void http::Router::registerPath(const std::string &method,
 }
 
 void http::Router::displayAllRoutes() {
-    Logger::log("\n----------------------- Paths -----------------------");
+    LOGGER_MINIMAL("\n----------------------- Paths -----------------------");
     displayAllRoutesCallback(root, "", true);
-    Logger::log("-----------------------------------------------------");
+    LOGGER_MINIMAL("-----------------------------------------------------");
 }
 
 void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
                                             bool isStart = false) {
     if (node->isEnd) {
-        Logger::log(path + node->value, std::to_string(node->weight));
+        LOGGER_MINIMAL(path + node->value + " " + std::to_string(node->weight));
     }
 
     if (!isStart) path += (node->value + "/");
@@ -175,7 +175,7 @@ void http::Router::getControllerFromPathTrieCallback(
 }
 
 void http::Router::registerPublicPath() {
-    Logger::log("Registering Public Paths");
+    LOGGER_MINIMAL("\nRegistering Public Paths");
     std::vector<std::string> publicFilesPath;
     std::string path = Utils::getCurrentDirectory() + "/app/public/";
     Utils::listFiles(path, publicFilesPath);
@@ -186,7 +186,7 @@ void http::Router::registerPublicPath() {
         if (tokens.size() < 2) continue;
 
         std::string relativePath = "/" + tokens[1];
-        Logger::log(relativePath);
+        LOGGER_MINIMAL(relativePath);
 
         registerPath("GET", relativePath, Controller::getPublicFile);
     }
