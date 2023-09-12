@@ -286,6 +286,18 @@ Json::Json::getKeyAndValuePairsOfJsonArrayObject(
             i++;
         }
 
+        // Check if key only contains space and \n
+        bool onlyContainsSpaceAndNewLine = true;
+        for (auto ch : key) {
+            if (ch != ' ' && ch != '\n') {
+                onlyContainsSpaceAndNewLine = false;
+                break;
+            }
+        }
+
+        // This means that the object has ended
+        if (onlyContainsSpaceAndNewLine) return keyAndValuePairs;
+
         if (!stk.empty() || !keyStringCompleted) {
             throw std::invalid_argument("Invalid Json Object: While parsing");
         }

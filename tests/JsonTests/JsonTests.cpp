@@ -366,5 +366,16 @@ void Test::JsonTests() {
         }
     }
 
+    // Try empty object
+    {
+        try {
+            std::string jsonValue = "{\n   \n  \n \n}";
+            Json::Json jsonObject(jsonValue);
+        } catch (const std::exception &e) {
+            totalTestFails += 1;
+            LOGGER_ERROR("Test Failed: Emtpy Object");
+        }
+    }
+
     LOGGER_NOTE("\nTotal Fails: " + std::to_string(totalTestFails));
 }
