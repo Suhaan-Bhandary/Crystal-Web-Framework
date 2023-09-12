@@ -473,3 +473,10 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
 std::string Json::Json::getJsonString() const {
     return data->getJsonString(0, 4);
 }
+
+namespace Json {
+std::ostream &operator<<(std::ostream &os, const Json &data) {
+    os << data.getJsonString();
+    return os;
+}
+}  // namespace Json

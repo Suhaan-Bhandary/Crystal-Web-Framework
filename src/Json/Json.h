@@ -33,6 +33,9 @@ class Json {
 
     std::vector<std::pair<std::string, std::string>>
     getKeyAndValuePairsOfJsonArrayObject(const std::string &jsonString);
+
+    // Overloading the cout
+    friend std::ostream &operator<<(std::ostream &os, const Json &data);
 };
 }  // namespace Json
 
