@@ -141,3 +141,9 @@ It supports main features and in future new features like Template Engine, Datab
 ## Feedback
 
 If you have any feedback, please reach out to us at fake@fake.com
+
+## You Reached the End and unlocked a Quote!!
+
+```
+“The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then start on the first one.” — Mark Twain
+```
