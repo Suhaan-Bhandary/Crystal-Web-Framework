@@ -140,7 +140,7 @@ It supports main features and in future new features like Template Engine, Datab
 
 ## Feedback
 
-If you have any feedback, please reach out to us at fake@fake.com
+If you have any feedback, please reach out to us at suhaanbhandary1@gmail.com
 
 ## You Reached the End and unlocked a Quote!!
 
