@@ -12,16 +12,19 @@ class Logger {
     static void log(const std::string& message);
 
     template <typename... Args>
-    static void log(const char* filename, int line, Args... args);
+    static void log(const char* filename, const int& line, const Args&... args);
 
     template <typename... Args>
-    static void logNote(const char* filename, int line, Args... args);
+    static void logNote(const char* filename, const int& line,
+                        const Args&... args);
 
     template <typename... Args>
-    static void logWarn(const char* filename, int line, Args... args);
+    static void logWarn(const char* filename, const int& line,
+                        const Args&... args);
 
     template <typename... Args>
-    static void logError(const char* filename, int line, Args... args);
+    static void logError(const char* filename, const int& line,
+                         const Args&... args);
 };
 
 // C++ Variadic Template has to be defined inside the .h file itself
@@ -32,14 +35,15 @@ const std::string red("\033[0;31m");
 const std::string reset("\033[0m");
 
 template <typename... Args>
-void Logger::log(const char* filename, int line, Args... args) {
+void Logger::log(const char* filename, const int& line, const Args&... args) {
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
     std::cout << std::endl;
 }
 
 template <typename... Args>
-void Logger::logNote(const char* filename, int line, Args... args) {
+void Logger::logNote(const char* filename, const int& line,
+                     const Args&... args) {
     std::cout << blue;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
@@ -47,7 +51,8 @@ void Logger::logNote(const char* filename, int line, Args... args) {
 }
 
 template <typename... Args>
-void Logger::logWarn(const char* filename, int line, Args... args) {
+void Logger::logWarn(const char* filename, const int& line,
+                     const Args&... args) {
     std::cout << yellow;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
@@ -55,7 +60,8 @@ void Logger::logWarn(const char* filename, int line, Args... args) {
 }
 
 template <typename... Args>
-void Logger::logError(const char* filename, int line, Args... args) {
+void Logger::logError(const char* filename, const int& line,
+                      const Args&... args) {
     std::cout << red;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
