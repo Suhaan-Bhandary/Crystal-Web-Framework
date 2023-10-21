@@ -14,8 +14,8 @@ void listFiles(const std::string &path, std::vector<std::string> &filePaths);
 
 // Get file size
 int getFileSizeInBytes(const std::string &filePath);
-
 std::string getLastModifiedTimeStamp(const std::string &filePath);
+std::string getFileETag(const std::string &filePath);
 }  // namespace Utils
 
 #endif

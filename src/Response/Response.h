@@ -55,6 +55,7 @@ class Response {
     int client_socket;
     int statusCode = 200;  // Default status code is 200
     const static std::unordered_map<int, std::string> statusCodes;
+    std::string eTag = "";
 
     // Cookies data
     std::unordered_map<std::string, Cookie> cookieData;
@@ -89,6 +90,10 @@ class Response {
                    const std::string &sameSite = "");
 
     void clearCookie(const std::string &name);
+
+    // Etag
+    std::string getETagHeader();
+    void setETag(std::string);
 };
 }  // namespace http
 

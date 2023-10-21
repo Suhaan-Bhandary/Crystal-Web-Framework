@@ -45,7 +45,12 @@ void http::Response::sendTemplate(const std::string& templateName,
 }
 
 void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
-    LOGGER(relativePathToPublic);
+    std::string absoluteFilePath =
+        Utils::getCurrentDirectory() + "/app/public" + relativePathToPublic;
+
+    // Set the file ETag
+    std::string fileETag = Utils::getFileETag(absoluteFilePath);
+    setETag(fileETag);
 
     // Find the type of the file
     std::string extension = Utils::split(relativePathToPublic, ".")[1];
@@ -64,9 +69,7 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     }
 
     // * File is opened in binary format as images will deform in text format
-    std::ifstream file(
-        Utils::getCurrentDirectory() + "/app/public" + relativePathToPublic,
-        std::ios::binary);
+    std::ifstream file(absoluteFilePath, std::ios::binary);
 
     // Read the file contents
     std::ostringstream file_stream;
@@ -94,7 +97,10 @@ void http::Response::sendResponse(const std::string& response_body,
     response_header += "HTTP/1.1 " + response_status + "\r\n";
     response_header += "Content-Type: " + response_type + "\r\n";
     response_header += getCookiesHeader();
+    response_header += getETagHeader();
     response_header += "\r\n";
+
+    LOGGER_ERROR(response_header);
 
     // Create response
     std::string httpResponse = response_header + response_body;
@@ -245,3 +251,11 @@ std::string http::Cookie::getHeader() {
 
     return header;
 }
+
+// Etag
+std::string http::Response::getETagHeader() {
+    if (eTag == "") return "";
+    return "ETag: " + eTag + "\r\n";
+}
+
+void http::Response::setETag(std::string eTagValue) { eTag = eTagValue; }

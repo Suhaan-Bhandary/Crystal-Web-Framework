@@ -125,4 +125,10 @@ std::string getLastModifiedTimeStamp(const std::string &filePath) {
     std::string formattedFileTime = buffer.str();
     return formattedFileTime;
 }
+
+std::string getFileETag(const std::string &filePath) {
+    int fileSize = getFileSizeInBytes(filePath);
+    std::string timeStamp = getLastModifiedTimeStamp(filePath);
+    return std::to_string(fileSize) + " " + timeStamp;
+}
 }  // namespace Utils

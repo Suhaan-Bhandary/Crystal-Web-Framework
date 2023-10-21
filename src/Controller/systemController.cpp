@@ -1,5 +1,7 @@
 #include "./systemController.h"
 
+#include "../Utils/Utils.h"
+
 void Controller::defaultNotFound(http::Request &request,
                                  http::Response &response) {
     response.send404();
@@ -7,6 +9,18 @@ void Controller::defaultNotFound(http::Request &request,
 
 void Controller::getPublicFile(http::Request &request,
                                http::Response &response) {
+    // Check If-None-Match from request
+    std::string ifNoneMatch = request.getValue("If-None-Match");
+
     std::string path = request.getValue("path");
+    std::string absoluteFilePath =
+        Utils::getCurrentDirectory() + "/app/public" + path;
+    std::string fileEtag = Utils::getFileETag(absoluteFilePath);
+
+    if (ifNoneMatch == fileEtag) {
+        response.setStatusCode(304);
+        return response.sendJson("");
+    }
+
     response.sendPublicFile(path);
 }
