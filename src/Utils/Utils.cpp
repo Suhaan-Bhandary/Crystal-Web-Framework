@@ -1,6 +1,8 @@
 #include <dirent.h>
 #include <unistd.h>
 
+#include <filesystem>
+#include <fstream>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -93,5 +95,34 @@ void listFiles(const std::string &path, std::vector<std::string> &filePaths) {
         }
         closedir(dir);
     }
+}
+
+int getFileSizeInBytes(const std::string &filePath) {
+    std::ifstream file(filePath, std::ios::binary);
+    file.seekg(0, std::ios::end);
+    int file_size = file.tellg();
+    return file_size;
+}
+
+// This function converts the time to time_t
+template <typename TP>
+std::time_t to_time_t(TP tp) {
+    using namespace std::chrono;
+    auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now() +
+                                                        system_clock::now());
+    return system_clock::to_time_t(sctp);
+}
+
+std::string getLastModifiedTimeStamp(const std::string &filePath) {
+    std::filesystem::file_time_type file_time =
+        std::filesystem::last_write_time(filePath);
+
+    std::time_t tt = to_time_t(file_time);
+    std::tm *gmt = std::gmtime(&tt);
+    std::stringstream buffer;
+    buffer << std::put_time(gmt, "%A, %d %B %Y %H:%M");
+
+    std::string formattedFileTime = buffer.str();
+    return formattedFileTime;
 }
 }  // namespace Utils

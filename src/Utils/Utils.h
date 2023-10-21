@@ -12,6 +12,10 @@ std::vector<std::string> split(const std::string &sentence,
 std::string getCurrentDirectory();
 void listFiles(const std::string &path, std::vector<std::string> &filePaths);
 
+// Get file size
+int getFileSizeInBytes(const std::string &filePath);
+
+std::string getLastModifiedTimeStamp(const std::string &filePath);
 }  // namespace Utils
 
 #endif
