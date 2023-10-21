@@ -48,10 +48,6 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     std::string absoluteFilePath =
         Utils::getCurrentDirectory() + "/app/public" + relativePathToPublic;
 
-    // Set the file ETag
-    std::string fileETag = Utils::getFileETag(absoluteFilePath);
-    setETag(fileETag);
-
     // Find the type of the file
     std::string extension = Utils::split(relativePathToPublic, ".")[1];
 
@@ -100,7 +96,7 @@ void http::Response::sendResponse(const std::string& response_body,
     response_header += getETagHeader();
     response_header += "\r\n";
 
-    LOGGER_ERROR(response_header);
+    LOGGER_WARNING(response_header);
 
     // Create response
     std::string httpResponse = response_header + response_body;

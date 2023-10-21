@@ -1,5 +1,6 @@
 #include "./systemController.h"
 
+#include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
 
 void Controller::defaultNotFound(http::Request &request,
@@ -15,12 +16,14 @@ void Controller::getPublicFile(http::Request &request,
     std::string path = request.getValue("path");
     std::string absoluteFilePath =
         Utils::getCurrentDirectory() + "/app/public" + path;
-    std::string fileEtag = Utils::getFileETag(absoluteFilePath);
+    std::string fileETag = Utils::getFileETag(absoluteFilePath);
 
-    if (ifNoneMatch == fileEtag) {
+    if (ifNoneMatch == fileETag) {
         response.setStatusCode(304);
         return response.sendJson("");
     }
 
+    // Set the file ETag
+    response.setETag(fileETag);
     response.sendPublicFile(path);
 }
