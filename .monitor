@@ -1,6 +1,7 @@
 {
   "outputFileName": "httpScratchServer",
   "scripts": {
+    "clean": "make clean",
     "build": "make all",
     "run": "./build/bin/httpScratchServer"
   },

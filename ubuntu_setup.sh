@@ -23,10 +23,14 @@ function runDevelopmentServer {
     ./monitor/monitor.sh
 }
 
+function runCleanDevelopmentServer {
+    ./monitor/monitor.sh -c
+}
+
 # Menu for running the above functions
 PS3="Select the Task to run: "
 
-select commandToRun in "Install Dependencies" "Run Development Server" "Build Server" Exit; do
+select commandToRun in "Install Dependencies" "Run Development Server" "Run Clean Development Server" "Build Server" Exit; do
     case $commandToRun in
     "Install Dependencies")
         installDependencies
@@ -34,6 +38,10 @@ select commandToRun in "Install Dependencies" "Run Development Server" "Build Se
         ;;
     "Run Development Server")
         runDevelopmentServer
+        break
+        ;;
+    "Run Clean Development Server")
+        runCleanDevelopmentServer
         break
         ;;
     "Build Server")
