@@ -16,7 +16,7 @@ void Controller::getPublicFile(http::Request &request,
     std::string path = request.getValue("path");
     std::string absoluteFilePath =
         Utils::getCurrentDirectory() + "/app/public" + path;
-    std::string fileETag = Utils::getFileETag(absoluteFilePath);
+    std::string fileETag = "\"" + Utils::getFileETag(absoluteFilePath) + "\"";
 
     if (ifNoneMatch == fileETag) {
         response.setStatusCode(304);

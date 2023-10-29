@@ -198,7 +198,7 @@ const codes = [
       ``,
       `    // The data you want to send`,
       `    const std::string data = "some data"; // data can be anything`,
-      `    const std::string eTagOfData = "unique identification of data";`,
+      `    const std::string eTagOfData = "\\"" + "unique identification of data" + "\\"";`,
       ``,
       `    // Check if the eTag is same or not, if same no need to again send data`,
       `    if (ifNoneMatch == eTagOfData) {`,
