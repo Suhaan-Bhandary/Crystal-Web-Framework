@@ -2,50 +2,477 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>C++ Framework from Scratch</title>
+    <title>C++ Web Framework made from Scratch</title>
 
-    <link rel="stylesheet" href="./home/style.css" />
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="./home/base.css" />
+    <link rel="stylesheet" href="./home/page.css" />
+    <script src="./home/script.js" defer></script>
+    <script src="./home/loadCodes.js" defer></script>
+
+    <!-- Highlight Js -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/highlight.js/9.9.0/styles/atom-one-dark.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
   </head>
   <body>
-    <main class="banner">
-      <h1>Web application Framework in C++</h1>
-      <p>
-        A Personal Project to take a deep dive in working of Networking,
-        frameworks and C++!!
-      </p>
-      <div class="buttons">
-        <button class="defaultButton" id="popUpButton">Developer</button>
-        <a href="/xo-game" class="defaultButton" id="popUpButton">XO Game</a>
-      </div>
-    </main>
+    <div class="overflow-hidden-x">
+      <main id="banner" class="container banner">
+        <div
+          class="filler-block banner__filter_block_1"
+          aria-hidden="true"
+        ></div>
 
-    <div class="popUp" id="popUpWindow">
-      <div class="popUpContainer">
-        <p class="closeButton" id="closeButton">X</p>
-        <img src="./assets/suhaan.jpg" alt="Suhaan Bhandary" />
-        <div>
-          <h2>
-            <a href="https://www.linkedin.com/in/suhaan-bhandary">
-              Suhaan Bhandary
-            </a>
-          </h2>
-          <p>
-            Skilled Full Stack Developer proficient in React, Node, and Django
-            with expertise in DSA problem-solving, recognized as Knight on
-            Leetcode with 700+ Problems and 60+ Contests.
-          </p>
+        <h1 class="banner__heading">
+          C++ Web Framework
+          <span class="banner__highlight"
+            >Made From <span class="underline">Scratch</span></span
+          >
+        </h1>
+        <p class="banner__detail">
+          It gives you with the ability to produce a Web Application Backend
+          with an expressive, elegant syntax in C++. An Open Source Project to
+          learn and Contribute. This website is also created in this Framework
+          itself!!
+        </p>
+        <div class="banner__buttons">
+          <a href="#features" class="banner__buttons__features">Features</a>
           <a
-            href="https://www.linkedin.com/in/suhaan-bhandary"
-            class="defaultButton anchorButton"
+            href="https://github.com/Suhaan-Bhandary/Web-Application-Framework"
+            class="banner__buttons__github"
             target="_blank"
-            >LinkedIn</a
+            >GitHub</a
           >
         </div>
-      </div>
-    </div>
+      </main>
 
-    <script src="./home/script.js "></script>
+      <section id="words-from-creator" class="container creator">
+        <div
+          class="filler-block creator__filter_block_1"
+          aria-hidden="true"
+        ></div>
+
+        <div class="creator__image__container">
+          <a href="https://www.linkedin.com/in/suhaan-bhandary" target="_blank">
+            <img
+              src="./home/images/suhaan.jpg"
+              alt="Suhaan Bhandary"
+              class="creator__image"
+              loading="lazy"
+            />
+          </a>
+          <span>👋</span>
+        </div>
+        <p class="creator__detail">
+          I'm
+          <a href="https://www.linkedin.com/in/suhaan-bhandary" target="_blank"
+            ><span class="bold">Suhaan Bhandary</span></a
+          >, the person behind this framework. This project started as a simple
+          HTTP Server in C++ and as days went by I started adding features to it
+          to make it a Robust Web Framework. It is a great project if you want
+          to learn in depth about
+          <span class="bold">C++ or Backend Development</span>
+          and how it works behind the scenes.
+        </p>
+        <p class="creator__quote">
+          <span class="bold">Learning Bit By Bit</span>, Suhaan
+        </p>
+      </section>
+
+      <section id="controller-code" class="container controller">
+        <div>
+          <h2 class="controller__title">
+            Where Code Meets User Friendly Syntax
+          </h2>
+          <p class="controller__detail">
+            Dive into the C++ World of Backend Brilliance! Create Robust,
+            Flexible Apps with Your Unique Style, All Up to Modern Standards.
+            Experience a Smooth Ride with MVC (Model View Controller)
+            Architecture for Effortless Functionality!
+          </p>
+        </div>
+
+        <div class="controller__image">
+          <img
+            src="./home/images/controller-example.jpeg"
+            alt="controller code"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <section id="monitor-code" class="container monitor">
+        <div class="monitor__image">
+          <img
+            src="./home/images/monitor-running.png"
+            alt="monitor code"
+            loading="lazy"
+          />
+        </div>
+
+        <div>
+          <h2 class="monitor__title">
+            Seamless Development: Instant Live Restarts with Monitor
+          </h2>
+          <p class="monitor__detail">
+            Monitor is a Program which Ensures Instant Live Restarts, Allowing
+            one to see Changes in Real Time. Say Goodbye to Tedious Manual
+            Restarts and Embrace a Seamless Workflow.
+          </p>
+        </div>
+      </section>
+
+      <section id="features" class="container features">
+        <div class="features__container">
+          <div class="features__list__container">
+            <ul class="features__list">
+              <button id="dynamic-router" class="active">
+                <li role="list">Dynamic Router</li>
+              </button>
+              <button id="data-url"><li role="list">Data in URL</li></button>
+              <button id="status-code">
+                <li role="list">Status Codes</li>
+              </button>
+              <button id="json-support">
+                <li role="list">JSON Support</li>
+              </button>
+              <button id="cookies-support">
+                <li role="list">Cookies Support</li>
+              </button>
+              <button id="public-files">
+                <li role="list">Public Files</li>
+              </button>
+              <button id="redirect-request">
+                <li role="list">Redirect Requests</li>
+              </button>
+              <button id="html-template">
+                <li role="list">HTML Template</li>
+              </button>
+              <button id="client-caching">
+                <li role="list">Client Side Caching</li>
+              </button>
+              <button id="live-restart">
+                <li role="list">Live Restart</li>
+              </button>
+            </ul>
+          </div>
+          <div class="features__content">
+            <div id="dynamic-router-content" class="active">
+              <h2 class="features__title">Dynamic Router</h2>
+              <p class="features__detail">
+                The Web Framework incorporates a dynamic routing system that
+                boasts robust support for URL parameters. This functionality
+                empowers developers to seamlessly manage an array of routes,
+                each with its own set of dynamic parameters. A standout feature
+                lies in its proficiency to effortlessly process URL parameters,
+                thereby facilitating the dynamic rendering of content.
+              </p>
+              <pre><code class="language-plaintext theme-atom-one-dark features__code" id="dynamic__router__code__1"></code></pre>
+
+              <h3 class="features__detail">Registering Routes</h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="dynamic__router__code__2"></code></pre>
+            </div>
+            <div id="data-url-content">
+              <h2 class="features__title">Data in URL</h2>
+              <p class="features__detail">
+                URL parameters and search queries are powerful tools in web
+                browsing. Parameters act like customizable keys, tailoring our
+                web experience by unlocking specific content. Search queries, on
+                the other hand, are like magic words in a search bar, fetching
+                the most relevant results. Together, they make our online
+                experience flexible and interactive, allowing us to navigate the
+                web with precision.
+              </p>
+              <h3 class="features__detail">
+                Example of how to define a URL parameter
+              </h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="data__url__code__1"></code></pre>
+              <h3 class="features__detail">
+                Example of how to access URL Param and Search Query from a
+                Request
+              </h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="data__url__code__2"></code></pre>
+            </div>
+            <div id="status-code-content">
+              <h2 class="features__title">Status Codes</h2>
+              <p class="features__detail">
+                A status code in HTTP is a three-digit number returned by a
+                server to indicate the outcome of a client's request. It
+                categorizes responses into classes, such as success,
+                redirection, client error, or server error.
+              </p>
+              <p class="features__detail">
+                All HTTP response status codes are separated into five classes
+                or categories. The first digit of the status code defines the
+                class of response, while the last two digits do not have any
+                classifying or categorization role. There are five classes
+                defined by the standard:
+              </p>
+              <ul class="features__detail">
+                <li>
+                  1xx informational response: the request was received,
+                  continuing process
+                </li>
+                <li>
+                  2xx successful: the request was successfully received,
+                  understood, and accepted
+                </li>
+                <li>
+                  3xx redirection: further action needs to be taken in order to
+                  complete the request
+                </li>
+                <li>
+                  4xx client error: the request contains bad syntax or cannot be
+                  fulfilled
+                </li>
+                <li>
+                  5xx server error: the server failed to fulfil an apparently
+                  valid request
+                </li>
+              </ul>
+
+              <h3 class="features__detail">
+                Sending status code with the Response
+              </h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="status__code__code__1"></code></pre>
+
+              <h3 class="features__detail">All Status Codes</h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="status__code__code__2"></code></pre>
+            </div>
+            <div id="json-support-content">
+              <h2 class="features__title">JSON in C++</h2>
+              <p class="features__detail">
+                JSON (JavaScript Object Notation) is a lightweight data format.
+                It's commonly used in REST APIs for exchanging information
+                between a client and server. It allows for easy data
+                interchange, making communication between different systems more
+                efficient and standardized.
+              </p>
+
+              <h3 class="features__detail">
+                Example: Controller Parsing Json Response Body and Generating a
+                Json Response to Client
+              </h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="json__code__1"></code></pre>
+
+              <h3 class="features__detail">Request Body to Controller</h3>
+              <pre><code class="language-js theme-atom-one-dark features__code" id="json__code__2"></code></pre>
+
+              <h3 class="features__detail">Response from Controller</h3>
+              <pre><code class="language-js theme-atom-one-dark features__code" id="json__code__3"></code></pre>
+            </div>
+            <div id="cookies-support-content">
+              <h2 class="features__title">Cookies</h2>
+              <p class="features__detail">
+                Browser cookies in HTTP are small data pieces stored by websites
+                on a user's browser. Cookies can be used to store details like
+                username, tokens and other things.
+              </p>
+
+              <h3 class="features__detail">Cookies Usage</h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="cookies__1"></code></pre>
+            </div>
+            <div id="public-files-content">
+              <h2 class="features__title">Public Files</h2>
+              <p class="features__detail">
+                Public Files can be easily served by stored them in the public
+                folder and accessing it through the link
+                /filePathRelativeToPublic. The files in the public folder are
+                automatically registered in the router as a GET request which
+                can be access from anywhere.
+              </p>
+            </div>
+            <div id="redirect-request-content">
+              <h2 class="features__title">Redirect a Request</h2>
+              <p class="features__detail">
+                A Request can be redirected from one route to other, it can be
+                useful to handle different cases where there is conditional
+                routing or if the user is restricted from viewing the content.
+              </p>
+              <h3 class="features__detail">Redirect Usage</h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="redirect__code__1"></code></pre>
+            </div>
+            <div id="html-template-content">
+              <h2 class="features__title">HTML Template</h2>
+              <p class="features__detail">Coming Soon..</p>
+              <p class="features__detail">
+                Working on a solution similar to EJS template Language.
+              </p>
+            </div>
+            <div id="client-caching-content">
+              <h2 class="features__title">Client Side Caching</h2>
+              <p class="features__detail">
+                Client-side caching is a way to save copies of web resources
+                (like images, scripts, etc.) on a user's device. This helps the
+                browser reuse these resources without asking the server again.
+                It speeds up webpage loading.
+              </p>
+
+              <h3 class="features__detail">ETags</h3>
+              <p class="features__detail">
+                ETags are unique IDs generated by a server to represent a
+                specific version of a resource. When a user asks for a resource,
+                the server sends it along with the ETag. When the user asks
+                again, it sends the ETag back. If the resource hasn't changed,
+                the server sends a no change code to client, then client uses
+                the previous stored data.
+              </p>
+              <p class="features__detail">
+                All the Public Files have ETags added to them so that the client
+                caches the data and reuses the files if no change in files. The
+                ETag is created using the file size and it's modified date.
+              </p>
+
+              <h3 class="features__detail">Etags on Custom Data</h3>
+              <pre><code class="language-cpp theme-atom-one-dark features__code" id="caching__code__1"></code></pre>
+            </div>
+            <div id="live-restart-content">
+              <h2 class="features__title">Live Restart</h2>
+              <p class="features__detail">
+                Live Restart is a feature which can be used while developing an
+                Application to view changes as they happen.
+              </p>
+              <p class="features__detail">
+                For Live Restarts, we have a InHouse Program called Monitor.
+              </p>
+              <p class="features__detail">
+                Monitor is a Program which Ensures Instant Live Restarts,
+                Allowing one to see Changes in Real Time. Say Goodbye to Tedious
+                Manual Restarts and Embrace a Seamless Workflow.
+              </p>
+              <h3 class="features__detail">Running Monitor</h3>
+              <pre><code class="language-md theme-atom-one-dark features__code" id="monitor__code__1"></code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="routing-live-demo" class="container">
+        <h2 class="routing__live__demo__title">Live Routing Demo</h2>
+
+        <div class="routing__live__demo__content__container">
+          <div class="routing__live__demo__content">
+            <h3 class="routing__live__demo__content__title">Tic Tac Toe</h3>
+            <p class="routing__live__demo__content__detail">
+              A Classic Tic Tac Toe Game which uses HTML, CSS and JS as public
+              files from the Backend Server. These public files are cached using
+              ETags to improve load times on revisits.
+            </p>
+            <a
+              href="/xo-game"
+              class="routing__live__demo__content__test"
+              target="_blank"
+              >Test</a
+            >
+          </div>
+
+          <div class="routing__live__demo__content">
+            <h3 class="routing__live__demo__content__title">
+              Url Param and Query
+            </h3>
+            <p class="routing__live__demo__content__detail">
+              Try out the URL Param and Search Query working.
+            </p>
+            <a
+              href="/user/demo"
+              class="routing__live__demo__content__test"
+              target="_blank"
+              >Test</a
+            >
+          </div>
+
+          <div class="routing__live__demo__content">
+            <h3 class="routing__live__demo__content__title">Not Found Page</h3>
+            <p class="routing__live__demo__content__detail">
+              This is the default fallback page which is displayed when the
+              given URL is wrong or doesn't match with any routes.
+            </p>
+            <a
+              href="/wrong-url"
+              class="routing__live__demo__content__test"
+              target="_blank"
+              >Test</a
+            >
+          </div>
+
+          <div class="routing__live__demo__content">
+            <h3 class="routing__live__demo__content__title">
+              Redirect to Google on Request
+            </h3>
+            <p class="routing__live__demo__content__detail">
+              Redirect to Google shows the redirection functionality of the
+              server, server can easily redirect a request from one route to
+              other.
+            </p>
+            <a
+              href="/redirect-user?url=https://www.google.com/"
+              class="routing__live__demo__content__test"
+              target="_blank"
+              >Test</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="deployment" class="container deployment">
+        <div>
+          <h2 class="deployment__title">Run anywhere with Docker</h2>
+          <p class="deployment__detail">
+            Unleash the full potential of our C++ framework! Seamlessly deploy
+            on any hosting platform with Docker's power. Experience hassle-free
+            setup and scaling for an elevated development journey.
+          </p>
+        </div>
+
+        <div class="deployment__image">
+          <img
+            src="./home/images/docker-config.jpeg"
+            alt="Docker Config"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <footer class="container footer">
+        <div>
+          <h2 class="accent">C++ Web Framework</h2>
+          <p class="footer__detail">
+            When you look at people who are successful, you will find that they
+            aren't the people who are motivated, but have consistency in their
+            motivation<span class="bold"> - Arsene Wenger</span>
+          </p>
+        </div>
+        <div>
+          <h2>Links</h2>
+          <ul>
+            <li role="list">
+              <a
+                href="https://github.com/Suhaan-Bhandary/Web-Application-Framework"
+                target="_blank"
+                >GitHub</a
+              >
+            </li>
+            <li role="list">
+              <a
+                href="https://www.linkedin.com/in/suhaan-bhandary"
+                target="_blank"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>

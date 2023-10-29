@@ -1,0 +1,181 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Root styles */
+:root {
+  --accent-color: #f9322c;
+  --dark-color: rgb(35, 35, 35);
+  --text-color-light: rgb(66, 80, 108);
+}
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+textarea,
+button,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+}
+
+li {
+  list-style-position: inside;
+}
+
+li[role="list"] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Basic Styling */
+body {
+  overflow-x: hidden;
+
+  width: 100%;
+  line-height: 1.5;
+
+  color: var(--dark-color);
+
+  text-rendering: optimizeSpeed;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Remove all animations, transitions and smooth scrolling */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Container Style */
+.container {
+  padding-inline: 2em;
+  margin-inline: auto;
+  max-width: 80rem;
+}
+
+/* For readability we are using visually hidden */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Blocks */
+.filler-block {
+  pointer-events: none;
+
+  width: 640px;
+  height: 640px;
+  opacity: 0.15;
+  position: absolute;
+
+  background-image: radial-gradient(
+    50% 50% at 50% 50%,
+    #eb4432 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.underline {
+  position: relative;
+}
+
+.underline::after {
+  content: "";
+  width: 100%;
+  height: 5px;
+  background-color: var(--accent-color);
+  border-radius: 20px;
+  background-position: center;
+
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  transform: rotateX(20deg);
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.accent {
+  color: var(--accent-color);
+}
+
+.overflow-hidden-x {
+  overflow-x: hidden;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(231 232 242);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(249, 50, 44, 0.8);
+  border-radius: 100vw;
+}
+
+@supports (scrollbar-color: rgb(249, 50, 44, 0.8) rgb(231 232 242)) {
+  * {
+    scrollbar-color: rgb(249, 50, 44, 0.8) rgb(231 232 242);
+  }
+}
