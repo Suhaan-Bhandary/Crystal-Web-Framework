@@ -2,7 +2,7 @@
 
 /* Root styles */
 :root {
-  --accent-color: #f9322c;
+  --accent-color: rgb(83, 96, 235);
   --dark-color: rgb(35, 35, 35);
   --text-color-light: rgb(66, 80, 108);
 }
@@ -124,7 +124,7 @@ code {
 
   background-image: radial-gradient(
     50% 50% at 50% 50%,
-    #eb4432 0%,
+    rgb(125, 136, 255) 0%,
     rgba(255, 255, 255, 0) 100%
   );
 }
@@ -170,12 +170,12 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(249, 50, 44, 0.8);
+  background: rgb(149, 158, 252);
   border-radius: 100vw;
 }
 
-@supports (scrollbar-color: rgb(249, 50, 44, 0.8) rgb(231 232 242)) {
+@supports (scrollbar-color: rgb(149, 158, 252) rgb(231 232 242)) {
   * {
-    scrollbar-color: rgb(249, 50, 44, 0.8) rgb(231 232 242);
+    scrollbar-color: rgb(149, 158, 252) rgb(231 232 242);
   }
 }
