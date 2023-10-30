@@ -155,7 +155,7 @@ const codes = [
     code: [
       `{`,
       `  "name": "suhaan",`,
-      `  "email": "suhaanbhandary1@gmail.com",`,
+      `  "email": "suhaanbhandary1@gmail.com"`,
       `}`,
     ],
   },
@@ -163,12 +163,12 @@ const codes = [
     id: "json__code__3",
     code: [
       `{`,
-      `  "message": "Successful"`,
+      `  "message": "Successful",`,
       `  "name": "suhaan",`,
       `  "email": "suhaanbhandary1@gmail.com",`,
       `  "colors": {`,
       `    "favorite": "red"`,
-      `  },`,
+      `  }`,
       `}`,
     ],
   },
