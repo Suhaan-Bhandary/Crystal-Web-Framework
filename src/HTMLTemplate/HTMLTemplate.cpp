@@ -58,6 +58,7 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
                    (HTMLContent[i] != '}' || HTMLContent[i + 1] != '}')) {
                 key.push_back(HTMLContent[i++]);
             }
+            i += 2;
 
             // Check if string data is present or not
             try {
@@ -66,8 +67,6 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
                 LOGGER_ERROR(e.what());
             }
 
-            LOGGER_ERROR("(" + key + ")");
-            i += 2;
         } else {
             result.push_back(HTMLContent[i++]);
         }

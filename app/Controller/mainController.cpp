@@ -23,25 +23,14 @@ void Controller::getHome(http::Request &request, http::Response &response) {
 
 void Controller::getUser(http::Request &request, http::Response &response) {
     std::string userId = request.pathParams[":id"];
-    std::string rollno = request.searchQueries["rollno"];
+    std::string search = request.searchQueries["search"];
 
-    // Send html response to the client
-    std::string htmlContent =
-        "<html>"
-        "<head><title>User</title></head>"
-        "<body>"
-        "<h1>User Profile Page</h1>"
-        "<h2>Welcome, " +
-        userId +
-        " !!</h2>"
-        "<p>Made with C++</p>"
-        "Your Rollno is: " +
-        rollno +
-        "</body>"
-        "</html>\r\n";
+    Json::Json jsonObject("{}");
+    jsonObject.data->insertInObject("id", userId);
+    jsonObject.data->insertInObject("search", search);
 
     response.setStatusCode(200);
-    response.sendHTML(htmlContent);
+    response.sendTemplate("getUser.html", jsonObject);
 }
 
 void Controller::getUserChat(http::Request &request, http::Response &response) {
