@@ -1,6 +1,10 @@
 # Server in C++
 
+```
 C++ Web Application Framework created from scratch. Inspired by Express and Django.
+```
+
+## [Home Page](https://cpp-scratch-server-demo.onrender.com)
 
 ## Motivation
 
@@ -21,6 +25,7 @@ My C++, DSA, and Networking skills were honed by developing this project and I g
 - Request Redirect
 - HTML Page Support
 - Static Fields
+- ETags for Client Side Caching
 - Monitor for Live Restart [./monitor/DOCUMENTATION.md](./monitor/DOCUMENTATION.md)
 
 ### Note
