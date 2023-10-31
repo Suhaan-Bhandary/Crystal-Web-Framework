@@ -52,12 +52,15 @@ TEST_OBJECT_NAMES = $(TEST_SOURCES:.cpp=.o)
 TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 
 # Flags
-# WFLAGS = -Wall -Wextra -Werror -Wshadow
 # TODO: Turn on Development when developing
+# WFLAGS = -Wall -Wextra -Werror -Wshadow
 # CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
+# OPTIMATION_C_FLAGS = -Og -g # Development
+OPTIMATION_C_FLAGS = -O3 # Production
+
 CUSTOM_MACROS_COMMON = -DFREQUENT_RESTART
 WFLAGS = 
-CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) -Og -g $(CUSTOM_MACROS) $(CUSTOM_MACROS_COMMON)
+CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) $(OPTIMATION_C_FLAGS) $(CUSTOM_MACROS) $(CUSTOM_MACROS_COMMON)
 LDFLAGS = $(addprefix -L, $(LIB_DIRS))
 
 # Build
