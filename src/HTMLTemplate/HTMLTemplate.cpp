@@ -49,13 +49,17 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
     // ! proper template language
     int i = 0;
     while (i < HTMLContent.size()) {
-        if (i + 1 != HTMLContent.size() && HTMLContent[i] == '{' &&
-            HTMLContent[i + 1] == '{') {
+        // \{{ this will ignore the {{
+        if (i + 2 < HTMLContent.size() && HTMLContent.substr(i, 3) == "\\{{") {
+            result += "{{";
+            i += 3;
+        } else if (i + 1 != HTMLContent.size() &&
+                   HTMLContent.substr(i, 2) == "{{") {
             i += 2;
 
             std::string key = "";
             while (i + 1 < HTMLContent.size() &&
-                   (HTMLContent[i] != '}' || HTMLContent[i + 1] != '}')) {
+                   HTMLContent.substr(i, 2) != "}}") {
                 key.push_back(HTMLContent[i++]);
             }
             i += 2;
@@ -64,6 +68,7 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
             try {
                 result += data.data->getObjectValue(key)->getStringValue();
             } catch (const std::exception &e) {
+                LOGGER_ERROR(key);
                 LOGGER_ERROR(e.what());
             }
 
