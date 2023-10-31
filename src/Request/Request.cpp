@@ -121,7 +121,8 @@ void http::Request::processSearchQuery(const std::string &queryString) {
         std::vector<std::string> keyAndValue = Utils::split(tokens[i], "=");
         if (keyAndValue.size() < 2) continue;
 
-        searchQueries.insert({keyAndValue[0], keyAndValue[1]});
+        searchQueries.insert({Utils::cleanEncodedString(keyAndValue[0]),
+                              Utils::cleanEncodedString(keyAndValue[1])});
     }
 }
 

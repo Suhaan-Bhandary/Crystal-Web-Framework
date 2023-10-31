@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -130,5 +131,38 @@ std::string getFileETag(const std::string &filePath) {
     int fileSize = getFileSizeInBytes(filePath);
     std::string timeStamp = getLastModifiedTimeStamp(filePath);
     return std::to_string(fileSize) + " " + timeStamp;
+}
+
+// Mapping for url encodings
+const std::unordered_map<std::string, std::string> reversedUrlEncodingMap = {
+    {"%20", " "}, {"%21", "!"}, {"%22", "\""}, {"%23", "#"}, {"%24", "$"},
+    {"%25", "%"}, {"%26", "&"}, {"%27", "'"},  {"%28", "("}, {"%29", ")"},
+    {"%2A", "*"}, {"%2B", "+"}, {"%2C", ","},  {"%2D", "-"}, {"%2E", "."},
+    {"%2F", "/"}, {"%3A", ":"}, {"%3B", ";"},  {"%3C", "<"}, {"%3D", "="},
+    {"%3E", ">"}, {"%3F", "?"}, {"%40", "@"},  {"%5B", "["}, {"%5C", "\\"},
+    {"%5D", "]"}, {"%5E", "^"}, {"%5F", "_"},  {"%60", "`"}, {"%7B", "{"},
+    {"%7C", "|"}, {"%7D", "}"}, {"%7E", "~"}};
+
+std::string cleanEncodedString(std::string &value) {
+    std::string result = "";
+
+    int i = 0;
+    while (i < value.size()) {
+        if (value[i] == '%') {
+            std::string specialEncoding = value.substr(i, 3);
+            if (reversedUrlEncodingMap.count(specialEncoding) == 1) {
+                result += reversedUrlEncodingMap.at(specialEncoding);
+                i += 3;
+            } else {
+                result.push_back(value[i]);
+                i++;
+            }
+        } else {
+            result.push_back(value[i]);
+            i++;
+        }
+    }
+
+    return result;
 }
 }  // namespace Utils

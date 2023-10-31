@@ -16,6 +16,9 @@ void listFiles(const std::string &path, std::vector<std::string> &filePaths);
 int getFileSizeInBytes(const std::string &filePath);
 std::string getLastModifiedTimeStamp(const std::string &filePath);
 std::string getFileETag(const std::string &filePath);
+
+// Function to Clean Query String from special char
+std::string cleanEncodedString(std::string &value);
 }  // namespace Utils
 
 #endif

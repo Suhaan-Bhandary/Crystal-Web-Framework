@@ -3,7 +3,6 @@
 #define INCLUDED_REQUEST
 
 #include <string>
-#include <unordered_map>
 
 #include "../Json/Json.h"
 

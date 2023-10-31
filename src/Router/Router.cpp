@@ -119,6 +119,11 @@ controller_type http::Router::getControllerFromPathTrie(
     // get tokens for the trie path
     std::vector<std::string> tokens = Utils::split(triePath, "/");
 
+    // Clean tokens
+    for (int i = 0; i < tokens.size(); i++) {
+        tokens[i] = Utils::cleanEncodedString(tokens[i]);
+    }
+
     // remove the last empty ones if any
     while (tokens.size() > 0 && tokens.back() == "") tokens.pop_back();
 
