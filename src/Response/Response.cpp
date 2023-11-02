@@ -96,7 +96,7 @@ void http::Response::sendResponse(const std::string& response_body,
     response_header += getETagHeader();
     response_header += "\r\n";
 
-    LOGGER_WARNING(response_header);
+    // LOGGER_WARNING(response_header);
 
     // Create response
     std::string httpResponse = response_header + response_body;

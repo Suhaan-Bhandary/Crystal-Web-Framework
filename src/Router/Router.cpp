@@ -22,10 +22,7 @@ http::Router::Router() {
 
 // The function will contain the routing logic for the application
 void http::Router::route(http::Request &request, http::Response &response) {
-    LOGGER("Method: " + request.getValue("method"));
-    LOGGER("Path: " + request.getValue("path"));
-    LOGGER("Host: " + request.getValue("Host"));
-    LOGGER_MINIMAL("");
+    // LOGGER("Request:", request.getValue("method"), request.getValue("path"));
 
     std::string method = request.getValue("method");
     std::string path = request.getValue("path");
