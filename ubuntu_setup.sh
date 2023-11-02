@@ -2,6 +2,8 @@
 
 function installDependencies {
     apt update
+    apt install sqlite3
+    apt-get install libsqlite3-dev
     apt install build-essential
     apt install make
     apt install jq

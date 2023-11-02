@@ -4,8 +4,9 @@
 ## % is a wild card which will match the command and run
 
 # Directories
-INCLUDE_DIRS = 
+INCLUDE_DIRS = lib/sqlite 
 LIB_DIRS =  
+
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
