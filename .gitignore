@@ -1,6 +1,9 @@
 # output
 build
 
+# Database
+*.db
+
 # Todo page
 todo.md
 

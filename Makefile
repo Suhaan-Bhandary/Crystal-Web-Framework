@@ -4,8 +4,8 @@
 ## % is a wild card which will match the command and run
 
 # Directories
-INCLUDE_DIRS = lib/sqlite 
-LIB_DIRS =  
+INCLUDE_DIRS = /usr/include
+LIB_DIRS = /usr/lib/x86_64-linux-gnu
 
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
@@ -32,8 +32,9 @@ SOURCES = src/main.cpp \
 		src/Logger/Logger.cpp \
 		src/Json/Json.cpp \
 		src/Json/JsonNode.cpp \
+		src/SQLite/SQLite.cpp \
 		app/Router/UserRouter.cpp \
-		app/Controller/mainController.cpp
+		app/Controller/mainController.cpp 
 
 TEST_SOURCES = tests/tests.cpp \
 			tests/JsonTests/JsonTests.cpp \
@@ -68,7 +69,7 @@ LDFLAGS = $(addprefix -L, $(LIB_DIRS))
 ## Linking
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(dir $@)
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $(LDFLAGS) $^ -lsqlite3 -o $@
 
 # Compiling
 $(OBJ_DIR)/%.o: %.cpp
@@ -78,7 +79,7 @@ $(OBJ_DIR)/%.o: %.cpp
 # Testing
 $(TEST_TARGET): ${TEST_OBJECTS}
 	@mkdir -p $(dir $@)
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $(LDFLAGS) $^ -lsqlite3 -o $@
 
 $(TEST_OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
