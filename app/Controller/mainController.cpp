@@ -1,6 +1,14 @@
-#include "./mainController.h"
+#include "mainController.h"
+
+#include "../db/services/visitors.h"
 
 void Controller::getHome(http::Request &request, http::Response &response) {
+    // Add visitor time in database
+    database::services::addVisitor();
+
+    // Get the visitor count
+    int visitorCount = database::services::getVisitorsCount();
+
     response.setStatusCode(200);
 
     // Set the cookies
@@ -18,6 +26,8 @@ void Controller::getHome(http::Request &request, http::Response &response) {
     }
 
     Json::Json jsonObject("{}");
+    jsonObject.data->insertInObject("visitorCount",
+                                    std::to_string(visitorCount));
     response.sendTemplate("home.html", jsonObject);
 }
 

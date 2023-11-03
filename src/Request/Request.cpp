@@ -94,7 +94,6 @@ void http::Request::parseDataFromBody() {
 
 void http::Request::parseCookiesData() {
     std::string cookiesStream = getValue("Cookie");
-    LOGGER(cookiesStream);
 
     if (cookiesStream.size() == 0) return;
 
