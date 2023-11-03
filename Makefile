@@ -34,6 +34,8 @@ SOURCES = src/main.cpp \
 		src/Json/JsonNode.cpp \
 		src/SQLite/SQLite.cpp \
 		app/Router/UserRouter.cpp \
+		app/db/models/initializeTables.cpp \
+		app/db/services/visitors.cpp \
 		app/Controller/mainController.cpp 
 
 TEST_SOURCES = tests/tests.cpp \
