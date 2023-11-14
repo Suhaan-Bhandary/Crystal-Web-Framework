@@ -289,9 +289,13 @@ void Test::JsonTests() {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("project")
-                                             ->getObjectValue("isInDevelopment")
-                                             ->getBoolValue() != true) {
+        if (isJsonParsedCorrectly &&
+            !jsonObject.data->getObjectValue("project")
+                 ->getObjectValue("isInDevelopment")
+                 ->isNULL() &&
+            jsonObject.data->getObjectValue("project")
+                    ->getObjectValue("isInDevelopment")
+                    ->getBoolValue() != true) {
             isJsonParsedCorrectly = false;
         }
 

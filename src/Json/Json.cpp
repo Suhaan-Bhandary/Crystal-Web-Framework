@@ -43,6 +43,10 @@ Json::JsonType Json::Json::getJsonTokenType(const std::string &jsonToken) {
     bool isInteger =
         isFirstCharDigit ? jsonToken.find('.') == std::string::npos : false;
 
+    if (jsonToken == "null") {
+        return JsonType::NULL_TOKEN;
+    }
+
     if (isFirstCharDigit && isInteger) {
         return JsonType::INT;
     } else if (isFirstCharDigit && !isInteger) {
@@ -448,6 +452,9 @@ Json::JsonNode *Json::Json::parseJsonFromStringCallback(
 
         case JsonType::STRING:
             node->stringValue = stringWithFirstAndLastCharTrimmed;
+            break;
+
+        case JsonType::NULL_TOKEN:
             break;
 
         case JsonType::ARRAY:

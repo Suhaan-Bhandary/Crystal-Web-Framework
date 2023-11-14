@@ -261,6 +261,8 @@ void Json::JsonNode::insertEmptyObject(const std::string &key) {
     objectValue[key] = node;
 }
 
+bool Json::JsonNode::isNULL() { return type == JsonType::NULL_TOKEN; }
+
 // Function to get string representation
 std::string Json::JsonNode::getJsonString(int indentationLevel,
                                           int indentSpaces) {
@@ -274,11 +276,18 @@ std::string Json::JsonNode::getJsonString(int indentationLevel,
     if (type == JsonType::DOUBLE) {
         return std::to_string(doubleValue);
     }
+
     if (type == JsonType::BOOL) {
         return boolValue ? "true" : "false";
     }
+
     if (type == JsonType::STRING) {
         return "\"" + stringValue + "\"";
+    }
+
+    // NULL token
+    if (type == JsonType::NULL_TOKEN) {
+        return "null";
     }
 
     // Array

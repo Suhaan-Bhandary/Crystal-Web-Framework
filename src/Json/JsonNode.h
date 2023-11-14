@@ -16,7 +16,8 @@ enum JsonType {
     BOOL = 3,
     STRING = 4,
     ARRAY = 5,
-    OBJECT = 6
+    OBJECT = 6,
+    NULL_TOKEN = 7
 };
 
 struct JsonNode {
@@ -88,6 +89,9 @@ struct JsonNode {
     void insertInObject(const std::string &key, const char *value);
     void insertEmptyArray(const std::string &key);
     void insertEmptyObject(const std::string &key);
+
+    // Check if Node is NULL
+    bool isNULL();
 
     // String representation
     std::string getJsonString(int indentationLevel, int indentSpaces);
