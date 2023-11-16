@@ -67,7 +67,7 @@ class Response {
     Response(int client_socket);
     void sendHTML(const std::string &html);
     void send404();
-    void sendTemplate(const std::string &templateName, const Json::Json &data);
+    void sendTemplate(const std::string &templateName, Json::Json &data);
     void sendPublicFile(const std::string &relativePathToPublic);
     void sendJson(const std::string &jsonString);
     void sendResponse(const std::string &response_body,

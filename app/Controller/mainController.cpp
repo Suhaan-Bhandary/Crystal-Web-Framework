@@ -26,8 +26,7 @@ void Controller::getHome(http::Request &request, http::Response &response) {
     }
 
     Json::Json jsonObject("{}");
-    jsonObject.data->insertInObject("visitorCount",
-                                    std::to_string(visitorCount));
+    jsonObject.getData().set("visitorCount", std::to_string(visitorCount));
     response.sendTemplate("home.html", jsonObject);
 }
 
@@ -36,8 +35,8 @@ void Controller::getUser(http::Request &request, http::Response &response) {
     std::string search = request.searchQueries["search"];
 
     Json::Json jsonObject("{}");
-    jsonObject.data->insertInObject("id", userId);
-    jsonObject.data->insertInObject("search", search);
+    jsonObject.getData().set("id", userId);
+    jsonObject.getData().set("search", search);
 
     response.setStatusCode(200);
     response.sendTemplate("getUser.html", jsonObject);
@@ -68,24 +67,31 @@ void Controller::getNotFound(http::Request &request, http::Response &response) {
 void Controller::saveUserData(http::Request &request,
                               http::Response &response) {
     try {
+        Json::Json &body = request.getJsonData();
+
         // Load data from json
-        std::string name =
-            request.getJsonData()->getObjectValue("name")->getStringValue();
+        std::string name = body.getData().get("name").get<Json::String>();
+        std::string email = body.getData().get("name").get<Json::String>();
 
-        std::string email =
-            request.getJsonData()->getObjectValue("email")->getStringValue();
+        Json::Json responseData("{}");
+        auto &node = responseData.getData();
 
-        Json::Json responseData;
-        responseData.data->setAsObject();
-        responseData.data->insertInObject("message", "Successful");
-        responseData.data->insertInObject("name", name);
-        responseData.data->insertInObject("email", email);
-        responseData.data->insertEmptyObject("colors");
-        responseData.data->getObjectValue("colors")->insertInObject("red",
-                                                                    "redo");
+        node.set("message", "Successful");
+        node.set("name", name);
+        node.set("email", email);
+
+        // Creating a object of colors pairs
+        node.set("colors", Json::Object());
+        node.get("colors").set("red", "blue");
+
+        // Numbers
+        node.set("languages", Json::Array());
+        node.get("number").push("C++");
+        node.get("number").push("Java");
+        node.get("number").push("Python");
 
         response.setStatusCode(200);
-        response.sendJson(responseData.getJsonString());
+        response.sendJson(responseData.getData().toString());
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         response.setStatusCode(500);

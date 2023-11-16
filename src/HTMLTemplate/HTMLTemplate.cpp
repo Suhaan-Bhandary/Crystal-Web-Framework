@@ -8,12 +8,12 @@
 
 // Constructor
 http::HTMLTemplate::HTMLTemplate(const std::string &templatePath,
-                                 const Json::Json &data) {
+                                 Json::Json &data) {
     compileHTMLFromTemplate(templatePath, data);
 }
 
 void http::HTMLTemplate::compileHTMLFromTemplate(
-    const std::string &templatePath, const Json::Json &data) {
+    const std::string &templatePath, Json::Json &data) {
     // Read HTML Template File
     std::string HTMLContent = readHTMLFromFile(templatePath);
 
@@ -41,7 +41,7 @@ std::string http::HTMLTemplate::readHTMLFromFile(
 
 // TODO: Implement HTML compile
 std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
-                                                const Json::Json &data) {
+                                                Json::Json &data) {
     std::string result = "";
 
     // TODO:
@@ -66,7 +66,7 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
 
             // Check if string data is present or not
             try {
-                result += data.data->getObjectValue(key)->getStringValue();
+                result += data.getData().get(key).get<Json::String>();
             } catch (const std::exception &e) {
                 LOGGER_ERROR(key);
                 LOGGER_ERROR(e.what());

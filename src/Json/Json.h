@@ -1,42 +1,32 @@
-// The ifndef is used so that the same File is not loaded again
 #ifndef INCLUDED_JSON
 #define INCLUDED_JSON
 
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-#include "./JsonNode.h"
+#include "Node/Node.h"
 
 namespace Json {
+// Wrapper around node
 class Json {
    public:
-    JsonNode *data;
     Json();
-    Json(const std::string &body);
-    Json(Json &object);
+    Json(const char* str, bool readFromFile = false);
+
+    Json(const Json& otherJson);
+    Json& operator=(const Json& otherJson);
+
+    Json(Json&& otherJson);
+    Json& operator=(Json&& otherJson);
+
+    Json(const Node& otherNode);
+    Json& operator=(const Node& otherNode);
+
     ~Json();
 
-    // Function to parse the string and convert to json object
-    JsonType getJsonTokenType(const std::string &jsonToken);
-    void parseJsonFromString(const std::string &jsonString);
-    JsonNode *parseJsonFromStringCallback(const std::string &jsonString);
+    Node& getData();
 
-    // Function to get Json String
-    // Note: Using const so that other const object can use this function
-    std::string getJsonString() const;
-
-    // Json utility functions
-    std::vector<std::string> getElementsOfJsonArrayString(
-        const std::string &jsonString);
-
-    std::vector<std::pair<std::string, std::string>>
-    getKeyAndValuePairsOfJsonArrayObject(const std::string &jsonString);
-
-    // Overloading the cout
-    friend std::ostream &operator<<(std::ostream &os, const Json &data);
+   private:
+    Node* data;
 };
+
 }  // namespace Json
 
 #endif

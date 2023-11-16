@@ -36,7 +36,7 @@ class Request {
     std::string getValue(std::string key);
     void processSearchQuery(const std::string &queryString);
 
-    Json::JsonNode *getJsonData();
+    Json::Json &getJsonData();
 };
 }  // namespace http
 

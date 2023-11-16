@@ -30,7 +30,7 @@ void http::Response::send404() {
 }
 
 void http::Response::sendTemplate(const std::string& templateName,
-                                  const Json::Json& data) {
+                                  Json::Json& data) {
     // Read the file
     std::string rootDir = Utils::getCurrentDirectory();
     std::string templateURL = rootDir + "/app/templates/" + templateName;

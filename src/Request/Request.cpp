@@ -85,7 +85,7 @@ void http::Request::parseDataFromBody() {
     // Check the type of content
     if (contentType == "application/json") {
         try {
-            jsonData = new Json::Json(body);
+            jsonData = new Json::Json(body.c_str());
         } catch (const std::exception &e) {
             jsonData = new Json::Json("");
         }
@@ -126,9 +126,9 @@ void http::Request::processSearchQuery(const std::string &queryString) {
 }
 
 // Getter for getting json data from body
-Json::JsonNode *http::Request::getJsonData() {
+Json::Json &http::Request::getJsonData() {
     if (jsonData == nullptr) {
         throw std::invalid_argument("Body Json Data not available");
     }
-    return jsonData->data;
+    return *jsonData;
 }

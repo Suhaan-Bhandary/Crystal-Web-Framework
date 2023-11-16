@@ -16,10 +16,9 @@ void Test::JsonTests() {
 
     // Empty Json
     {
-        std::string jsonValue = "";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject("");
 
-        if (jsonObject.data->getType() != Json::JsonType::NULL_VALUE) {
+        if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Empty Json");
         }
@@ -27,11 +26,10 @@ void Test::JsonTests() {
 
     // Number as Json
     {
-        std::string jsonValue = "100";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject("100");
 
-        if (jsonObject.data->getType() != Json::JsonType::INT ||
-            jsonObject.data->getIntValue() != 100) {
+        if (jsonObject.getData().getType() != JsonType::NUMBER ||
+            jsonObject.getData().get<Json::Number>() != 100) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Number Json");
         }
@@ -39,11 +37,10 @@ void Test::JsonTests() {
 
     // Double as Json
     {
-        std::string jsonValue = "100.25";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject("100.25");
 
-        if (jsonObject.data->getType() != Json::JsonType::DOUBLE ||
-            jsonObject.data->getDoubleValue() != 100.25) {
+        if (jsonObject.getData().getType() != JsonType::FRACTION ||
+            jsonObject.getData().get<Json::Fraction>() != 100.25) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Double Json");
         }
@@ -51,11 +48,10 @@ void Test::JsonTests() {
 
     // bool as Json
     {
-        std::string jsonValue = "true";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject("true");
 
-        if (jsonObject.data->getType() != Json::JsonType::BOOL ||
-            jsonObject.data->getBoolValue() != true) {
+        if (jsonObject.getData().getType() != JsonType::BOOL ||
+            jsonObject.getData().get<Json::Bool>() != true) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Bool Json");
         }
@@ -63,11 +59,10 @@ void Test::JsonTests() {
 
     // string as Json
     {
-        std::string jsonValue = "\"Http Server C++\"";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject("\"Http Server C++\"");
 
-        if (jsonObject.data->getType() != Json::JsonType::STRING ||
-            jsonObject.data->getStringValue() != "Http Server C++") {
+        if (jsonObject.getData().getType() != JsonType::STRING ||
+            jsonObject.getData().get<Json::String>() != "Http Server C++") {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: String Json");
         }
@@ -80,16 +75,17 @@ void Test::JsonTests() {
         std::string jsonValue = "[1,2,3,4,5]";
         int compareArray[] = {1, 2, 3, 4, 5};
 
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
+        if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
+            arrayIsSimilar =
+                jsonObject.getData().get<Json::Array>().size() == arrSize;
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
-                if (element->getIntValue() != compareArray[i]) {
+                if (jsonObject.getData().get(i).get<Json::Number>() !=
+                    compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -111,17 +107,18 @@ void Test::JsonTests() {
         std::string jsonValue = "[1.1,2.5,5.6,3.5,4.4,5.8]";
         double compareArray[] = {1.1, 2.5, 5.6, 3.5, 4.4, 5.8};
 
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
+        if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
+            arrayIsSimilar =
+                jsonObject.getData().get<Json::Array>().size() == arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
-                if (element->getDoubleValue() != compareArray[i]) {
+                if (jsonObject.getData().get(i).get<Json::Fraction>() !=
+                    compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -143,16 +140,18 @@ void Test::JsonTests() {
         std::string jsonValue = "[\"hello\",\"world\",\",\",\"Json\",\"Here\"]";
         std::string compareArray[] = {"hello", "world", ",", "Json", "Here"};
 
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
+        if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
-            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
+            arrayIsSimilar =
+                jsonObject.getData().get<Json::Array>().size() == arrSize;
+
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
-                if (element->getStringValue() != compareArray[i]) {
+                if (jsonObject.getData().get(i).get<Json::String>() !=
+                    compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -174,16 +173,17 @@ void Test::JsonTests() {
         std::string jsonValue = "[true,false,false,true,true]";
         bool compareArray[] = {true, false, false, true, true};
 
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
+        if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
+            arrayIsSimilar =
+                jsonObject.getData().get<Json::Array>().size() == arrSize;
 
-            arrayIsSimilar = jsonObject.data->getArray().size() == arrSize;
             for (int i = 0; i < arrSize; i++) {
-                Json::JsonNode *element = jsonObject.data->getArrayElement(i);
-                if (element->getBoolValue() != compareArray[i]) {
+                if (jsonObject.getData().get(i).get<Json::Bool>() !=
+                    compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -202,12 +202,11 @@ void Test::JsonTests() {
     // Object as Json
     {
         std::string jsonValue = "{\"language\": \"C++\", \"number\": 1}";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() != Json::JsonType::OBJECT ||
-            jsonObject.data->getObjectValue("language")->getStringValue() !=
-                "C++" ||
-            jsonObject.data->getObjectValue("number")->getIntValue() != 1) {
+        if (jsonObject.getData().getType() != JsonType::OBJECT ||
+            jsonObject.getData().get("language").get<Json::String>() != "C++" ||
+            jsonObject.getData().get("number").get<Json::Number>() != 1) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Object as Json");
         }
@@ -218,14 +217,12 @@ void Test::JsonTests() {
         int arrSize = 5;
         std::string jsonValue = "[1,[1,2,3,[6]],3,4,5]";
 
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
-        if (jsonObject.data->getType() == Json::JsonType::ARRAY) {
+        if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // get the value 6
-            if (jsonObject.data->getArrayElement(1)
-                    ->getArrayElement(3)
-                    ->getArrayElement(0)
-                    ->getIntValue() != 6) {
+            if (jsonObject.getData().get(1).get(3).get(0).get<Json::Number>() !=
+                6) {
                 totalTestFails += 1;
                 LOGGER_ERROR("Test Failed: Array Array Json");
             }
@@ -253,56 +250,60 @@ void Test::JsonTests() {
         JsonFile.close();
 
         // Creating a json object from the json file
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
         // Print string
         // LOGGER_ERROR(jsonObject.getJsonString());
 
         bool isJsonParsedCorrectly = true;
 
-        if (jsonObject.data->getType() != Json::JsonType::OBJECT) {
+        if (jsonObject.getData().getType() != JsonType::OBJECT) {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.data->getObjectValue("language")->getStringValue() !=
-                "C++") {
-            isJsonParsedCorrectly = false;
-        }
-
-        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("tests")
-                                             ->getArrayElement(0)
-                                             ->getStringValue() != "trim") {
+            jsonObject.getData().get("language").get<Json::String>() != "C++") {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.data->getObjectValue("project")
-                    ->getObjectValue("creator")
-                    ->getStringValue() != "Suhaan Ramdas Bhandary") {
-            isJsonParsedCorrectly = false;
-        }
-
-        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("project")
-                                             ->getObjectValue("stars")
-                                             ->getIntValue() != 6) {
+            jsonObject.getData().get("tests").get(0).get<Json::String>() !=
+                "trim") {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            !jsonObject.data->getObjectValue("project")
-                 ->getObjectValue("isInDevelopment")
-                 ->isNULL() &&
-            jsonObject.data->getObjectValue("project")
-                    ->getObjectValue("isInDevelopment")
-                    ->getBoolValue() != true) {
+            jsonObject.getData()
+                    .get("project")
+                    .get("creator")
+                    .get<Json::String>() != "Suhaan Ramdas Bhandary") {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.data->getObjectValue("systems")
-                                             ->getArrayElement(0)
-                                             ->getObjectValue("name")
-                                             ->getStringValue() != "ubuntu") {
+        if (isJsonParsedCorrectly && jsonObject.getData()
+                                             .get("project")
+                                             .get("stars")
+                                             .get<Json::Number>() != 6) {
+            isJsonParsedCorrectly = false;
+        }
+
+        if (isJsonParsedCorrectly &&
+            !jsonObject.getData()
+                 .get("project")
+                 .get("isInDevelopment")
+                 .isNull() &&
+            jsonObject.getData()
+                    .get("project")
+                    .get("isInDevelopment")
+                    .get<Json::Bool>() != true) {
+            isJsonParsedCorrectly = false;
+        }
+
+        if (isJsonParsedCorrectly && jsonObject.getData()
+                                             .get("systems")
+                                             .get(0)
+                                             .get("name")
+                                             .get<Json::String>() != "ubuntu") {
             isJsonParsedCorrectly = false;
         }
 
@@ -316,7 +317,7 @@ void Test::JsonTests() {
     {
         try {
             std::string jsonValue = "{\"\"}";
-            Json::Json jsonObject(jsonValue);
+            Json::Json jsonObject(jsonValue.c_str());
 
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Invalid Json");
@@ -330,21 +331,21 @@ void Test::JsonTests() {
     {
         try {
             Json::Json jsonObject;
-            jsonObject.data->setAsObject();
+            jsonObject.getData().set(Json::Object());
 
-            jsonObject.data->insertInObject("name", "suhaan");
-            jsonObject.data->insertInObject("email", "suhaan");
-            jsonObject.data->insertEmptyArray("colors");
+            jsonObject.getData().set("name", "suhaan");
+            jsonObject.getData().set("email", "suhaan");
 
-            jsonObject.data->getObjectValue("colors")->insertInArray("red");
-            jsonObject.data->getObjectValue("colors")->insertInArray("blue");
-            jsonObject.data->getObjectValue("colors")->insertInArray("green");
+            jsonObject.getData().set("colors", Json::Array());
+
+            jsonObject.getData().get("colors").push("red");
+            jsonObject.getData().get("colors").push("blue");
+            jsonObject.getData().get("colors").push("green");
 
             // LOGGER(jsonObject.getJsonString());
 
-            if (jsonObject.data->getObjectValue("colors")
-                    ->getArrayElement(0)
-                    ->getStringValue() != "red") {
+            if (jsonObject.getData().get("colors").get(0).get<Json::String>() !=
+                "red") {
                 totalTestFails += 1;
                 LOGGER_ERROR("Test Failed: Json Object Creation");
             }
@@ -359,12 +360,12 @@ void Test::JsonTests() {
     // Try copy constructor
     {
         std::string jsonValue = "100";
-        Json::Json jsonObject(jsonValue);
+        Json::Json jsonObject(jsonValue.c_str());
 
         Json::Json copiedObject = jsonObject;
 
-        if (copiedObject.data->getType() != Json::JsonType::INT ||
-            copiedObject.data->getIntValue() != 100) {
+        if (copiedObject.getData().getType() != JsonType::NUMBER ||
+            copiedObject.getData().get<Json::Number>() != 100) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Copy Constructor");
         }
@@ -374,7 +375,7 @@ void Test::JsonTests() {
     {
         try {
             std::string jsonValue = "{\n   \n  \n \n}";
-            Json::Json jsonObject(jsonValue);
+            Json::Json jsonObject(jsonValue.c_str());
         } catch (const std::exception &e) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Emtpy Object");

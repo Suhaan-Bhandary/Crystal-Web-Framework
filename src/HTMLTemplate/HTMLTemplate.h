@@ -14,17 +14,17 @@ class HTMLTemplate {
 
     // Function to compile html
     void compileHTMLFromTemplate(const std::string &templatePath,
-                                 const Json::Json &data);
+                                 Json::Json &data);
 
     // Function to read html from file
     std::string readHTMLFromFile(const std::string &templatePath);
 
     // Function to compile the html text
     std::string compileHTMLText(const std::string &HTMLContent,
-                                const Json::Json &data);
+                                Json::Json &data);
 
    public:
-    HTMLTemplate(const std::string &templatePath, const Json::Json &data);
+    HTMLTemplate(const std::string &templatePath, Json::Json &data);
 
     // Function returns the compiled html file from the template
     std::string getHtml();
