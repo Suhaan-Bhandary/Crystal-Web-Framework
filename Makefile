@@ -31,7 +31,10 @@ SOURCES = src/main.cpp \
 		src/Utils/Utils.cpp \
 		src/Logger/Logger.cpp \
 		src/Json/Json.cpp \
-		src/Json/JsonNode.cpp \
+		src/Json/Scanner/Scanner.cpp \
+		src/Json/Parser/Parser.cpp \
+		src/Json/Token/Token.cpp \
+		src/Json/Node/Node.cpp \
 		src/SQLite/SQLite.cpp \
 		app/Router/UserRouter.cpp \
 		app/db/models/initializeTables.cpp \
@@ -58,12 +61,11 @@ TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 # Flags
 # TODO: Turn on Development when developing
 # WFLAGS = -Wall -Wextra -Werror -Wshadow
-# CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
+CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
 # OPTIMATION_C_FLAGS = -Og -g # Development
 OPTIMATION_C_FLAGS = -O3 # Production
 
 CUSTOM_MACROS_COMMON = -DFREQUENT_RESTART
-WFLAGS = 
 CFLAGS = $(WFLAGS) $(addprefix -I, $(INCLUDE_DIRS)) $(OPTIMATION_C_FLAGS) $(CUSTOM_MACROS) $(CUSTOM_MACROS_COMMON)
 LDFLAGS = $(addprefix -L, $(LIB_DIRS))
 
