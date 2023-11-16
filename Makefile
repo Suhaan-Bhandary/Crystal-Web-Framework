@@ -61,7 +61,7 @@ TEST_OBJECTS = $(patsubst %,$(TEST_OBJ_DIR)/%,$(TEST_OBJECT_NAMES))
 # Flags
 # TODO: Turn on Development when developing
 # WFLAGS = -Wall -Wextra -Werror -Wshadow
-CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
+# CUSTOM_MACROS = -DDEVELOPMENT_ENVIRONMENT
 # OPTIMATION_C_FLAGS = -Og -g # Development
 OPTIMATION_C_FLAGS = -O3 # Production
 

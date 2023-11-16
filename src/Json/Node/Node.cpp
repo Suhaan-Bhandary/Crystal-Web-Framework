@@ -377,6 +377,15 @@ void Json::Node::push(const char* value) {
 // NULL check
 bool Json::Node::isNull() { return type == NULL_; }
 
+bool Json::Node::contains(const std::string& key) {
+    if (type != OBJECT) {
+        throw std::invalid_argument("Json Node not an Object");
+    }
+
+    Object& object = std::get<Object>(this->value);
+    return object.count(key) != 0;
+}
+
 // String representation
 std::string Json::Node::toString(int level, int spaces) {
     std::string indentation = std::string(level * spaces, ' ');

@@ -79,6 +79,9 @@ struct Node {
 
     bool isNull();
 
+    // Add contains for key
+    bool contains(const std::string &key);
+
     std::string toString(int level = 0, int spaces = 4);
 
    private:

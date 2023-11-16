@@ -67,14 +67,19 @@ void Controller::getNotFound(http::Request &request, http::Response &response) {
 void Controller::saveUserData(http::Request &request,
                               http::Response &response) {
     try {
-        Json::Json &body = request.getJsonData();
-
-        // Load data from json
-        std::string name = body.getData().get("name").get<Json::String>();
-        std::string email = body.getData().get("name").get<Json::String>();
+        auto &bodyNode = request.getJsonData().getData();
 
         Json::Json responseData("{}");
         auto &node = responseData.getData();
+
+        if (!bodyNode.contains("name") || !bodyNode.contains("email")) {
+            bodyNode.set("message", "Please provide name and email");
+            return response.sendJson(bodyNode.toString());
+        }
+
+        // Load data from json
+        std::string name = bodyNode.get("name").get<Json::String>();
+        std::string email = bodyNode.get("email").get<Json::String>();
 
         node.set("message", "Successful");
         node.set("name", name);
@@ -86,12 +91,12 @@ void Controller::saveUserData(http::Request &request,
 
         // Numbers
         node.set("languages", Json::Array());
-        node.get("number").push("C++");
-        node.get("number").push("Java");
-        node.get("number").push("Python");
+        node.get("languages").push("C++");
+        node.get("languages").push("Java");
+        node.get("languages").push("Python");
 
         response.setStatusCode(200);
-        response.sendJson(responseData.getData().toString());
+        response.sendJson(node.toString());
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         response.setStatusCode(500);
