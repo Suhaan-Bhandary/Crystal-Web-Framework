@@ -48,7 +48,10 @@ TEST_SOURCES = tests/tests.cpp \
 			src/Utils/Utils.cpp \
 			src/Logger/Logger.cpp \
 			src/Json/Json.cpp \
-			src/Json/JsonNode.cpp \
+			src/Json/Scanner/Scanner.cpp \
+			src/Json/Parser/Parser.cpp \
+			src/Json/Token/Token.cpp \
+			src/Json/Node/Node.cpp \
 			src/HTMLTemplate/HTMLTemplate.cpp \
 
 # Creating objects from sources
