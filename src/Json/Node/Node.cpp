@@ -4,6 +4,41 @@
 
 Json::Node::Node() { type = NULL_; }
 
+Json::Node::Node(Object value) {
+    type = OBJECT;
+    this->value = value;
+}
+
+Json::Node::Node(Array value) {
+    type = ARRAY;
+    this->value = value;
+}
+
+Json::Node::Node(String value) {
+    type = STRING;
+    this->value = value;
+}
+
+Json::Node::Node(Number value) {
+    type = NUMBER;
+    this->value = value;
+}
+
+Json::Node::Node(Fraction value) {
+    type = FRACTION;
+    this->value = value;
+}
+
+Json::Node::Node(Bool value) {
+    type = BOOL;
+    this->value = value;
+}
+
+Json::Node::Node(const char* value) {
+    type = STRING;
+    this->value = std::string(value);
+}
+
 Json::Node::Node(const Node& otherNode) {
     // Set initial type as null
     type = JsonType::NULL_;
@@ -194,6 +229,11 @@ void Json::Node::set(Bool value) {
     this->value = value;
 }
 
+void Json::Node::set(const Node& value) {
+    clear();
+    (*this) = Node(value);
+}
+
 void Json::Node::set(const char* value) {
     clear();
     type = STRING;
@@ -265,6 +305,15 @@ void Json::Node::set(const std::string& key, Bool value) {
     Node* node = new Node();
     node->set(value);
     object[key] = node;
+}
+
+void Json::Node::set(const std::string& key, const Node& value) {
+    if (type != OBJECT) {
+        throw std::invalid_argument("Json Node not an Object");
+    }
+
+    Object& object = std::get<Object>(this->value);
+    object[key] = new Node(value);
 }
 
 void Json::Node::set(const std::string& key, Node* value) {
@@ -352,6 +401,15 @@ void Json::Node::push(Bool value) {
     Node* node = new Node();
     node->set(value);
     array.push_back(node);
+}
+
+void Json::Node::push(const Node& value) {
+    if (type != ARRAY) {
+        throw std::invalid_argument("Json Node not an Array");
+    }
+
+    Array& array = std::get<Array>(this->value);
+    array.push_back(new Node(value));
 }
 
 void Json::Node::push(Node* value) {

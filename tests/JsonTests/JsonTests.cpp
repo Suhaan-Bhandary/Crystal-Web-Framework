@@ -16,7 +16,7 @@ void Test::JsonTests() {
 
     // Empty Json
     {
-        Json::Json jsonObject("");
+        Json::Json jsonObject("null");
 
         if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
@@ -83,6 +83,7 @@ void Test::JsonTests() {
 
             arrayIsSimilar =
                 jsonObject.getData().get<Json::Array>().size() == arrSize;
+
             for (int i = 0; i < arrSize; i++) {
                 if (jsonObject.getData().get(i).get<Json::Number>() !=
                     compareArray[i]) {
@@ -315,15 +316,12 @@ void Test::JsonTests() {
 
     // Invalid Json
     {
-        try {
-            std::string jsonValue = "{\"\"}";
-            Json::Json jsonObject(jsonValue.c_str());
+        std::string jsonValue = "{\"\"}";
+        Json::Json jsonObject(jsonValue.c_str());
 
+        if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
             LOGGER_ERROR("Test Failed: Invalid Json");
-        } catch (const std::exception &e) {
-            // LOGGER_ERROR(e.what());
-            // If it catches it means it is working correctly
         }
     }
 

@@ -31,6 +31,14 @@ using Bool = bool;
 struct Node {
    public:
     Node();
+    Node(Object value);
+    Node(Array value);
+    Node(String value);
+    Node(Number value);
+    Node(Fraction value);
+    Node(Bool value);
+    Node(const char *value);
+
     ~Node();
 
     Node(const Node &otherNode);
@@ -57,6 +65,7 @@ struct Node {
     void set(Number value);
     void set(Fraction value);
     void set(Bool value);
+    void set(const Node &value);
     void set(const char *value);
 
     void set(const std::string &key, Object value);
@@ -65,6 +74,7 @@ struct Node {
     void set(const std::string &key, Number value);
     void set(const std::string &key, Fraction value);
     void set(const std::string &key, Bool value);
+    void set(const std::string &key, const Node &value);
     void set(const std::string &key, Node *value);
     void set(const std::string &key, const char *value);
 
@@ -74,6 +84,7 @@ struct Node {
     void push(Number value);
     void push(Fraction value);
     void push(Bool value);
+    void push(const Node &value);
     void push(Node *value);
     void push(const char *value);
 

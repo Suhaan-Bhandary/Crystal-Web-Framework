@@ -62,33 +62,22 @@ Json::Node *Json::Parser::parseTokens() {
         case TokenType::OPEN_SQUARE_BRACKET:
             return parseArrayTokens();
         case TokenType::STRING: {
-            Node *node = new Node();
-            node->set(std::get<String>(token.literal));
-            return node;
+            return new Node(std::get<String>(token.literal));
         }
         case TokenType::NUMBER: {
-            Node *node = new Node();
-            node->set(std::get<Number>(token.literal));
-            return node;
+            return new Node(std::get<Number>(token.literal));
         }
         case TokenType::FRACTION: {
-            Node *node = new Node();
-            node->set(std::get<Fraction>(token.literal));
-            return node;
+            return new Node(std::get<Fraction>(token.literal));
         }
         case TokenType::TRUE: {
-            Node *node = new Node();
-            node->set(true);
-            return node;
+            return new Node(true);
         }
         case TokenType::FALSE: {
-            Node *node = new Node();
-            node->set(false);
-            return node;
+            return new Node(false);
         }
         case TokenType::NULL_TOKEN: {
-            Node *node = new Node();
-            return node;
+            return new Node();
         }
         default:
             std::cout << "Incorrect Token: " << token.line << ", "
@@ -101,13 +90,10 @@ Json::Node *Json::Parser::parseObjectTokens() {
     // If the first token is } then it is an empty object
     if (peek().type == CLOSE_CURL_BRACKET) {
         advance();
-        Node *node = new Node();
-        node->set(Object());
-        return node;
+        return new Node(Object());
     }
 
-    Node *node = new Node();
-    node->set(Object());
+    Node *node = new Node(Object());
 
     // parse key value { key : value }
     while (true) {
@@ -168,13 +154,10 @@ Json::Node *Json::Parser::parseArrayTokens() {
     // If the first token is } then it is an empty object
     if (peek().type == CLOSE_SQUARE_BRACKET) {
         advance();
-        Node *node = new Node();
-        node->set(Array());
-        return node;
+        return new Node(Array());
     }
 
-    Node *node = new Node();
-    node->set(Array());
+    Node *node = new Node(Array());
 
     // parse as: value, value ]
     while (true) {

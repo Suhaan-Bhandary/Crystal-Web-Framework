@@ -49,12 +49,12 @@ void Test::HTMLTemplateTests() {
         std::string HTMLContent = html_template.getHtml();
 
         // Print json data
-        LOGGER("Json Data");
-        LOGGER(data.getJsonString());
+        // LOGGER("Json Data");
+        // LOGGER(data.getData().toString());
 
         // TODO: Check if the html is compiled
-        LOGGER("\n\nHtml Content");
-        LOGGER(HTMLContent);
+        // LOGGER("\n\nHtml Content");
+        // LOGGER(HTMLContent);
     }
 
     LOGGER_NOTE("Total Fails: " + std::to_string(totalTestFails));
