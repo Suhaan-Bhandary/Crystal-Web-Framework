@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 
+#include "../../Logger/Logger.h"
 #include "../Scanner/Scanner.h"
 #include "../Token/Token.h"
 
@@ -59,22 +60,21 @@ Json::Node *Json::Parser::parse() {
     Scanner scanner(source, readFromFile);
     tokens = scanner.scanTokens();
 
-    // Tokens for Debugging
-    // std::cout << std::endl;
+    // LOGGER("");
+    // LOGGER_MINIMAL("Debugging Scanner Tokens");
     // int line = 0;
     // for (auto &token : tokens) {
     //     if (line != token.line) {
     //         line = token.line;
-    //         std::cout << "Line: " << token.line << ": " << std::endl;
+    //         LOGGER_MINIMAL("Line " + std::to_string(token.line) + ": ");
     //     }
 
-    //     std::cout << "\t" << tokenToString(token) << std::endl;
+    //     LOGGER_MINIMAL("\t" + tokenToString(token));
     // }
-    // std::cout << std::endl;
+    // LOGGER_MINIMAL("");
 
     // If tokens is empty then an error has occurred
     if (tokens.empty()) {
-        std::cout << "Error while Scanning Json" << std::endl;
         return new Node();
     }
 
@@ -84,13 +84,12 @@ Json::Node *Json::Parser::parse() {
     // Check the last token
     auto token = advance();
 
-    if (token.type != TokenType::EOF_TOKEN) {
-        std::cout << "Expected EOF at line " << token.line << std::endl;
+    if (node == nullptr) {
         return new Node();
     }
 
-    if (node == nullptr) {
-        std::cout << "Error while Parsing Json" << std::endl;
+    if (token.type != TokenType::EOF_TOKEN) {
+        LOGGER_ERROR("Expected EOF at line ", token.line);
         return new Node();
     }
 
@@ -124,8 +123,7 @@ Json::Node *Json::Parser::parseTokens() {
             return new Node();
         }
         default:
-            std::cout << "Incorrect Token: " << token.line << ", "
-                      << token.lexeme << std::endl;
+            LOGGER_ERROR("Invalid Token Found ", token.line);
             return nullptr;
     }
 }
@@ -146,8 +144,8 @@ Json::Node *Json::Parser::parseObjectTokens() {
         if (keyToken.type != TokenType::STRING) {
             // clean the node
             delete node;
-            std::cout << "Json Object Error: " << keyToken.line << ", "
-                      << keyToken.lexeme << std::endl;
+            LOGGER_ERROR("Json Object Error: key should be string at line",
+                         keyToken.line, "but found", keyToken.lexeme);
             return nullptr;
         }
 
@@ -159,8 +157,8 @@ Json::Node *Json::Parser::parseObjectTokens() {
         if (colonToken.type != TokenType::COLON) {
             // clean the node
             delete node;
-            std::cout << "Json Object Error: " << colonToken.line << ", "
-                      << colonToken.lexeme << std::endl;
+            LOGGER_ERROR("Json Object Error: Expected colon separator at line",
+                         colonToken.line, "but found", colonToken.lexeme);
             return nullptr;
         }
 
@@ -169,8 +167,6 @@ Json::Node *Json::Parser::parseObjectTokens() {
         if (valueNode == nullptr) {
             // clean the node
             delete node;
-            std::cout << "Json Object Error: " << colonToken.line << ", "
-                      << colonToken.lexeme << std::endl;
             return nullptr;
         }
 
@@ -185,8 +181,8 @@ Json::Node *Json::Parser::parseObjectTokens() {
         } else {
             // clean the node
             delete node;
-            std::cout << "Json Object Error: " << colonToken.line << ", "
-                      << colonToken.lexeme << std::endl;
+            LOGGER_ERROR("Json Object Error: Expected comma or color at line",
+                         separator.line, "but found", separator.lexeme);
             return nullptr;
         }
     }
@@ -211,7 +207,6 @@ Json::Node *Json::Parser::parseArrayTokens() {
         if (valueNode == nullptr) {
             // clean the node
             delete node;
-            std::cout << "Json Array Error at " << token.line << std::endl;
             return nullptr;
         }
 
@@ -226,7 +221,10 @@ Json::Node *Json::Parser::parseArrayTokens() {
         } else {
             // clean the node
             delete node;
-            std::cout << "Json Array Error at " << token.line << std::endl;
+            LOGGER_ERROR(
+                "Json Array Error: Expected colon or comma separator at line",
+                separator.line, "but found", separator.lexeme);
+
             return nullptr;
         }
     }

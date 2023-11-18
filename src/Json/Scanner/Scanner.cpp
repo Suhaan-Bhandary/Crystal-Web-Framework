@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../../Logger/Logger.h"
 #include "../Token/Token.h"
 
 using Token = Json::Token;
@@ -89,8 +90,7 @@ bool Json::Scanner::scanToken() {
             } else if (isAlpha(ch)) {
                 isScanComplete = identifierToken();
             } else {
-                std::cout << line << ": Unexpected character: " << ch
-                          << std::endl;
+                LOGGER_ERROR("Unexpected character:", ch, " at line", line);
                 isScanComplete = false;
             }
     }
@@ -110,7 +110,7 @@ bool Json::Scanner::stringToken() {
     }
 
     if (isAtEnd()) {
-        std::cout << line << ": Unterminated String" << std::endl;
+        LOGGER_ERROR("Unterminated String at line", line);
         return false;
     }
 
@@ -126,10 +126,9 @@ bool Json::Scanner::stringToken() {
 bool Json::Scanner::numberToken(char firstChar) {
     if (firstChar == '-') {
         if (!(peek() >= '0' && peek() <= '9')) {
-            std::cout
-                << line
-                << ": Invalid Json Number, - should be followed by a digit"
-                << std::endl;
+            LOGGER_ERROR(
+                "Invalid Json Number: - should be followed by a digit at line",
+                line);
             return false;
         }
     }
@@ -150,15 +149,17 @@ bool Json::Scanner::numberToken(char firstChar) {
         }
 
         if (!isDigitAfterDot) {
-            std::cout << line
-                      << ": Invalid Json Number, . should have digit after it"
-                      << std::endl;
+            LOGGER_ERROR(
+                "Invalid Json Number, . should have digit after it at line",
+                line);
             return false;
         }
 
         if (match('e') || match('E')) {
             if (peek() != '+' && peek() != '-') {
-                std::cout << line << ": Invalid Number" << std::endl;
+                LOGGER_ERROR(
+                    "Invalid Json Number, e/E should have +/- after it at line",
+                    line);
                 return false;
             }
 
@@ -171,10 +172,10 @@ bool Json::Scanner::numberToken(char firstChar) {
             }
 
             if (!isDigitAfterE) {
-                std::cout
-                    << line
-                    << ": Invalid Json Number, E or e be followed by a digit"
-                    << std::endl;
+                LOGGER_ERROR(
+                    "Invalid Json Number, e/E should have digit after it at "
+                    "line",
+                    line);
                 return false;
             }
         }
@@ -185,7 +186,9 @@ bool Json::Scanner::numberToken(char firstChar) {
         return true;
     } else if (match('e') || match('E')) {
         if (peek() != '+' && peek() != '-') {
-            std::cout << line << ": Invalid Number" << std::endl;
+            LOGGER_ERROR(
+                "Invalid Json Number, e/E should have +/- after it at line",
+                line);
             return false;
         }
 
@@ -200,9 +203,10 @@ bool Json::Scanner::numberToken(char firstChar) {
         }
 
         if (!isDigitAfterE) {
-            std::cout << line
-                      << ": Invalid Json Number, E or e be followed by a digit"
-                      << std::endl;
+            LOGGER_ERROR(
+                "Invalid Json Number, e/E should have digit after it at "
+                "line",
+                line);
             return false;
         }
 
@@ -233,8 +237,7 @@ bool Json::Scanner::identifierToken() {
     std::string token(source + start, current - start);
 
     if (keywords.find(token) == keywords.end()) {
-        std::cout << line << ": Invalid Keyword "
-                  << " " << token << std::endl;
+        LOGGER_ERROR("Invalid Keyword", token, "at line", line);
         return false;
     }
 
