@@ -16,6 +16,40 @@ Json::Parser::Parser(const char *jsonString, bool isFile) {
     readFromFile = isFile;
 }
 
+// Utility Function to display string for a token
+inline std::string tokenToString(Json::Token &token) {
+    switch (token.type) {
+        case Json::TokenType::COMMA:
+            return "COMMA";
+        case Json::TokenType::COLON:
+            return "COLON";
+        case Json::TokenType::OPEN_CURL_BRACKET:
+            return "OPEN_CURL_BRACKET";
+        case Json::TokenType::CLOSE_CURL_BRACKET:
+            return "CLOSE_CURL_BRACKET";
+        case Json::TokenType::OPEN_SQUARE_BRACKET:
+            return "OPEN_SQUARE_BRACKET";
+        case Json::TokenType::CLOSE_SQUARE_BRACKET:
+            return "CLOSE_SQUARE_BRACKET";
+        case Json::TokenType::STRING:
+            return "STRING " + token.lexeme;
+        case Json::TokenType::NUMBER:
+            return "NUMBER " + token.lexeme;
+        case Json::TokenType::FRACTION:
+            return "FRACTION " + token.lexeme;
+        case Json::TokenType::TRUE:
+            return "TRUE";
+        case Json::TokenType::FALSE:
+            return "FALSE";
+        case Json::TokenType::NULL_TOKEN:
+            return "NULL_TOKEN";
+        case Json::TokenType::EOF_TOKEN:
+            return "EOF_TOKEN";
+        default:
+            return "";
+    }
+}
+
 Json::Node *Json::Parser::parse() {
     start = 0;
     current = 0;
@@ -25,16 +59,18 @@ Json::Node *Json::Parser::parse() {
     Scanner scanner(source, readFromFile);
     tokens = scanner.scanTokens();
 
-    // TODO: Display the tokens for Debugging
+    // Tokens for Debugging
+    // std::cout << std::endl;
     // int line = 0;
-    // for (auto token : tokens) {
+    // for (auto &token : tokens) {
     //     if (line != token.line) {
     //         line = token.line;
     //         std::cout << "Line: " << token.line << ": " << std::endl;
     //     }
 
-    //     std::cout << "\t|" << token.lexeme << std::endl;
+    //     std::cout << "\t" << tokenToString(token) << std::endl;
     // }
+    // std::cout << std::endl;
 
     // If tokens is empty then an error has occurred
     if (tokens.empty()) {
@@ -44,6 +80,14 @@ Json::Node *Json::Parser::parse() {
 
     // Parse Token
     Node *node = parseTokens();
+
+    // Check the last token
+    auto token = advance();
+
+    if (token.type != TokenType::EOF_TOKEN) {
+        std::cout << "Expected EOF at line " << token.line << std::endl;
+        return new Node();
+    }
 
     if (node == nullptr) {
         std::cout << "Error while Parsing Json" << std::endl;
