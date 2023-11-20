@@ -7,8 +7,8 @@
 Json::Json::Json() { data = new Node(); }
 
 Json::Json::Json(const char* str, bool readFromFile) {
-    auto p = Parser(str, readFromFile);
-    data = p.parse();
+    auto p = Parser();
+    data = p.parse(str, readFromFile);
 }
 
 Json::Json::Json(const Json& otherJson) { data = new Node(*otherJson.data); }

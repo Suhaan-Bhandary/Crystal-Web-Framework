@@ -10,13 +10,6 @@
 using Token = Json::Token;
 using Scanner = Json::Scanner;
 
-Json::Parser::Parser(const char *jsonString, bool isFile) {
-    start = 0;
-    current = 0;
-    source = jsonString;
-    readFromFile = isFile;
-}
-
 // Utility Function to display string for a token
 inline std::string tokenToString(Json::Token &token) {
     switch (token.type) {
@@ -51,13 +44,13 @@ inline std::string tokenToString(Json::Token &token) {
     }
 }
 
-Json::Node *Json::Parser::parse() {
+Json::Node *Json::Parser::parse(const char *jsonString, bool isFile) {
     start = 0;
     current = 0;
     tokens.clear();
 
     // Scanner the Json and get Tokens
-    Scanner scanner(source, readFromFile);
+    Scanner scanner(jsonString, isFile);
     tokens = scanner.scanTokens();
 
     // LOGGER("");
@@ -78,18 +71,27 @@ Json::Node *Json::Parser::parse() {
         return new Node();
     }
 
+    // Official: A JSON payload should be an object or array, not a string
+    // So first token should be { or [
+    if (tokens[0].type != TokenType::OPEN_CURL_BRACKET &&
+        tokens[0].type != TokenType::OPEN_SQUARE_BRACKET) {
+        return new Node();
+    }
+
     // Parse Token
     Node *node = parseTokens();
-
-    // Check the last token
-    auto token = advance();
 
     if (node == nullptr) {
         return new Node();
     }
 
-    if (token.type != TokenType::EOF_TOKEN) {
-        LOGGER_ERROR("Expected EOF at line ", token.line);
+    // Check if it is at EOF or not
+    if (!isAtEnd()) {
+        return new Node();
+    }
+
+    if (peek().type != TokenType::EOF_TOKEN) {
+        LOGGER_ERROR("Expected EOF at line ", peek().line);
         return new Node();
     }
 
@@ -123,7 +125,8 @@ Json::Node *Json::Parser::parseTokens() {
             return new Node();
         }
         default:
-            LOGGER_ERROR("Invalid Token Found ", token.line);
+            LOGGER_ERROR("Invalid Token Found", token.lexeme, "at line",
+                         token.line);
             return nullptr;
     }
 }
@@ -233,6 +236,16 @@ Json::Node *Json::Parser::parseArrayTokens() {
 }
 
 // Util functions
-Token &Json::Parser::peek() { return tokens[current]; }
-Token &Json::Parser::advance() { return tokens[current++]; }
+Token &Json::Parser::peek() {
+    // Returning EOF if is at end
+    if (isAtEnd()) return tokens[current];
+    return tokens[current];
+}
+
+Token &Json::Parser::advance() {
+    // Returning EOF if is at end
+    if (isAtEnd()) return tokens[current];
+    return tokens[current++];
+}
+
 bool Json::Parser::isAtEnd() { return tokens[current].type == EOF_TOKEN; }

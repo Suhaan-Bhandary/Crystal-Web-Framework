@@ -10,14 +10,10 @@
 namespace Json {
 class Parser {
    public:
-    Parser() = delete;
-    Parser(const char *jsonString, bool isFile = false);
-    Node *parse();
+    Node *parse(const char *jsonString, bool isFile);
 
    private:
-    const char *source;
     int start, current;
-    bool readFromFile;
     std::vector<Token> tokens;
 
     Node *parseTokens();

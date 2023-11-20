@@ -14,57 +14,34 @@ void Test::JsonTests() {
 
     // *Below the parenthesis is used to create a simple scope
 
-    // Empty Json
-    {
-        Json::Json jsonObject("null");
+    // Official test suit
+    std::vector<std::string> testWithNULLResult = {
+        "fail1.json",  "fail10.json", "fail11.json", "fail12.json",
+        "fail13.json", "fail14.json", "fail15.json", "fail16.json",
+        "fail17.json", "fail19.json", "fail2.json",  "fail20.json",
+        "fail21.json", "fail22.json", "fail23.json", "fail24.json",
+        "fail25.json", "fail26.json", "fail27.json", "fail28.json",
+        "fail29.json", "fail3.json",  "fail30.json", "fail31.json",
+        "fail32.json", "fail33.json", "fail4.json",  "fail5.json",
+        "fail6.json",  "fail7.json",  "fail8.json",  "fail9.json"};
 
-        if (jsonObject.getData().getType() != JsonType::NULL_) {
+    for (auto &filename : testWithNULLResult) {
+        std::string src = "tests/JsonTests/official/fail/" + filename;
+        Json::Json jsonObject(src.c_str(), true);
+        if (!jsonObject.getData().isNull()) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Empty Json");
+            LOGGER_NOTE("Test Failed: Test with Null Result on file", filename);
         }
     }
 
-    // Number as Json
-    {
-        Json::Json jsonObject("100");
-
-        if (jsonObject.getData().getType() != JsonType::NUMBER ||
-            jsonObject.getData().get<Json::Number>() != 100) {
+    std::vector<std::string> testToPass = {"pass1.json", "pass2.json",
+                                           "pass3.json"};
+    for (auto &filename : testToPass) {
+        std::string src = "tests/JsonTests/official/pass/" + filename;
+        Json::Json jsonObject(src.c_str(), true);
+        if (jsonObject.getData().isNull()) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Number Json");
-        }
-    }
-
-    // Double as Json
-    {
-        Json::Json jsonObject("100.25");
-
-        if (jsonObject.getData().getType() != JsonType::FRACTION ||
-            jsonObject.getData().get<Json::Fraction>() != 100.25) {
-            totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Double Json");
-        }
-    }
-
-    // bool as Json
-    {
-        Json::Json jsonObject("true");
-
-        if (jsonObject.getData().getType() != JsonType::BOOL ||
-            jsonObject.getData().get<Json::Bool>() != true) {
-            totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Bool Json");
-        }
-    }
-
-    // string as Json
-    {
-        Json::Json jsonObject("\"Http Server C++\"");
-
-        if (jsonObject.getData().getType() != JsonType::STRING ||
-            jsonObject.getData().get<Json::String>() != "Http Server C++") {
-            totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: String Json");
+            LOGGER_NOTE("Test Failed: Pass Test on file", filename);
         }
     }
 
@@ -94,11 +71,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: Number Array Json");
+                LOGGER_NOTE("Test Failed: Number Array Json");
             }
         } else {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Number Array Json");
+            LOGGER_NOTE("Test Failed: Number Array Json");
         }
     }
 
@@ -127,11 +104,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: Double Array Json");
+                LOGGER_NOTE("Test Failed: Double Array Json");
             }
         } else {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Double Array Json");
+            LOGGER_NOTE("Test Failed: Double Array Json");
         }
     }
 
@@ -160,11 +137,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: String Array Json");
+                LOGGER_NOTE("Test Failed: String Array Json");
             }
         } else {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: String Array Json");
+            LOGGER_NOTE("Test Failed: String Array Json");
         }
     }
 
@@ -192,11 +169,11 @@ void Test::JsonTests() {
 
             if (!arrayIsSimilar) {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: Bool Array Json");
+                LOGGER_NOTE("Test Failed: Bool Array Json");
             }
         } else {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Bool Array Json");
+            LOGGER_NOTE("Test Failed: Bool Array Json");
         }
     }
 
@@ -209,7 +186,7 @@ void Test::JsonTests() {
             jsonObject.getData().get("language").get<Json::String>() != "C++" ||
             jsonObject.getData().get("number").get<Json::Number>() != 1) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Object as Json");
+            LOGGER_NOTE("Test Failed: Object as Json");
         }
     }
 
@@ -225,11 +202,11 @@ void Test::JsonTests() {
             if (jsonObject.getData().get(1).get(3).get(0).get<Json::Number>() !=
                 6) {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: Array Array Json");
+                LOGGER_NOTE("Test Failed: Array Array Json");
             }
         } else {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Array Array Json");
+            LOGGER_NOTE("Test Failed: Array Array Json");
         }
     }
 
@@ -237,24 +214,10 @@ void Test::JsonTests() {
     {
         // Read json from a file
         std::string rootDir = Utils::getCurrentDirectory();
-        std::ifstream JsonFile(rootDir + "/tests/JsonTests/testData.json");
-
-        if (!JsonFile.is_open()) {
-            LOGGER_ERROR("Error in opening file!!");
-            return;
-        }
-
-        std::string jsonValue((std::istreambuf_iterator<char>(JsonFile)),
-                              (std::istreambuf_iterator<char>()));
-
-        // close the file
-        JsonFile.close();
 
         // Creating a json object from the json file
-        Json::Json jsonObject(jsonValue.c_str());
-
-        // Print string
-        // LOGGER_ERROR(jsonObject.getJsonString());
+        std::string fileSrc = rootDir + "/tests/JsonTests/testData.json";
+        Json::Json jsonObject(fileSrc.c_str(), true);
 
         bool isJsonParsedCorrectly = true;
 
@@ -310,7 +273,7 @@ void Test::JsonTests() {
 
         if (!isJsonParsedCorrectly) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Object as Json");
+            LOGGER_NOTE("Test Failed: Object as Json");
         }
     }
 
@@ -321,7 +284,7 @@ void Test::JsonTests() {
 
         if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Invalid Json");
+            LOGGER_NOTE("Test Failed: Invalid Json");
         }
     }
 
@@ -345,27 +308,28 @@ void Test::JsonTests() {
             if (jsonObject.getData().get("colors").get(0).get<Json::String>() !=
                 "red") {
                 totalTestFails += 1;
-                LOGGER_ERROR("Test Failed: Json Object Creation");
+                LOGGER_NOTE("Test Failed: Json Object Creation");
             }
 
         } catch (const std::exception &e) {
             totalTestFails += 1;
-            LOGGER_ERROR(e.what());
-            LOGGER_ERROR("Test Failed: Json Object Creation");
+            LOGGER_NOTE(e.what());
+            LOGGER_NOTE("Test Failed: Json Object Creation");
         }
     }
 
     // Try copy constructor
     {
-        std::string jsonValue = "100";
+        std::string jsonValue = "{\"number\": 100}";
         Json::Json jsonObject(jsonValue.c_str());
 
         Json::Json copiedObject = jsonObject;
 
-        if (copiedObject.getData().getType() != JsonType::NUMBER ||
-            copiedObject.getData().get<Json::Number>() != 100) {
+        if (copiedObject.getData().getType() != JsonType::OBJECT &&
+            copiedObject.getData().contains("number") &&
+            copiedObject.getData().get("number").get<Json::Number>() != 100) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Copy Constructor");
+            LOGGER_NOTE("Test Failed: Copy Constructor");
         }
     }
 
@@ -376,7 +340,7 @@ void Test::JsonTests() {
             Json::Json jsonObject(jsonValue.c_str());
         } catch (const std::exception &e) {
             totalTestFails += 1;
-            LOGGER_ERROR("Test Failed: Emtpy Object");
+            LOGGER_NOTE("Test Failed: Emtpy Object");
         }
     }
 

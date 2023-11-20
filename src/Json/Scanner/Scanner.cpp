@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "../../Logger/Logger.h"
@@ -14,11 +15,19 @@ Json::Scanner::Scanner(const char* rawJsonString, bool readFromFile) {
     // Initialize variables
     start = 0;
     current = 0;
+    this->readFromFile = readFromFile;
 
     if (readFromFile) {
         source = readFile(rawJsonString);
     } else {
-        source = rawJsonString;
+        source = (char*)rawJsonString;
+    }
+}
+
+Json::Scanner::~Scanner() {
+    // freeing the memory allocated by malloc if file was taken as input
+    if (readFromFile) {
+        free(source);
     }
 }
 
@@ -30,8 +39,13 @@ std::vector<Token>& Json::Scanner::scanTokens() {
 
     while (!isAtEnd()) {
         start = current;
-        bool isScanComplete = scanToken();
-        if (!isScanComplete) return tokens;
+
+        // Check if scan was success or not
+        bool isJsonTokensValid = scanToken();
+        if (!isJsonTokensValid) {
+            tokens.clear();
+            return tokens;
+        }
     }
 
     // Adding EOF
@@ -85,8 +99,14 @@ bool Json::Scanner::scanToken() {
             break;
 
         default:
-            if (isNumber(ch)) {
+            if (isNumberStart(ch)) {
                 isScanComplete = numberToken(ch);
+            } else if (ch == '0' && peek() == '.') {
+                isScanComplete = numberToken(ch);
+            } else if (ch == '0' && (peek() < '1' || peek() > '9')) {
+                std::string str(source + start, current - start);
+                addToken(TokenType::NUMBER, (long long)0);
+                isScanComplete = true;
             } else if (isAlpha(ch)) {
                 isScanComplete = identifierToken();
             } else {
@@ -101,9 +121,32 @@ bool Json::Scanner::scanToken() {
 
 bool Json::Scanner::stringToken() {
     while (!isAtEnd() && peek() != '"') {
+        // Cntrl characters are not allowed
+        if (std::iscntrl(static_cast<unsigned char>(peek()))) return false;
+
         if (peek() == '\\') {
             advance();
-            advance();
+
+            std::unordered_set<char> escapeChars = {
+                '"', '\\', '/', 'b', 'f', 'n', 'r', 't',
+            };
+
+            if (escapeChars.count(peek()) != 0) {
+                advance();
+            } else if (match('u') && isNextFourCharacterDigit()) {
+                advance();
+
+                advance();
+                advance();
+                advance();
+                advance();
+            } else {
+                LOGGER_ERROR("Incorrect Escape Character", line);
+                return false;
+            }
+        } else if (peek() == '\n') {
+            LOGGER_ERROR("Unexpected end of string", line);
+            return false;
         } else {
             advance();
         }
@@ -156,16 +199,11 @@ bool Json::Scanner::numberToken(char firstChar) {
         }
 
         if (match('e') || match('E')) {
-            if (peek() != '+' && peek() != '-') {
-                LOGGER_ERROR(
-                    "Invalid Json Number, e/E should have +/- after it at line",
-                    line);
-                return false;
+            if (peek() == '+' || peek() == '-') {
+                advance();
             }
 
-            advance();
             bool isDigitAfterE = false;
-
             while (peek() >= '0' && peek() <= '9') {
                 isDigitAfterE = true;
                 advance();
@@ -185,20 +223,13 @@ bool Json::Scanner::numberToken(char firstChar) {
         addToken(TokenType::FRACTION, value);
         return true;
     } else if (match('e') || match('E')) {
-        if (peek() != '+' && peek() != '-') {
-            LOGGER_ERROR(
-                "Invalid Json Number, e/E should have +/- after it at line",
-                line);
-            return false;
+        if (peek() == '+' || peek() == '-') {
+            advance();
         }
 
         bool isDigitAfterE = false;
-
-        // Move one forward if match
-        advance();
-
         while (peek() >= '0' && peek() <= '9') {
-            bool isDigitAfterE = true;
+            isDigitAfterE = true;
             advance();
         }
 
@@ -284,15 +315,28 @@ char Json::Scanner::peek() {
 
 bool Json::Scanner::isAtEnd() { return source[current] == '\0'; }
 
-bool Json::Scanner::isNumber(char ch) {
-    return (ch == '-' || (ch >= '0' && ch <= '9'));
+bool Json::Scanner::isNextFourCharacterDigit() {
+    if (!isHexCharacter(source[current + 0])) return false;
+    if (!isHexCharacter(source[current + 1])) return false;
+    if (!isHexCharacter(source[current + 2])) return false;
+    if (!isHexCharacter(source[current + 3])) return false;
+    return true;
+}
+
+bool Json::Scanner::isHexCharacter(char ch) {
+    return ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F') ||
+            (ch >= 'a' && ch <= 'f'));
+}
+
+bool Json::Scanner::isNumberStart(char ch) {
+    return (ch == '-' || (ch >= '1' && ch <= '9'));
 }
 
 bool Json::Scanner::isAlpha(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
 }
 
-const char* Json::Scanner::readFile(const char* path) {
+char* Json::Scanner::readFile(const char* path) {
     FILE* file = fopen(path, "rb");
 
     fseek(file, 0L, SEEK_END);
