@@ -11,15 +11,13 @@ namespace Json {
 class Scanner {
    public:
     Scanner() = delete;
-    ~Scanner();
-    Scanner(const char* rawJsonString, bool readFromFile);
+    Scanner(const char* source);
 
     std::vector<Token>& scanTokens();
 
    private:
-    bool readFromFile;
     int start, current, line;
-    char* source;
+    const char* source;
     std::vector<Token> tokens;
 
     // Functions
@@ -29,7 +27,7 @@ class Scanner {
     bool identifierToken();
 
     void addToken(TokenType type);
-    void addToken(TokenType type, std::string literal);
+    void addToken(TokenType type, const std::string& literal);
     void addToken(TokenType type, double literal);
     void addToken(TokenType type, long long literal);
 
@@ -42,8 +40,6 @@ class Scanner {
     bool isHexCharacter(char ch);
     bool isNumberStart(char ch);
     bool isAlpha(char ch);
-
-    char* readFile(const char* path);
 };
 }  // namespace Json
 

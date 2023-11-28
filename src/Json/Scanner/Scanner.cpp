@@ -11,24 +11,11 @@
 using Token = Json::Token;
 using TokenType = Json::TokenType;
 
-Json::Scanner::Scanner(const char* rawJsonString, bool readFromFile) {
+Json::Scanner::Scanner(const char* source) {
     // Initialize variables
     start = 0;
     current = 0;
-    this->readFromFile = readFromFile;
-
-    if (readFromFile) {
-        source = readFile(rawJsonString);
-    } else {
-        source = (char*)rawJsonString;
-    }
-}
-
-Json::Scanner::~Scanner() {
-    // freeing the memory allocated by malloc if file was taken as input
-    if (readFromFile) {
-        free(source);
-    }
+    this->source = source;
 }
 
 std::vector<Token>& Json::Scanner::scanTokens() {
@@ -49,7 +36,7 @@ std::vector<Token>& Json::Scanner::scanTokens() {
     }
 
     // Adding EOF
-    tokens.push_back(Token(TokenType::EOF_TOKEN, "", "", line));
+    addToken(TokenType::EOF_TOKEN);
     return tokens;
 }
 
@@ -57,6 +44,7 @@ bool Json::Scanner::scanToken() {
     bool isScanComplete = true;
 
     char ch = advance();
+
     switch (ch) {
         case ',':
             addToken(TokenType::COMMA);
@@ -279,23 +267,19 @@ bool Json::Scanner::identifierToken() {
 }
 
 void Json::Scanner::addToken(TokenType type) {
-    std::string lexeme(source + start, current - start);
-    tokens.push_back(Token(type, lexeme, line));
+    tokens.push_back(Token(type, start, current - start, line));
 }
 
-void Json::Scanner::addToken(TokenType type, std::string literal) {
-    std::string lexeme(source + start, current - start);
-    tokens.push_back(Token(type, lexeme, literal, line));
+void Json::Scanner::addToken(TokenType type, const std::string& literal) {
+    tokens.push_back(Token(type, start, current - start, literal, line));
 }
 
 void Json::Scanner::addToken(TokenType type, double literal) {
-    std::string lexeme(source + start, current - start);
-    tokens.push_back(Token(type, lexeme, literal, line));
+    tokens.push_back(Token(type, start, current - start, literal, line));
 }
 
 void Json::Scanner::addToken(TokenType type, long long literal) {
-    std::string lexeme(source + start, current - start);
-    tokens.push_back(Token(type, lexeme, literal, line));
+    tokens.push_back(Token(type, start, current - start, literal, line));
 }
 
 char Json::Scanner::advance() { return source[current++]; }
@@ -334,19 +318,4 @@ bool Json::Scanner::isNumberStart(char ch) {
 
 bool Json::Scanner::isAlpha(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
-}
-
-char* Json::Scanner::readFile(const char* path) {
-    FILE* file = fopen(path, "rb");
-
-    fseek(file, 0L, SEEK_END);
-    size_t fileSize = ftell(file);
-    rewind(file);
-
-    char* buffer = (char*)malloc(fileSize + 1);
-    size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
-    buffer[bytesRead] = '\0';
-
-    fclose(file);
-    return buffer;
 }

@@ -30,19 +30,20 @@ enum TokenType {
 
 struct Token {
     TokenType type;
-    std::string lexeme;  // the string itself
+    int lexemeStart, lexemeLength;
     std::variant<std::string, long long, double>
         literal;  // actual value of lexeme
 
     int line;
 
     // Constructor
-    Token(TokenType type, const std::string &lexeme, const std::string &literal,
+    Token(TokenType type, int lexemeStart, int lexemeLength,
+          const std::string &literal, int line);
+    Token(TokenType type, int lexemeStart, int lexemeLength, double literal,
           int line);
-    Token(TokenType type, const std::string &lexeme, double literal, int line);
-    Token(TokenType type, const std::string &lexeme, long long literal,
+    Token(TokenType type, int lexemeStart, int lexemeLength, long long literal,
           int line);
-    Token(TokenType type, const std::string &lexeme, int line);
+    Token(TokenType type, int lexemeStart, int lexemeLength, int line);
 };
 }  // namespace Json
 

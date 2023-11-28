@@ -1,31 +1,36 @@
 #include "Token.h"
 
-Json::Token::Token(TokenType type, const std::string &lexeme,
+Json::Token::Token(TokenType type, int lexemeStart, int lexemeLength,
                    const std::string &literal, int line) {
     this->type = type;
-    this->lexeme = lexeme;
+    this->lexemeStart = lexemeStart;
+    this->lexemeLength = lexemeLength;
     this->literal = literal;
     this->line = line;
 };
 
-Json::Token::Token(TokenType type, const std::string &lexeme, double literal,
+Json::Token::Token(TokenType type, int lexemeStart, int lexemeLength,
+                   double literal, int line) {
+    this->type = type;
+    this->lexemeStart = lexemeStart;
+    this->lexemeLength = lexemeLength;
+    this->literal = literal;
+    this->line = line;
+};
+
+Json::Token::Token(TokenType type, int lexemeStart, int lexemeLength,
+                   long long literal, int line) {
+    this->type = type;
+    this->lexemeStart = lexemeStart;
+    this->lexemeLength = lexemeLength;
+    this->literal = literal;
+    this->line = line;
+};
+
+Json::Token::Token(TokenType type, int lexemeStart, int lexemeLength,
                    int line) {
     this->type = type;
-    this->lexeme = lexeme;
-    this->literal = literal;
-    this->line = line;
-};
-
-Json::Token::Token(TokenType type, const std::string &lexeme, long long literal,
-                   int line) {
-    this->type = type;
-    this->lexeme = lexeme;
-    this->literal = literal;
-    this->line = line;
-};
-
-Json::Token::Token(TokenType type, const std::string &lexeme, int line) {
-    this->type = type;
-    this->lexeme = lexeme;
+    this->lexemeStart = lexemeStart;
+    this->lexemeLength = lexemeLength;
     this->line = line;
 };

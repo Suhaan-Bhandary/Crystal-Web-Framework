@@ -10,6 +10,26 @@
 using Token = Json::Token;
 using Scanner = Json::Scanner;
 
+Json::Parser::Parser(const char *jsonString, bool isFile) {
+    // Initialize variables
+    start = 0;
+    current = 0;
+    this->isFile = isFile;
+
+    if (isFile) {
+        source = readFile(jsonString);
+    } else {
+        source = (char *)jsonString;
+    }
+}
+
+Json::Parser::~Parser() {
+    // freeing the memory allocated by malloc if file was taken as input
+    if (isFile) {
+        free(source);
+    }
+}
+
 // Utility Function to display string for a token
 inline std::string tokenToString(Json::Token &token) {
     switch (token.type) {
@@ -26,11 +46,13 @@ inline std::string tokenToString(Json::Token &token) {
         case Json::TokenType::CLOSE_SQUARE_BRACKET:
             return "CLOSE_SQUARE_BRACKET";
         case Json::TokenType::STRING:
-            return "STRING " + token.lexeme;
+            return "STRING " + std::get<Json::String>(token.literal);
         case Json::TokenType::NUMBER:
-            return "NUMBER " + token.lexeme;
+            return "NUMBER " +
+                   std::to_string(std::get<Json::Number>(token.literal));
         case Json::TokenType::FRACTION:
-            return "FRACTION " + token.lexeme;
+            return "FRACTION " +
+                   std::to_string(std::get<Json::Fraction>(token.literal));
         case Json::TokenType::TRUE:
             return "TRUE";
         case Json::TokenType::FALSE:
@@ -44,13 +66,13 @@ inline std::string tokenToString(Json::Token &token) {
     }
 }
 
-Json::Node *Json::Parser::parse(const char *jsonString, bool isFile) {
+Json::Node *Json::Parser::parse() {
     start = 0;
     current = 0;
     tokens.clear();
 
     // Scanner the Json and get Tokens
-    Scanner scanner(jsonString, isFile);
+    Scanner scanner(source);
     tokens = scanner.scanTokens();
 
     // LOGGER("");
@@ -125,8 +147,8 @@ Json::Node *Json::Parser::parseTokens() {
             return new Node();
         }
         default:
-            LOGGER_ERROR("Invalid Token Found", token.lexeme, "at line",
-                         token.line);
+            std::string lexeme(source + token.lexemeStart, token.lexemeLength);
+            LOGGER_ERROR("Invalid Token Found", lexeme, "at line", token.line);
             return nullptr;
     }
 }
@@ -147,8 +169,10 @@ Json::Node *Json::Parser::parseObjectTokens() {
         if (keyToken.type != TokenType::STRING) {
             // clean the node
             delete node;
+            std::string lexeme(source + keyToken.lexemeStart,
+                               keyToken.lexemeLength);
             LOGGER_ERROR("Json Object Error: key should be string at line",
-                         keyToken.line, "but found", keyToken.lexeme);
+                         keyToken.line, "but found", lexeme);
             return nullptr;
         }
 
@@ -160,8 +184,10 @@ Json::Node *Json::Parser::parseObjectTokens() {
         if (colonToken.type != TokenType::COLON) {
             // clean the node
             delete node;
+            std::string lexeme(source + colonToken.lexemeStart,
+                               colonToken.lexemeLength);
             LOGGER_ERROR("Json Object Error: Expected colon separator at line",
-                         colonToken.line, "but found", colonToken.lexeme);
+                         colonToken.line, "but found", lexeme);
             return nullptr;
         }
 
@@ -184,8 +210,10 @@ Json::Node *Json::Parser::parseObjectTokens() {
         } else {
             // clean the node
             delete node;
+            std::string lexeme(source + separator.lexemeStart,
+                               separator.lexemeLength);
             LOGGER_ERROR("Json Object Error: Expected comma or color at line",
-                         separator.line, "but found", separator.lexeme);
+                         separator.line, "but found", lexeme);
             return nullptr;
         }
     }
@@ -224,9 +252,11 @@ Json::Node *Json::Parser::parseArrayTokens() {
         } else {
             // clean the node
             delete node;
+            std::string lexeme(source + separator.lexemeStart,
+                               separator.lexemeLength);
             LOGGER_ERROR(
                 "Json Array Error: Expected colon or comma separator at line",
-                separator.line, "but found", separator.lexeme);
+                separator.line, "but found", lexeme);
 
             return nullptr;
         }
@@ -249,3 +279,18 @@ Token &Json::Parser::advance() {
 }
 
 bool Json::Parser::isAtEnd() { return tokens[current].type == EOF_TOKEN; }
+
+char *Json::Parser::readFile(const char *path) {
+    FILE *file = fopen(path, "rb");
+
+    fseek(file, 0L, SEEK_END);
+    size_t fileSize = ftell(file);
+    rewind(file);
+
+    char *buffer = (char *)malloc(fileSize + 1);
+    size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
+    buffer[bytesRead] = '\0';
+
+    fclose(file);
+    return buffer;
+}
