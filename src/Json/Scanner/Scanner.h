@@ -43,6 +43,7 @@ class Scanner {
     Token createToken(TokenType type, const std::string& literal);
     Token createToken(TokenType type, double literal);
     Token createToken(TokenType type, long long literal);
+    Token createToken(TokenType type, unsigned long long literal);
 
     char advance();
     bool match(char expected);

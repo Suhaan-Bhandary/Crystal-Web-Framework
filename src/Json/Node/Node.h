@@ -11,6 +11,7 @@ enum JsonType {
     ARRAY,
     STRING,
     NUMBER,
+    UNSIGNED_NUMBER,
     FRACTION,
     BOOL,
     NULL_,
@@ -25,6 +26,7 @@ using Object = std::unordered_map<std::string, Node *>;
 using Array = std::vector<Node *>;
 using String = std::string;
 using Number = long long;
+using UnsignedNumber = unsigned long long;
 using Fraction = double;
 using Bool = bool;
 
@@ -35,6 +37,7 @@ struct Node {
     Node(Array value);
     Node(String value);
     Node(Number value);
+    Node(UnsignedNumber value);
     Node(Fraction value);
     Node(Bool value);
     Node(const char *value);
@@ -97,7 +100,7 @@ struct Node {
 
    private:
     JsonType type;
-    std::variant<String, Number, Fraction, Bool, Array, Object> value;
+    std::variant<String, Number, UnsignedNumber, Fraction, Bool, Array, Object> value;
 };
 }  // namespace Json
 

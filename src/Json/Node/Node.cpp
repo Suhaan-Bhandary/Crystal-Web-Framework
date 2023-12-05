@@ -24,6 +24,11 @@ Json::Node::Node(Number value) {
     this->value = value;
 }
 
+Json::Node::Node(UnsignedNumber value) {
+    type = UNSIGNED_NUMBER;
+    this->value = value;
+}
+
 Json::Node::Node(Fraction value) {
     type = FRACTION;
     this->value = value;
@@ -493,6 +498,8 @@ std::string Json::Node::toString(int level, int spaces) {
             return "\"" + std::get<String>(value) + "\"";
         case NUMBER:
             return std::to_string(std::get<Number>(value));
+        case UNSIGNED_NUMBER:
+            return std::to_string(std::get<UnsignedNumber>(value));
         case FRACTION:
             return std::to_string(std::get<Fraction>(value));
         case BOOL:

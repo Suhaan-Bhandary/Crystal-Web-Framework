@@ -49,6 +49,9 @@ inline std::string tokenToString(Json::Token &token) {
         case Json::TokenType::NUMBER:
             return "NUMBER " +
                    std::to_string(std::get<Json::Number>(token.literal));
+        case Json::TokenType::UNSIGNED_NUMBER:
+            return "UNSIGNED_NUMBER " +
+                   std::to_string(std::get<Json::UnsignedNumber>(token.literal));
         case Json::TokenType::FRACTION:
             return "FRACTION " +
                    std::to_string(std::get<Json::Fraction>(token.literal));
@@ -108,6 +111,9 @@ Json::Node *Json::Parser::parseTokens() {
         }
         case TokenType::NUMBER: {
             return new Node(std::get<Number>(token.literal));
+        }
+        case TokenType::UNSIGNED_NUMBER: {
+            return new Node(std::get<UnsignedNumber>(token.literal));
         }
         case TokenType::FRACTION: {
             return new Node(std::get<Fraction>(token.literal));

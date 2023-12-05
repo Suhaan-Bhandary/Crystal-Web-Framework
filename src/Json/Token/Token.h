@@ -17,6 +17,7 @@ enum TokenType {
     // Identifier
     STRING,
     NUMBER,
+    UNSIGNED_NUMBER,
     FRACTION,
 
     // Keywords
@@ -34,7 +35,7 @@ enum TokenType {
 struct Token {
     TokenType type;
     int lexemeStart, lexemeLength;
-    std::variant<std::string, long long, double>
+    std::variant<std::string,unsigned long long, long long, double>
         literal;  // actual value of lexeme
 
     int line;
@@ -45,6 +46,8 @@ struct Token {
     Token(TokenType type, int lexemeStart, int lexemeLength, double literal,
           int line);
     Token(TokenType type, int lexemeStart, int lexemeLength, long long literal,
+          int line);
+    Token(TokenType type, int lexemeStart, int lexemeLength, unsigned long long literal,
           int line);
     Token(TokenType type, int lexemeStart, int lexemeLength, int line);
 };

@@ -236,9 +236,14 @@ Token Json::Scanner::numberToken(char firstChar) {
             long long value = stoll(str);
             return createToken(TokenType::NUMBER, value);
         }catch(const std::out_of_range& e){
-            // NOTE: We are making the number 0 if overflow happen
-            // TODO: Find a way to overcome it
-            return createToken(TokenType::NUMBER, 0LL);
+            // store it in stoull if it cannot be stored in long long, else we make it null
+            try {
+                unsigned long long value = stoull(str);
+                return createToken(TokenType::UNSIGNED_NUMBER, value);
+            }
+            catch (const std::out_of_range& e) {
+                return createToken(TokenType::NULL_TOKEN);
+            }
         }
     }
 }
@@ -278,6 +283,10 @@ Token Json::Scanner::createToken(TokenType type, double literal) {
 }
 
 Token Json::Scanner::createToken(TokenType type, long long literal) {
+    return Token(type, start, current - start, literal, line);
+}
+
+Token Json::Scanner::createToken(TokenType type, unsigned long long literal) {
     return Token(type, start, current - start, literal, line);
 }
 
