@@ -6,6 +6,7 @@
 
 #include "../Node/Node.h"
 #include "../Token/Token.h"
+#include "../Scanner/Scanner.h"
 
 namespace Json {
 class Parser {
@@ -19,16 +20,14 @@ class Parser {
    private:
     bool isFile;
     char *source;
-    int start, current;
-    std::vector<Token> tokens;
+    Scanner *scanner;
 
     Node *parseTokens();
     Node *parseObjectTokens();
     Node *parseArrayTokens();
 
-    Token &peek();
-    Token &advance();
-    bool isAtEnd();
+    Token peek();
+    Token advance();
 
     char *readFile(const char *path);
 };

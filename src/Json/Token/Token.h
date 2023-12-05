@@ -25,7 +25,10 @@ enum TokenType {
     NULL_TOKEN,
 
     // End of line
-    EOF_TOKEN
+    EOF_TOKEN,
+
+    // Invalid
+    INVALID
 };
 
 struct Token {

@@ -1,5 +1,3 @@
-#include <fstream>
-#include <iostream>
 #include <string>
 
 #include "../../src/Json/Json.h"
@@ -34,11 +32,13 @@ void Test::JsonTests() {
         }
     }
 
+
     std::vector<std::string> testToPass = {"pass1.json", "pass2.json",
                                            "pass3.json"};
     for (auto &filename : testToPass) {
         std::string src = "tests/JsonTests/official/pass/" + filename;
         Json::Json jsonObject(src.c_str(), true);
+
         if (jsonObject.getData().isNull()) {
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Pass Test on file", filename);

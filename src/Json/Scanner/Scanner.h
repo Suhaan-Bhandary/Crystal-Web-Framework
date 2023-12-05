@@ -12,30 +12,42 @@ class Scanner {
    public:
     Scanner() = delete;
     Scanner(const char* source);
+    
+    Scanner(const Scanner& otherScanner);
+    Scanner& operator=(const Scanner& otherScanner);
 
-    std::vector<Token>& scanTokens();
+    Scanner(Scanner&& otherScanner);
+    Scanner& operator=(Scanner&& otherScanner);
+
+    // Public Functions to use in parser
+    bool isAtEnd();
+    Token advanceToken();
+    Token peekToken();
 
    private:
     int start, current, line;
     const char* source;
-    std::vector<Token> tokens;
+
+    // Function returns one token at a time
+    Token scanTokensOneByOne();
 
     // Functions
-    bool scanToken();
-    bool stringToken();
-    bool numberToken(char firstChar);
-    bool identifierToken();
+    Token scanToken();
+    Token stringToken();
+    Token numberToken(char firstChar);
+    Token identifierToken();
 
-    void addToken(TokenType type);
-    void addToken(TokenType type, const std::string& literal);
-    void addToken(TokenType type, double literal);
-    void addToken(TokenType type, long long literal);
+    void trimCharacters();
+
+    Token createToken(TokenType type);
+    Token createToken(TokenType type, const std::string& literal);
+    Token createToken(TokenType type, double literal);
+    Token createToken(TokenType type, long long literal);
 
     char advance();
     bool match(char expected);
     char peek();
 
-    bool isAtEnd();
     bool isNextFourCharacterDigit();
     bool isHexCharacter(char ch);
     bool isNumberStart(char ch);

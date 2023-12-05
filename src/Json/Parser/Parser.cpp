@@ -1,8 +1,5 @@
 #include "Parser.h"
 
-#include <iostream>
-#include <memory>
-
 #include "../../Logger/Logger.h"
 #include "../Scanner/Scanner.h"
 #include "../Token/Token.h"
@@ -12,8 +9,6 @@ using Scanner = Json::Scanner;
 
 Json::Parser::Parser(const char *jsonString, bool isFile) {
     // Initialize variables
-    start = 0;
-    current = 0;
     this->isFile = isFile;
 
     if (isFile) {
@@ -21,9 +16,13 @@ Json::Parser::Parser(const char *jsonString, bool isFile) {
     } else {
         source = (char *)jsonString;
     }
+
+    // creating the scanner
+    scanner = new Scanner(source);
 }
 
 Json::Parser::~Parser() {
+    delete scanner;
     // freeing the memory allocated by malloc if file was taken as input
     if (isFile) {
         free(source);
@@ -67,36 +66,16 @@ inline std::string tokenToString(Json::Token &token) {
 }
 
 Json::Node *Json::Parser::parse() {
-    start = 0;
-    current = 0;
-    tokens.clear();
-
-    // Scanner the Json and get Tokens
-    Scanner scanner(source);
-    tokens = scanner.scanTokens();
-
-    // LOGGER("");
-    // LOGGER_MINIMAL("Debugging Scanner Tokens");
-    // int line = 0;
-    // for (auto &token : tokens) {
-    //     if (line != token.line) {
-    //         line = token.line;
-    //         LOGGER_MINIMAL("Line " + std::to_string(token.line) + ": ");
-    //     }
-
-    //     LOGGER_MINIMAL("\t" + tokenToString(token));
-    // }
-    // LOGGER_MINIMAL("");
-
     // If tokens is empty then an error has occurred
-    if (tokens.empty()) {
+    Token firstToken = peek();
+    if (firstToken.type == INVALID) {
         return new Node();
     }
 
     // Official: A JSON payload should be an object or array, not a string
     // So first token should be { or [
-    if (tokens[0].type != TokenType::OPEN_CURL_BRACKET &&
-        tokens[0].type != TokenType::OPEN_SQUARE_BRACKET) {
+    if (firstToken.type != TokenType::OPEN_CURL_BRACKET &&
+        firstToken.type != TokenType::OPEN_SQUARE_BRACKET) {
         return new Node();
     }
 
@@ -108,10 +87,6 @@ Json::Node *Json::Parser::parse() {
     }
 
     // Check if it is at EOF or not
-    if (!isAtEnd()) {
-        return new Node();
-    }
-
     if (peek().type != TokenType::EOF_TOKEN) {
         LOGGER_ERROR("Expected EOF at line ", peek().line);
         return new Node();
@@ -266,19 +241,14 @@ Json::Node *Json::Parser::parseArrayTokens() {
 }
 
 // Util functions
-Token &Json::Parser::peek() {
-    // Returning EOF if is at end
-    if (isAtEnd()) return tokens[current];
-    return tokens[current];
+Token Json::Parser::peek() {
+    return scanner->peekToken();
 }
 
-Token &Json::Parser::advance() {
-    // Returning EOF if is at end
-    if (isAtEnd()) return tokens[current];
-    return tokens[current++];
+// advance if token present, else Returning EOF if is at end
+Token Json::Parser::advance() {
+    return scanner->advanceToken();
 }
-
-bool Json::Parser::isAtEnd() { return tokens[current].type == EOF_TOKEN; }
 
 char *Json::Parser::readFile(const char *path) {
     FILE *file = fopen(path, "rb");

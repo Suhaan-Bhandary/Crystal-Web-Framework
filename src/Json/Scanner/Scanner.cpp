@@ -1,9 +1,7 @@
 #include "Scanner.h"
 
-#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 #include "../../Logger/Logger.h"
 #include "../Token/Token.h"
@@ -15,102 +13,102 @@ Json::Scanner::Scanner(const char* source) {
     // Initialize variables
     start = 0;
     current = 0;
+    line = 1;
     this->source = source;
 }
 
-std::vector<Token>& Json::Scanner::scanTokens() {
-    // Initialize variables
-    start = 0;
-    current = 0;
-    line = 1;
+Json::Scanner::Scanner(const Scanner& otherScanner) { 
+    start = otherScanner.start;
+    current = otherScanner.current;
+    line = otherScanner.line;
+    source = otherScanner.source;
+}
 
-    while (!isAtEnd()) {
+Json::Scanner& Json::Scanner::operator=(const Scanner& otherScanner) {
+    if (this != &otherScanner) {
+        start = otherScanner.start;
+        current = otherScanner.current;
+        line = otherScanner.line;
+        source = otherScanner.source;
+    }
+    return *this;
+}
+
+Json::Scanner::Scanner(Scanner&& otherScanner) {
+    start = otherScanner.start;
+    current = otherScanner.current;
+    line = otherScanner.line;
+    source = otherScanner.source;
+}
+
+Json::Scanner& Json::Scanner::operator=(Scanner&& otherScanner) {
+    start = otherScanner.start;
+    current = otherScanner.current;
+    line = otherScanner.line;
+    source = otherScanner.source;
+    return *this;
+}
+
+// retuns the next token and moves forward
+Token Json::Scanner::scanTokensOneByOne(){
+    // remove characters
+    trimCharacters();
+
+    // skipping all the unnecessary tokens
+    if(!isAtEnd()) {
         start = current;
-
-        // Check if scan was success or not
-        bool isJsonTokensValid = scanToken();
-        if (!isJsonTokensValid) {
-            tokens.clear();
-            return tokens;
-        }
+        return scanToken();
     }
 
     // Adding EOF
-    addToken(TokenType::EOF_TOKEN);
-    return tokens;
+    return Token(TokenType::EOF_TOKEN, start, current - start, line);
 }
-
-bool Json::Scanner::scanToken() {
-    bool isScanComplete = true;
-
+    
+Token Json::Scanner::scanToken() {
     char ch = advance();
-
     switch (ch) {
         case ',':
-            addToken(TokenType::COMMA);
-            break;
+            return createToken(TokenType::COMMA);
 
         case ':':
-            addToken(TokenType::COLON);
-            break;
+            return createToken(TokenType::COLON);
 
         case '{':
-            addToken(TokenType::OPEN_CURL_BRACKET);
-            break;
+            return createToken(TokenType::OPEN_CURL_BRACKET);
 
         case '}':
-            addToken(TokenType::CLOSE_CURL_BRACKET);
-            break;
+            return createToken(TokenType::CLOSE_CURL_BRACKET);
 
         case '[':
-            addToken(TokenType::OPEN_SQUARE_BRACKET);
-            break;
+            return createToken(TokenType::OPEN_SQUARE_BRACKET);
 
         case ']':
-            addToken(TokenType::CLOSE_SQUARE_BRACKET);
-            break;
-
-        // we ignore all of this
-        case ' ':
-        case '\r':
-        case '\t':
-            // Ignore whitespace.
-            break;
-
-        case '\n':
-            line++;
-            break;
+            return createToken(TokenType::CLOSE_SQUARE_BRACKET);
 
         // String
         case '"':
-            isScanComplete = stringToken();
-            break;
+            return stringToken();
 
         default:
             if (isNumberStart(ch)) {
-                isScanComplete = numberToken(ch);
+                return numberToken(ch);
             } else if (ch == '0' && peek() == '.') {
-                isScanComplete = numberToken(ch);
+                return numberToken(ch);
             } else if (ch == '0' && (peek() < '1' || peek() > '9')) {
-                std::string str(source + start, current - start);
-                addToken(TokenType::NUMBER, (long long)0);
-                isScanComplete = true;
+                return createToken(TokenType::NUMBER, (long long)0);
             } else if (isAlpha(ch)) {
-                isScanComplete = identifierToken();
+                return identifierToken();
             } else {
                 LOGGER_ERROR("Unexpected character:", ch, " at line", line);
-                isScanComplete = false;
+                return createToken(TokenType::INVALID);
             }
     }
-
-    // No Error in token
-    return isScanComplete;
 }
 
-bool Json::Scanner::stringToken() {
+Token Json::Scanner::stringToken() {
     while (!isAtEnd() && peek() != '"') {
         // Cntrl characters are not allowed
-        if (std::iscntrl(static_cast<unsigned char>(peek()))) return false;
+        if (std::iscntrl(static_cast<unsigned char>(peek()))) return createToken(TokenType::INVALID);
 
         if (peek() == '\\') {
             advance();
@@ -130,11 +128,11 @@ bool Json::Scanner::stringToken() {
                 advance();
             } else {
                 LOGGER_ERROR("Incorrect Escape Character", line);
-                return false;
+                return createToken(TokenType::INVALID);
             }
         } else if (peek() == '\n') {
             LOGGER_ERROR("Unexpected end of string", line);
-            return false;
+            return createToken(TokenType::INVALID);
         } else {
             advance();
         }
@@ -142,25 +140,23 @@ bool Json::Scanner::stringToken() {
 
     if (isAtEnd()) {
         LOGGER_ERROR("Unterminated String at line", line);
-        return false;
+        return createToken(TokenType::INVALID);
     }
 
     // advance to "
     advance();
 
     std::string value(source + start + 1, (current - 1) - (start + 1));
-    addToken(TokenType::STRING, value);
-
-    return true;
+    return createToken(TokenType::STRING, value);
 }
 
-bool Json::Scanner::numberToken(char firstChar) {
+Token Json::Scanner::numberToken(char firstChar) {
     if (firstChar == '-') {
         if (!(peek() >= '0' && peek() <= '9')) {
             LOGGER_ERROR(
                 "Invalid Json Number: - should be followed by a digit at line",
                 line);
-            return false;
+            return createToken(TokenType::INVALID);
         }
     }
 
@@ -183,7 +179,7 @@ bool Json::Scanner::numberToken(char firstChar) {
             LOGGER_ERROR(
                 "Invalid Json Number, . should have digit after it at line",
                 line);
-            return false;
+            return createToken(TokenType::INVALID);
         }
 
         if (match('e') || match('E')) {
@@ -202,14 +198,13 @@ bool Json::Scanner::numberToken(char firstChar) {
                     "Invalid Json Number, e/E should have digit after it at "
                     "line",
                     line);
-                return false;
+                return createToken(TokenType::INVALID);
             }
         }
 
         std::string str(source + start, current - start);
         double value = stod(str);
-        addToken(TokenType::FRACTION, value);
-        return true;
+        return createToken(TokenType::FRACTION, value);
     } else if (match('e') || match('E')) {
         if (peek() == '+' || peek() == '-') {
             advance();
@@ -226,23 +221,29 @@ bool Json::Scanner::numberToken(char firstChar) {
                 "Invalid Json Number, e/E should have digit after it at "
                 "line",
                 line);
-            return false;
+            return createToken(TokenType::INVALID);
         }
 
         std::string str(source + start, current - start);
         double value = stod(str);
-        addToken(TokenType::FRACTION, value);
-        return true;
+        return createToken(TokenType::FRACTION, value);
     } else {
         // Non Fraction
         std::string str(source + start, current - start);
-        long long value = stoll(str);
-        addToken(TokenType::NUMBER, value);
-        return true;
+
+        // Handle out of range, if out-of range then we keep it as number only
+        try{
+            long long value = stoll(str);
+            return createToken(TokenType::NUMBER, value);
+        }catch(const std::out_of_range& e){
+            // NOTE: We are making the number 0 if overflow happen
+            // TODO: Find a way to overcome it
+            return createToken(TokenType::NUMBER, 0LL);
+        }
     }
 }
 
-bool Json::Scanner::identifierToken() {
+Token Json::Scanner::identifierToken() {
     while (!isAtEnd() && isAlpha(peek())) {
         advance();
     }
@@ -257,29 +258,27 @@ bool Json::Scanner::identifierToken() {
 
     if (keywords.find(token) == keywords.end()) {
         LOGGER_ERROR("Invalid Keyword", token, "at line", line);
-        return false;
+        return createToken(TokenType::INVALID);
     }
 
     TokenType type = keywords[token];
-    addToken(type);
-
-    return true;
+    return createToken(type);
 }
 
-void Json::Scanner::addToken(TokenType type) {
-    tokens.push_back(Token(type, start, current - start, line));
+Token Json::Scanner::createToken(TokenType type) {
+    return Token(type, start, current - start, line);
 }
 
-void Json::Scanner::addToken(TokenType type, const std::string& literal) {
-    tokens.push_back(Token(type, start, current - start, literal, line));
+Token Json::Scanner::createToken(TokenType type, const std::string& literal) {
+    return Token(type, start, current - start, literal, line);
 }
 
-void Json::Scanner::addToken(TokenType type, double literal) {
-    tokens.push_back(Token(type, start, current - start, literal, line));
+Token Json::Scanner::createToken(TokenType type, double literal) {
+    return Token(type, start, current - start, literal, line);
 }
 
-void Json::Scanner::addToken(TokenType type, long long literal) {
-    tokens.push_back(Token(type, start, current - start, literal, line));
+Token Json::Scanner::createToken(TokenType type, long long literal) {
+    return Token(type, start, current - start, literal, line);
 }
 
 char Json::Scanner::advance() { return source[current++]; }
@@ -297,7 +296,42 @@ char Json::Scanner::peek() {
     return source[current];
 }
 
+// Public functions for Parser
 bool Json::Scanner::isAtEnd() { return source[current] == '\0'; }
+
+Token Json::Scanner::advanceToken(){
+    return scanTokensOneByOne();
+}
+
+Token Json::Scanner::peekToken(){
+   // store variables before advance
+    int initialStart = start;
+    int initialCurrent = current;
+    int initialLine = line;
+
+    // We advance one token and store the result and then reset the state
+    Token token = scanTokensOneByOne();
+
+    // reset variables
+    start = initialStart;
+    current = initialCurrent;
+    line = initialLine;
+
+    return token;
+}
+
+void Json::Scanner::trimCharacters(){
+    // we ignore all of this values
+    while(
+        source[current] == ' ' || 
+        source[current] == '\r' || 
+        source[current] == '\t' || 
+       source[current] == '\n' 
+    ){
+        if(source[current] == '\n') line++; 
+        current++;
+    }
+}
 
 bool Json::Scanner::isNextFourCharacterDigit() {
     if (!isHexCharacter(source[current + 0])) return false;
