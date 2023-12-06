@@ -3,7 +3,6 @@
 
 #include <fstream>
 #include <string>
-#include <vector>
 
 #include "../Token/Token.h"
 

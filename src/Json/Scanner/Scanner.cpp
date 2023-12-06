@@ -1,8 +1,5 @@
 #include "Scanner.h"
 
-#include <unordered_map>
-#include <unordered_set>
-
 #include "../../Logger/Logger.h"
 #include "../Token/Token.h"
 
@@ -106,14 +103,18 @@ Token Json::Scanner::stringToken() {
         // Cntrl characters are not allowed
         if (std::iscntrl(static_cast<unsigned char>(peek()))) return createToken(TokenType::INVALID);
 
-        if (peek() == '\\') {
-            advance();
-
-            std::unordered_set<char> escapeChars = {
-                '"', '\\', '/', 'b', 'f', 'n', 'r', 't',
-            };
-
-            if (escapeChars.count(peek()) != 0) {
+        if (match('\\')) {
+            char ch = peek();
+            if (
+                ch == '\\' || 
+                ch == '"' || 
+                ch == '/' || 
+                ch == 'b' || 
+                ch == 'f' || 
+                ch == 'n' || 
+                ch == 'r' || 
+                ch == 't' 
+            ) {
                 advance();
             } else if (match('u') && isNextFourCharacterDigit()) {
                 advance();
@@ -249,20 +250,21 @@ Token Json::Scanner::identifierToken() {
         advance();
     }
 
-    std::unordered_map<std::string, TokenType> keywords = {
-        {"true", TokenType::TRUE},
-        {"false", TokenType::FALSE},
-        {"null", TokenType::NULL_TOKEN}};
-
     // Check if keyword is present or not
     std::string token(source + start, current - start);
 
-    if (keywords.find(token) == keywords.end()) {
+    // Match the token and assign valid type
+    TokenType type = TokenType::INVALID;
+    if (token == "true") {
+        type = TokenType::TRUE;
+    } else if (token == "false") {
+        type = TokenType::FALSE;
+    } else if (token == "null") {
+        type = TokenType::NULL_TOKEN;
+    } else { 
         LOGGER_ERROR("Invalid Keyword", token, "at line", line);
-        return createToken(TokenType::INVALID);
     }
 
-    TokenType type = keywords[token];
     return createToken(type);
 }
 

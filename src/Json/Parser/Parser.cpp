@@ -23,6 +23,7 @@ Json::Parser::Parser(const char *jsonString, bool isFile) {
 
 Json::Parser::~Parser() {
     delete scanner;
+
     // freeing the memory allocated by malloc if file was taken as input
     if (isFile) {
         free(source);
