@@ -23,9 +23,13 @@ void Test::JsonTests() {
         "fail32.json", "fail33.json", "fail4.json",  "fail5.json",
         "fail6.json",  "fail7.json",  "fail8.json",  "fail9.json"};
 
+    // silence errors in the fail test
     for (auto &filename : testWithNULLResult) {
+        Logger::isErrorSilenced = true;
         std::string src = "tests/JsonTests/official/fail/" + filename;
         Json::Json jsonObject(src.c_str(), true);
+        Logger::isErrorSilenced = false;
+
         if (!jsonObject.getData().isNull()) {
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Test with Null Result on file", filename);
@@ -279,8 +283,12 @@ void Test::JsonTests() {
 
     // Invalid Json
     {
+        Logger::isErrorSilenced = true;
+
         std::string jsonValue = "{\"\"}";
         Json::Json jsonObject(jsonValue.c_str());
+
+        Logger::isErrorSilenced = false;
 
         if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
@@ -335,10 +343,10 @@ void Test::JsonTests() {
 
     // Try empty object
     {
-        try {
-            std::string jsonValue = "{\n   \n  \n \n}";
-            Json::Json jsonObject(jsonValue.c_str());
-        } catch (const std::exception &e) {
+        std::string jsonValue = "{\n   \n  \n \n}";
+        Json::Json jsonObject(jsonValue.c_str());
+
+        if(jsonObject.getData().isNull()){
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Emtpy Object");
         }

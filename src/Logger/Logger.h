@@ -9,6 +9,8 @@ class Logger {
     static std::string __filename;
 
    public:
+    static bool isErrorSilenced;
+
     static void log(const std::string& message);
 
     template <typename... Args>
@@ -62,6 +64,7 @@ void Logger::logWarn(const char* filename, const int& line,
 template <typename... Args>
 void Logger::logError(const char* filename, const int& line,
                       const Args&... args) {
+    if(isErrorSilenced) return;
     std::cout << red;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);

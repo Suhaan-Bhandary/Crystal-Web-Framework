@@ -8,3 +8,6 @@ void Logger::log(const std::string& message) {
 
 // TODO: output file
 std::string Logger::__filename = "";
+
+// Variable to silence errors
+bool Logger::isErrorSilenced = false;
