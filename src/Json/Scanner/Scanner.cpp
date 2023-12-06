@@ -49,22 +49,18 @@ Json::Scanner& Json::Scanner::operator=(Scanner&& otherScanner) {
     return *this;
 }
 
-// retuns the next token and moves forward
-Token Json::Scanner::scanTokensOneByOne(){
-    // remove characters
-    trimCharacters();
-
+Token Json::Scanner::scanToken() {
+    // set start as current
+    start = current;
+    
     // skipping all the unnecessary tokens
-    if(!isAtEnd()) {
-        start = current;
-        return scanToken();
+    trimCharacters();
+    
+    // Return EOF if it is at end
+    if(isAtEnd()) {
+        return Token(TokenType::EOF_TOKEN, start, current - start, line);
     }
 
-    // Adding EOF
-    return Token(TokenType::EOF_TOKEN, start, current - start, line);
-}
-    
-Token Json::Scanner::scanToken() {
     char ch = advance();
     switch (ch) {
         case ',':
@@ -309,7 +305,7 @@ char Json::Scanner::peek() {
 bool Json::Scanner::isAtEnd() { return source[current] == '\0'; }
 
 Token Json::Scanner::advanceToken(){
-    return scanTokensOneByOne();
+    return scanToken();
 }
 
 Token Json::Scanner::peekToken(){
@@ -319,7 +315,7 @@ Token Json::Scanner::peekToken(){
     int initialLine = line;
 
     // We advance one token and store the result and then reset the state
-    Token token = scanTokensOneByOne();
+    Token token = scanToken();
 
     // reset variables
     start = initialStart;
@@ -340,6 +336,9 @@ void Json::Scanner::trimCharacters(){
         if(source[current] == '\n') line++; 
         current++;
     }
+
+    // set the start as current after the trim
+    start = current;
 }
 
 bool Json::Scanner::isNextFourCharacterDigit() {

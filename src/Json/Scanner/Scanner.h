@@ -28,17 +28,16 @@ class Scanner {
     int start, current, line;
     const char* source;
 
-    // Function returns one token at a time
-    Token scanTokensOneByOne();
-
     // Functions
     Token scanToken();
     Token stringToken();
     Token numberToken(char firstChar);
     Token identifierToken();
 
+    // trims the characters such as spaces and newline and resets the start and current
     void trimCharacters();
 
+    // Function to create tokens
     Token createToken(TokenType type);
     Token createToken(TokenType type, const std::string& literal);
     Token createToken(TokenType type, double literal);
