@@ -37,11 +37,11 @@ class Scanner {
     void trimCharacters();
 
     // Function to create tokens
-    Token createToken(TokenType type);
-    Token createToken(TokenType type, const std::string& literal);
-    Token createToken(TokenType type, double literal);
-    Token createToken(TokenType type, long long literal);
-    Token createToken(TokenType type, unsigned long long literal);
+    inline Token createToken(TokenType type);
+    inline Token createToken(TokenType type, const std::string& literal);
+    inline Token createToken(TokenType type, double literal);
+    inline Token createToken(TokenType type, long long literal);
+    inline Token createToken(TokenType type, unsigned long long literal);
 
     char advance();
     bool match(char expected);
