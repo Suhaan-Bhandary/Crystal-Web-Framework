@@ -8,17 +8,11 @@ function installDependencies {
     apt install make
     apt install jq
     apt install inotify-tools
+    apt install cmake
 }
 
 function runBuildServer {
-    # Clean bin
-    make clean
-
-    # Build the project
-    make all
-
-    # Run the build
-    ./build/bin/httpScratchServer
+    ./scripts/deploy_example.sh
 }
 
 function runDevelopmentServer {
