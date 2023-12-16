@@ -1,7 +1,5 @@
+#include "crystal.h"
 #include "visitors.h"
-
-#include "../../../src/Logger/Logger.h"
-#include "../../../src/SQLite/SQLite.h"
 
 namespace database::services {
 int getVisitorsCount() {

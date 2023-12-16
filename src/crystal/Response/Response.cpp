@@ -11,6 +11,7 @@
 #include "../Json/Json.h"
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
+#include "../Config/Config.h"
 
 http::Response::Response(int client_socket) {
     this->client_socket = client_socket;
@@ -33,7 +34,7 @@ void http::Response::sendTemplate(const std::string& templateName,
                                   Json::Json& data) {
     // Read the file
     std::string rootDir = Utils::getCurrentDirectory();
-    std::string templateURL = rootDir + "/app/templates/" + templateName;
+    std::string templateURL = rootDir + http::Config::TEMPLATE_DIR_PATH + templateName;
 
     // Create template object
     http::HTMLTemplate html_template(templateURL, data);
@@ -46,7 +47,7 @@ void http::Response::sendTemplate(const std::string& templateName,
 
 void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     std::string absoluteFilePath =
-        Utils::getCurrentDirectory() + "/app/public" + relativePathToPublic;
+        Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH + relativePathToPublic;
 
     // Find the type of the file
     std::string extension = Utils::split(relativePathToPublic, ".")[1];

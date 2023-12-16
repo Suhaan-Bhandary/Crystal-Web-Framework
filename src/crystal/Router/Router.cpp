@@ -4,6 +4,7 @@
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 #include "../Utils/Utils.h"
+#include "../Config/Config.h"
 
 typedef void (*controller_type)(http::Request &request,
                                 http::Response &response);
@@ -179,7 +180,7 @@ void http::Router::getControllerFromPathTrieCallback(
 void http::Router::registerPublicPath() {
     LOGGER_MINIMAL("\nRegistering Public Paths");
     std::vector<std::string> publicFilesPath;
-    std::string path = Utils::getCurrentDirectory() + "/app/public/";
+    std::string path = Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH;
     Utils::listFiles(path, publicFilesPath);
 
     // register each file

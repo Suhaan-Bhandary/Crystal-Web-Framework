@@ -3,6 +3,7 @@
 #define INCLUDED_TESTS
 
 #include <iostream>
+#include "crystal.h"
 
 namespace Test {
 void TrimTests();

@@ -1,5 +1,3 @@
-#include "../../src/Logger/Logger.h"
-#include "../../src/Utils/Utils.h"
 #include "../tests.h"
 
 void Test::TrimTests() {

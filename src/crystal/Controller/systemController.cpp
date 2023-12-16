@@ -2,6 +2,7 @@
 
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
+#include "../Config/Config.h"
 
 void Controller::defaultNotFound(http::Request &request,
                                  http::Response &response) {
@@ -15,7 +16,7 @@ void Controller::getPublicFile(http::Request &request,
 
     std::string path = request.getValue("path");
     std::string absoluteFilePath =
-        Utils::getCurrentDirectory() + "/app/public" + path;
+        Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH + path;
     std::string fileETag = "\"" + Utils::getFileETag(absoluteFilePath) + "\"";
 
     if (ifNoneMatch == fileETag) {

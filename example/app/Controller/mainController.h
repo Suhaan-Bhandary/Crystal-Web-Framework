@@ -2,10 +2,7 @@
 #define INCLUDED_MAIN_CONTROLLER
 
 #include <iostream>
-
-#include "../../src/Logger/Logger.h"
-#include "../../src/Request/Request.h"
-#include "../../src/Response/Response.h"
+#include "crystal.h"
 
 namespace Controller {
 void getHome(http::Request &request, http::Response &response);

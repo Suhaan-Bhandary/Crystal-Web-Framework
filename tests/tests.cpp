@@ -1,6 +1,6 @@
 #include "./tests.h"
 
-#include "../src/Logger/Logger.h"
+#include "crystal.h"
 
 int main() {
     LOGGER_NOTE("\n\nTesting Project");

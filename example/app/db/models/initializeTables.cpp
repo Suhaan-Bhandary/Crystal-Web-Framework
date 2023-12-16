@@ -1,7 +1,5 @@
 #include "initializeTables.h"
-
-#include "../../../src/Logger/Logger.h"
-#include "../../../src/SQLite/SQLite.h"
+#include "crystal.h"
 
 void createVisitorsTable(sqlite3 *db) {
     const char *query = "CREATE TABLE IF NOT EXISTS Visitors (timestamp TEXT);";

@@ -1,4 +1,5 @@
 #include "mainController.h"
+#include "crystal.h"
 
 #include "../db/services/visitors.h"
 

@@ -1,8 +1,5 @@
 #include <fstream>
 
-#include "../../src/HTMLTemplate/HTMLTemplate.h"
-#include "../../src/Logger/Logger.h"
-#include "../../src/Utils/Utils.h"
 #include "../tests.h"
 
 Json::Json getTestJsonData() {

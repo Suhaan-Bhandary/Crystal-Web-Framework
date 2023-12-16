@@ -1,9 +1,9 @@
 {
   "outputFileName": "httpScratchServer",
   "scripts": {
-    "clean": "make clean",
-    "build": "make all",
-    "run": "./build/bin/httpScratchServer"
+    "clean": "rm -rf build && ./scripts/debug_configure.sh",
+    "build": "./scripts/build.sh",
+    "run": "./scripts/run_example.sh"
   },
   "exclude": [
     "build",

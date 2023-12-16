@@ -1,8 +1,11 @@
-#include "../app/db/models/initializeTables.h"
-#include "SQLite/SQLite.h"
-#include "TcpServer/TcpServer.h"
+#include "crystal.h"
+#include "./db/models/initializeTables.h"
 
 int main() {
+    // Set public and template folder path relative to the root folder
+    http::Config::TEMPLATE_DIR_PATH = "/example/app/templates/";
+    http::Config::PUBLIC_DIR_PATH = "/example/app/public/";
+
     // Configure Database
     database::SQLite::configDatabase("server.db");
 
