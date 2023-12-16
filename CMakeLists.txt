@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.22)
 
 project(CRYSTAL)
 
+# Setting C++ version
+set (CMAKE_CXX_STANDARD 17)
+
 # Adding Project files
 file(GLOB_RECURSE SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "src/*.h")
