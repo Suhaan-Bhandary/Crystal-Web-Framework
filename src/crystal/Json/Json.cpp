@@ -4,40 +4,43 @@
 
 #include "Parser/Parser.h"
 
-Json::Json::Json() { data = new Node(); }
+Crystal::Json::Json::Json() { data = new Node(); }
 
-Json::Json::Json(const char* str, bool readFromFile) {
+Crystal::Json::Json::Json(const char* str, bool readFromFile) {
     auto p = Parser(str, readFromFile);
     data = p.parse();
 }
 
-Json::Json::Json(const Json& otherJson) { data = new Node(*otherJson.data); }
+Crystal::Json::Json::Json(const Json& otherJson) {
+    data = new Node(*otherJson.data);
+}
 
-Json::Json& Json::Json::operator=(const Json& otherJson) {
+Crystal::Json::Json& Crystal::Json::Json::operator=(const Json& otherJson) {
     if (this != &otherJson) {
         data = new Node(*otherJson.data);
     }
     return *this;
 }
 
-Json::Json::Json(Json&& otherJson) {
+Crystal::Json::Json::Json(Json&& otherJson) {
     data = otherJson.data;
     otherJson.data = nullptr;
 }
 
-Json::Json& Json::Json::operator=(Json&& otherJson) {
+Crystal::Json::Json& Crystal::Json::Json::operator=(
+    Crystal::Json::Json&& otherJson) {
     data = otherJson.data;
     otherJson.data = nullptr;
     return *this;
 }
 
-Json::Json::Json(const Node& otherNode) { data = new Node(otherNode); }
+Crystal::Json::Json::Json(const Node& otherNode) { data = new Node(otherNode); }
 
-Json::Json& Json::Json::operator=(const Node& otherNode) {
+Crystal::Json::Json& Crystal::Json::Json::operator=(const Node& otherNode) {
     data = new Node(otherNode);
     return *this;
 }
 
-Json::Json::~Json() { delete data; }
+Crystal::Json::Json::~Json() { delete data; }
 
-Json::Node& Json::Json::getData() { return *data; }
+Crystal::Json::Node& Crystal::Json::Json::getData() { return *data; }

@@ -2,49 +2,49 @@
 
 #include <stdexcept>
 
-Json::Node::Node() { type = NULL_; }
+Crystal::Json::Node::Node() { type = NULL_; }
 
-Json::Node::Node(Object value) {
+Crystal::Json::Node::Node(Object value) {
     type = OBJECT;
     this->value = value;
 }
 
-Json::Node::Node(Array value) {
+Crystal::Json::Node::Node(Array value) {
     type = ARRAY;
     this->value = value;
 }
 
-Json::Node::Node(String value) {
+Crystal::Json::Node::Node(String value) {
     type = STRING;
     this->value = value;
 }
 
-Json::Node::Node(Number value) {
+Crystal::Json::Node::Node(Number value) {
     type = NUMBER;
     this->value = value;
 }
 
-Json::Node::Node(UnsignedNumber value) {
+Crystal::Json::Node::Node(UnsignedNumber value) {
     type = UNSIGNED_NUMBER;
     this->value = value;
 }
 
-Json::Node::Node(Fraction value) {
+Crystal::Json::Node::Node(Fraction value) {
     type = FRACTION;
     this->value = value;
 }
 
-Json::Node::Node(Bool value) {
+Crystal::Json::Node::Node(Bool value) {
     type = BOOL;
     this->value = value;
 }
 
-Json::Node::Node(const char* value) {
+Crystal::Json::Node::Node(const char* value) {
     type = STRING;
     this->value = std::string(value);
 }
 
-Json::Node::Node(const Node& otherNode) {
+Crystal::Json::Node::Node(const Node& otherNode) {
     // Set initial type as null
     type = JsonType::NULL_;
 
@@ -74,7 +74,7 @@ Json::Node::Node(const Node& otherNode) {
     }
 }
 
-Json::Node& Json::Node::operator=(const Node& otherNode) {
+Crystal::Json::Node& Crystal::Json::Node::operator=(const Node& otherNode) {
     switch (otherNode.type) {
         case ARRAY: {
             const Array& oldArray = std::get<Array>(otherNode.value);
@@ -103,55 +103,61 @@ Json::Node& Json::Node::operator=(const Node& otherNode) {
     return *this;
 }
 
-Json::Node::Node(Node&& otherNode) {
+Crystal::Json::Node::Node(Node&& otherNode) {
     type = otherNode.type;
     value = otherNode.value;
     otherNode.type = NULL_;
 }
 
-Json::Node& Json::Node::operator=(Node&& otherNode) {
+Crystal::Json::Node& Crystal::Json::Node::operator=(Node&& otherNode) {
     type = otherNode.type;
     value = otherNode.value;
     otherNode.type = NULL_;
     return *this;
 }
 
-Json::Node::~Node() { clear(); }
+Crystal::Json::Node::~Node() { clear(); }
 
-JsonType Json::Node::getType() const { return type; }
+JsonType Crystal::Json::Node::getType() const { return type; }
 
 // Getters
 template <>
-const Json::String& Json::Node::get<Json::String>() const {
-    return std::get<Json::String>(value);
+const Crystal::Json::String& Crystal::Json::Node::get<Crystal::Json::String>()
+    const {
+    return std::get<Crystal::Json::String>(value);
 }
 
 template <>
-const Json::Number& Json::Node::get<Json::Number>() const {
-    return std::get<Json::Number>(value);
+const Crystal::Json::Number& Crystal::Json::Node::get<Crystal::Json::Number>()
+    const {
+    return std::get<Crystal::Json::Number>(value);
 }
 
 template <>
-const Json::Fraction& Json::Node::get<Json::Fraction>() const {
-    return std::get<Json::Fraction>(value);
+const Crystal::Json::Fraction&
+Crystal::Json::Node::get<Crystal::Json::Fraction>() const {
+    return std::get<Crystal::Json::Fraction>(value);
 }
 
 template <>
-const Json::Bool& Json::Node::get<Json::Bool>() const {
-    return std::get<Json::Bool>(value);
+const Crystal::Json::Bool& Crystal::Json::Node::get<Crystal::Json::Bool>()
+    const {
+    return std::get<Crystal::Json::Bool>(value);
 }
 
 template <>
-const Json::Array& Json::Node::get<Json::Array>() const {
+const Crystal::Json::Array& Crystal::Json::Node::get<Crystal::Json::Array>()
+    const {
     return std::get<Array>(value);
 }
 
 template <>
-const Json::Object& Json::Node::get<Json::Object>() const {
+const Crystal::Json::Object& Crystal::Json::Node::get<Crystal::Json::Object>()
+    const {
     return std::get<Object>(value);
 }
 
-Json::Node& Json::Node::get(int index) const {
+Crystal::Json::Node& Crystal::Json::Node::get(int index) const {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -163,7 +169,7 @@ Json::Node& Json::Node::get(int index) const {
     return *std::get<Array>(value).at(index);
 }
 
-Json::Node& Json::Node::get(const String& key) const {
+Crystal::Json::Node& Crystal::Json::Node::get(const String& key) const {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -172,7 +178,7 @@ Json::Node& Json::Node::get(const String& key) const {
 }
 
 // Function to clear the node and set it as null
-void Json::Node::clear() {
+void Crystal::Json::Node::clear() {
     switch (type) {
         case ARRAY: {
             // Delete each element in the array
@@ -198,55 +204,55 @@ void Json::Node::clear() {
 }
 
 // Setters
-void Json::Node::set(Object value) {
+void Crystal::Json::Node::set(Object value) {
     clear();
     type = OBJECT;
     this->value = value;
 }
 
-void Json::Node::set(Array value) {
+void Crystal::Json::Node::set(Array value) {
     clear();
     type = ARRAY;
     this->value = value;
 }
 
-void Json::Node::set(String value) {
+void Crystal::Json::Node::set(String value) {
     clear();
     type = STRING;
     this->value = value;
 }
 
-void Json::Node::set(Number value) {
+void Crystal::Json::Node::set(Number value) {
     clear();
     type = NUMBER;
     this->value = value;
 }
 
-void Json::Node::set(Fraction value) {
+void Crystal::Json::Node::set(Fraction value) {
     clear();
     type = FRACTION;
     this->value = value;
 }
 
-void Json::Node::set(Bool value) {
+void Crystal::Json::Node::set(Bool value) {
     clear();
     type = BOOL;
     this->value = value;
 }
 
-void Json::Node::set(const Node& value) {
+void Crystal::Json::Node::set(const Node& value) {
     clear();
     (*this) = Node(value);
 }
 
-void Json::Node::set(const char* value) {
+void Crystal::Json::Node::set(const char* value) {
     clear();
     type = STRING;
     this->value = std::string(value);
 }
 
 // Object Setters
-void Json::Node::set(const std::string& key, Object value) {
+void Crystal::Json::Node::set(const std::string& key, Object value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -257,7 +263,7 @@ void Json::Node::set(const std::string& key, Object value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, Array value) {
+void Crystal::Json::Node::set(const std::string& key, Array value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -268,7 +274,7 @@ void Json::Node::set(const std::string& key, Array value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, String value) {
+void Crystal::Json::Node::set(const std::string& key, String value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -279,7 +285,7 @@ void Json::Node::set(const std::string& key, String value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, Number value) {
+void Crystal::Json::Node::set(const std::string& key, Number value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -290,7 +296,7 @@ void Json::Node::set(const std::string& key, Number value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, Fraction value) {
+void Crystal::Json::Node::set(const std::string& key, Fraction value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -301,7 +307,7 @@ void Json::Node::set(const std::string& key, Fraction value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, Bool value) {
+void Crystal::Json::Node::set(const std::string& key, Bool value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -312,7 +318,7 @@ void Json::Node::set(const std::string& key, Bool value) {
     object[key] = node;
 }
 
-void Json::Node::set(const std::string& key, const Node& value) {
+void Crystal::Json::Node::set(const std::string& key, const Node& value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -321,7 +327,7 @@ void Json::Node::set(const std::string& key, const Node& value) {
     object[key] = new Node(value);
 }
 
-void Json::Node::set(const std::string& key, Node* value) {
+void Crystal::Json::Node::set(const std::string& key, Node* value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -330,7 +336,7 @@ void Json::Node::set(const std::string& key, Node* value) {
     object[key] = value;
 }
 
-void Json::Node::set(const std::string& key, const char* value) {
+void Crystal::Json::Node::set(const std::string& key, const char* value) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -342,7 +348,7 @@ void Json::Node::set(const std::string& key, const char* value) {
 }
 
 // Push in array
-void Json::Node::push(Object value) {
+void Crystal::Json::Node::push(Object value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -353,7 +359,7 @@ void Json::Node::push(Object value) {
     array.push_back(node);
 }
 
-void Json::Node::push(Array value) {
+void Crystal::Json::Node::push(Array value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -364,7 +370,7 @@ void Json::Node::push(Array value) {
     array.push_back(node);
 }
 
-void Json::Node::push(String value) {
+void Crystal::Json::Node::push(String value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -375,7 +381,7 @@ void Json::Node::push(String value) {
     array.push_back(node);
 }
 
-void Json::Node::push(Number value) {
+void Crystal::Json::Node::push(Number value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -386,7 +392,7 @@ void Json::Node::push(Number value) {
     array.push_back(node);
 }
 
-void Json::Node::push(Fraction value) {
+void Crystal::Json::Node::push(Fraction value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -397,7 +403,7 @@ void Json::Node::push(Fraction value) {
     array.push_back(node);
 }
 
-void Json::Node::push(Bool value) {
+void Crystal::Json::Node::push(Bool value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -408,7 +414,7 @@ void Json::Node::push(Bool value) {
     array.push_back(node);
 }
 
-void Json::Node::push(const Node& value) {
+void Crystal::Json::Node::push(const Node& value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -417,7 +423,7 @@ void Json::Node::push(const Node& value) {
     array.push_back(new Node(value));
 }
 
-void Json::Node::push(Node* value) {
+void Crystal::Json::Node::push(Node* value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -426,7 +432,7 @@ void Json::Node::push(Node* value) {
     array.push_back(value);
 }
 
-void Json::Node::push(const char* value) {
+void Crystal::Json::Node::push(const char* value) {
     if (type != ARRAY) {
         throw std::invalid_argument("Json Node not an Array");
     }
@@ -438,9 +444,9 @@ void Json::Node::push(const char* value) {
 }
 
 // NULL check
-bool Json::Node::isNull() { return type == NULL_; }
+bool Crystal::Json::Node::isNull() { return type == NULL_; }
 
-bool Json::Node::contains(const std::string& key) {
+bool Crystal::Json::Node::contains(const std::string& key) {
     if (type != OBJECT) {
         throw std::invalid_argument("Json Node not an Object");
     }
@@ -450,7 +456,7 @@ bool Json::Node::contains(const std::string& key) {
 }
 
 // String representation
-std::string Json::Node::toString(int level, int spaces) {
+std::string Crystal::Json::Node::toString(int level, int spaces) {
     std::string indentation = std::string(level * spaces, ' ');
     std::string nextLevelIndentation = std::string((level + 1) * spaces, ' ');
 

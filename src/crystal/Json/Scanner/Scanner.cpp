@@ -3,10 +3,10 @@
 #include "../../Logger/Logger.h"
 #include "../Token/Token.h"
 
-using Token = Json::Token;
-using TokenType = Json::TokenType;
+using Token = Crystal::Json::Token;
+using TokenType = Crystal::Json::TokenType;
 
-Json::Scanner::Scanner(const char* source) {
+Crystal::Json::Scanner::Scanner(const char* source) {
     // Initialize variables
     start = 0;
     current = 0;
@@ -14,14 +14,15 @@ Json::Scanner::Scanner(const char* source) {
     this->source = source;
 }
 
-Json::Scanner::Scanner(const Scanner& otherScanner) { 
+Crystal::Json::Scanner::Scanner(const Scanner& otherScanner) {
     start = otherScanner.start;
     current = otherScanner.current;
     line = otherScanner.line;
     source = otherScanner.source;
 }
 
-Json::Scanner& Json::Scanner::operator=(const Scanner& otherScanner) {
+Crystal::Json::Scanner& Crystal::Json::Scanner::operator=(
+    const Scanner& otherScanner) {
     if (this != &otherScanner) {
         start = otherScanner.start;
         current = otherScanner.current;
@@ -31,14 +32,15 @@ Json::Scanner& Json::Scanner::operator=(const Scanner& otherScanner) {
     return *this;
 }
 
-Json::Scanner::Scanner(Scanner&& otherScanner) {
+Crystal::Json::Scanner::Scanner(Scanner&& otherScanner) {
     start = otherScanner.start;
     current = otherScanner.current;
     line = otherScanner.line;
     source = otherScanner.source;
 }
 
-Json::Scanner& Json::Scanner::operator=(Scanner&& otherScanner) {
+Crystal::Json::Scanner& Crystal::Json::Scanner::operator=(
+    Scanner&& otherScanner) {
     start = otherScanner.start;
     current = otherScanner.current;
     line = otherScanner.line;
@@ -46,15 +48,15 @@ Json::Scanner& Json::Scanner::operator=(Scanner&& otherScanner) {
     return *this;
 }
 
-Token Json::Scanner::scanToken() {
+Token Crystal::Json::Scanner::scanToken() {
     // set start as current
     start = current;
-    
+
     // skipping all the unnecessary tokens
     trimCharacters();
-    
+
     // Return EOF if it is at end
-    if(isAtEnd()) {
+    if (isAtEnd()) {
         return Token(TokenType::EOF_TOKEN, start, current - start, line);
     }
 
@@ -98,23 +100,16 @@ Token Json::Scanner::scanToken() {
     }
 }
 
-Token Json::Scanner::stringToken() {
+Token Crystal::Json::Scanner::stringToken() {
     while (!isAtEnd() && peek() != '"') {
         // Cntrl characters are not allowed
-        if (std::iscntrl(static_cast<unsigned char>(peek()))) return createToken(TokenType::INVALID);
+        if (std::iscntrl(static_cast<unsigned char>(peek())))
+            return createToken(TokenType::INVALID);
 
         if (match('\\')) {
             char ch = peek();
-            if (
-                ch == '\\' || 
-                ch == '"' || 
-                ch == '/' || 
-                ch == 'b' || 
-                ch == 'f' || 
-                ch == 'n' || 
-                ch == 'r' || 
-                ch == 't' 
-            ) {
+            if (ch == '\\' || ch == '"' || ch == '/' || ch == 'b' ||
+                ch == 'f' || ch == 'n' || ch == 'r' || ch == 't') {
                 advance();
             } else if (match('u') && isNextFourCharacterDigit()) {
                 advance();
@@ -147,7 +142,7 @@ Token Json::Scanner::stringToken() {
     return createToken(TokenType::STRING, value);
 }
 
-Token Json::Scanner::numberToken(char firstChar) {
+Token Crystal::Json::Scanner::numberToken(char firstChar) {
     if (firstChar == '-') {
         if (!(peek() >= '0' && peek() <= '9')) {
             LOGGER_ERROR(
@@ -229,23 +224,23 @@ Token Json::Scanner::numberToken(char firstChar) {
         std::string str(source + start, current - start);
 
         // Handle out of range, if out-of range then we keep it as number only
-        try{
+        try {
             long long value = stoll(str);
             return createToken(TokenType::NUMBER, value);
-        }catch(const std::out_of_range& e){
-            // store it in stoull if it cannot be stored in long long, else we make it null
+        } catch (const std::out_of_range& e) {
+            // store it in stoull if it cannot be stored in long long, else we
+            // make it null
             try {
                 unsigned long long value = stoull(str);
                 return createToken(TokenType::UNSIGNED_NUMBER, value);
-            }
-            catch (const std::out_of_range& e) {
+            } catch (const std::out_of_range& e) {
                 return createToken(TokenType::NULL_TOKEN);
             }
         }
     }
 }
 
-Token Json::Scanner::identifierToken() {
+Token Crystal::Json::Scanner::identifierToken() {
     while (!isAtEnd() && isAlpha(peek())) {
         advance();
     }
@@ -261,36 +256,38 @@ Token Json::Scanner::identifierToken() {
         type = TokenType::FALSE;
     } else if (token == "null") {
         type = TokenType::NULL_TOKEN;
-    } else { 
+    } else {
         LOGGER_ERROR("Invalid Keyword", token, "at line", line);
     }
 
     return createToken(type);
 }
 
-Token Json::Scanner::createToken(TokenType type) {
+Token Crystal::Json::Scanner::createToken(TokenType type) {
     return Token(type, start, current - start, line);
 }
 
-Token Json::Scanner::createToken(TokenType type, const std::string& literal) {
+Token Crystal::Json::Scanner::createToken(TokenType type,
+                                          const std::string& literal) {
     return Token(type, start, current - start, literal, line);
 }
 
-Token Json::Scanner::createToken(TokenType type, double literal) {
+Token Crystal::Json::Scanner::createToken(TokenType type, double literal) {
     return Token(type, start, current - start, literal, line);
 }
 
-Token Json::Scanner::createToken(TokenType type, long long literal) {
+Token Crystal::Json::Scanner::createToken(TokenType type, long long literal) {
     return Token(type, start, current - start, literal, line);
 }
 
-Token Json::Scanner::createToken(TokenType type, unsigned long long literal) {
+Token Crystal::Json::Scanner::createToken(TokenType type,
+                                          unsigned long long literal) {
     return Token(type, start, current - start, literal, line);
 }
 
-char Json::Scanner::advance() { return source[current++]; }
+char Crystal::Json::Scanner::advance() { return source[current++]; }
 
-bool Json::Scanner::match(char expected) {
+bool Crystal::Json::Scanner::match(char expected) {
     if (isAtEnd()) return false;
     if (source[current] != expected) return false;
 
@@ -298,20 +295,18 @@ bool Json::Scanner::match(char expected) {
     return true;
 }
 
-char Json::Scanner::peek() {
+char Crystal::Json::Scanner::peek() {
     if (isAtEnd()) return '\0';
     return source[current];
 }
 
 // Public functions for Parser
-bool Json::Scanner::isAtEnd() { return source[current] == '\0'; }
+bool Crystal::Json::Scanner::isAtEnd() { return source[current] == '\0'; }
 
-Token Json::Scanner::advanceToken(){
-    return scanToken();
-}
+Token Crystal::Json::Scanner::advanceToken() { return scanToken(); }
 
-Token Json::Scanner::peekToken(){
-   // store variables before advance
+Token Crystal::Json::Scanner::peekToken() {
+    // store variables before advance
     int initialStart = start;
     int initialCurrent = current;
     int initialLine = line;
@@ -327,15 +322,11 @@ Token Json::Scanner::peekToken(){
     return token;
 }
 
-void Json::Scanner::trimCharacters(){
+void Crystal::Json::Scanner::trimCharacters() {
     // we ignore all of this values
-    while(
-        source[current] == ' ' || 
-        source[current] == '\r' || 
-        source[current] == '\t' || 
-       source[current] == '\n' 
-    ){
-        if(source[current] == '\n') line++; 
+    while (source[current] == ' ' || source[current] == '\r' ||
+           source[current] == '\t' || source[current] == '\n') {
+        if (source[current] == '\n') line++;
         current++;
     }
 
@@ -343,7 +334,7 @@ void Json::Scanner::trimCharacters(){
     start = current;
 }
 
-bool Json::Scanner::isNextFourCharacterDigit() {
+bool Crystal::Json::Scanner::isNextFourCharacterDigit() {
     if (!isHexCharacter(source[current + 0])) return false;
     if (!isHexCharacter(source[current + 1])) return false;
     if (!isHexCharacter(source[current + 2])) return false;
@@ -351,15 +342,15 @@ bool Json::Scanner::isNextFourCharacterDigit() {
     return true;
 }
 
-bool Json::Scanner::isHexCharacter(char ch) {
+bool Crystal::Json::Scanner::isHexCharacter(char ch) {
     return ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F') ||
             (ch >= 'a' && ch <= 'f'));
 }
 
-bool Json::Scanner::isNumberStart(char ch) {
+bool Crystal::Json::Scanner::isNumberStart(char ch) {
     return (ch == '-' || (ch >= '1' && ch <= '9'));
 }
 
-bool Json::Scanner::isAlpha(char ch) {
+bool Crystal::Json::Scanner::isAlpha(char ch) {
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
 }

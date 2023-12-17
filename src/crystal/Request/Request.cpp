@@ -6,7 +6,7 @@
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
 
-http::Request::Request(char requestBuffer[]) {
+Crystal::Request::Request(char requestBuffer[]) {
     readRequest(requestBuffer);
     parseDataFromHeader();
     parseDataFromBody();
@@ -15,15 +15,15 @@ http::Request::Request(char requestBuffer[]) {
     parseCookiesData();
 }
 
-http::Request::~Request() {
+Crystal::Request::~Request() {
     if (jsonData != nullptr) {
         delete jsonData;
     }
 }
 
-void http::Request::readRequest(char requestBuffer[]) {
+void Crystal::Request::readRequest(char requestBuffer[]) {
     std::vector<std::string> blocks =
-        Utils::split(std::string(requestBuffer), "\r\n\r\n");
+        Crystal::Utils::split(std::string(requestBuffer), "\r\n\r\n");
 
     int blockCount = blocks.size();
 
@@ -42,17 +42,18 @@ void http::Request::readRequest(char requestBuffer[]) {
     }
 }
 
-void http::Request::parseDataFromHeader() {
+void Crystal::Request::parseDataFromHeader() {
     if (header.size() == 0) return;
 
     // Extract lines
-    std::vector<std::string> lines = Utils::split(header, "\r\n");
+    std::vector<std::string> lines = Crystal::Utils::split(header, "\r\n");
 
     // Read the first line
-    std::vector<std::string> tokens = Utils::split(lines[0], " ");
+    std::vector<std::string> tokens = Crystal::Utils::split(lines[0], " ");
 
     // Handle the query if exits
-    std::vector<std::string> pathAndSearchQuery = Utils::split(tokens[1], "?");
+    std::vector<std::string> pathAndSearchQuery =
+        Crystal::Utils::split(tokens[1], "?");
 
     if (pathAndSearchQuery.size() == 2) {
         // Handle the search queries
@@ -64,7 +65,7 @@ void http::Request::parseDataFromHeader() {
     valueMap["http-version"] = tokens[2];
 
     for (int i = 1; i < lines.size(); i++) {
-        std::vector<std::string> tokens = Utils::split(lines[i], ": ");
+        std::vector<std::string> tokens = Crystal::Utils::split(lines[i], ": ");
 
         // Handling the tokens if overflow occurred
         if (tokens.size() != 2) {
@@ -76,7 +77,7 @@ void http::Request::parseDataFromHeader() {
     }
 }
 
-void http::Request::parseDataFromBody() {
+void Crystal::Request::parseDataFromBody() {
     std::string contentType = getValue("Content-Type");
 
     // Check if contentType is valid
@@ -92,15 +93,16 @@ void http::Request::parseDataFromBody() {
     }
 }
 
-void http::Request::parseCookiesData() {
+void Crystal::Request::parseCookiesData() {
     std::string cookiesStream = getValue("Cookie");
 
     if (cookiesStream.size() == 0) return;
 
     // Parse the data and store it in cookies
-    std::vector<std::string> tokens = Utils::split(cookiesStream, ";");
+    std::vector<std::string> tokens = Crystal::Utils::split(cookiesStream, ";");
     for (auto token : tokens) {
-        std::vector<std::string> keyAndValue = Utils::split(token, "=");
+        std::vector<std::string> keyAndValue =
+            Crystal::Utils::split(token, "=");
         if (keyAndValue.size() < 2) continue;
 
         // Inserting the cookies
@@ -108,25 +110,27 @@ void http::Request::parseCookiesData() {
     }
 }
 
-std::string http::Request::getValue(std::string key) {
+std::string Crystal::Request::getValue(std::string key) {
     if (valueMap.count(key) == 0) return "";
     return valueMap[key];
 }
 
-void http::Request::processSearchQuery(const std::string &queryString) {
-    std::vector<std::string> tokens = Utils::split(queryString, "&");
+void Crystal::Request::processSearchQuery(const std::string &queryString) {
+    std::vector<std::string> tokens = Crystal::Utils::split(queryString, "&");
 
     for (int i = 0; i < tokens.size(); i++) {
-        std::vector<std::string> keyAndValue = Utils::split(tokens[i], "=");
+        std::vector<std::string> keyAndValue =
+            Crystal::Utils::split(tokens[i], "=");
         if (keyAndValue.size() < 2) continue;
 
-        searchQueries.insert({Utils::cleanEncodedString(keyAndValue[0]),
-                              Utils::cleanEncodedString(keyAndValue[1])});
+        searchQueries.insert(
+            {Utils::cleanEncodedString(keyAndValue[0]),
+             Crystal::Utils::cleanEncodedString(keyAndValue[1])});
     }
 }
 
 // Getter for getting json data from body
-Json::Json &http::Request::getJsonData() {
+Crystal::Json::Json &Crystal::Request::getJsonData() {
     if (jsonData == nullptr) {
         throw std::invalid_argument("Body Json Data not available");
     }

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+namespace Crystal {
 class Logger {
    private:
     static std::string __filename;
@@ -28,6 +29,7 @@ class Logger {
     static void logError(const char* filename, const int& line,
                          const Args&... args);
 };
+}  // namespace Crystal
 
 // C++ Variadic Template has to be defined inside the .h file itself
 // https://stackoverflow.com/questions/25091516/c-template-variadic-function-undefined-reference
@@ -37,15 +39,16 @@ const std::string red("\033[0;31m");
 const std::string reset("\033[0m");
 
 template <typename... Args>
-void Logger::log(const char* filename, const int& line, const Args&... args) {
+void Crystal::Logger::log(const char* filename, const int& line,
+                          const Args&... args) {
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
     std::cout << std::endl;
 }
 
 template <typename... Args>
-void Logger::logNote(const char* filename, const int& line,
-                     const Args&... args) {
+void Crystal::Logger::logNote(const char* filename, const int& line,
+                              const Args&... args) {
     std::cout << blue;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
@@ -53,8 +56,8 @@ void Logger::logNote(const char* filename, const int& line,
 }
 
 template <typename... Args>
-void Logger::logWarn(const char* filename, const int& line,
-                     const Args&... args) {
+void Crystal::Logger::logWarn(const char* filename, const int& line,
+                              const Args&... args) {
     std::cout << yellow;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
@@ -62,9 +65,9 @@ void Logger::logWarn(const char* filename, const int& line,
 }
 
 template <typename... Args>
-void Logger::logError(const char* filename, const int& line,
-                      const Args&... args) {
-    if(isErrorSilenced) return;
+void Crystal::Logger::logError(const char* filename, const int& line,
+                               const Args&... args) {
+    if (isErrorSilenced) return;
     std::cout << red;
     std::cout << "[" << filename << ":" << line << "] ";
     ((std::cout << args << " "), ...);
@@ -72,17 +75,21 @@ void Logger::logError(const char* filename, const int& line,
 }
 
 #ifdef DEVELOPMENT_ENVIRONMENT
-#define LOGGER_MINIMAL(message) Logger::log(message)
-#define LOGGER(...) Logger::log(__FILE__, __LINE__, __VA_ARGS__)
-#define LOGGER_NOTE(...) Logger::logNote(__FILE__, __LINE__, __VA_ARGS__)
-#define LOGGER_WARNING(...) Logger::logWarn(__FILE__, __LINE__, __VA_ARGS__)
-#define LOGGER_ERROR(...) Logger::logError(__FILE__, __LINE__, __VA_ARGS__)
+#define LOGGER_MINIMAL(message) Crystal::Logger::log(message)
+#define LOGGER(...) Crystal::Logger::log(__FILE__, __LINE__, __VA_ARGS__)
+#define LOGGER_NOTE(...) \
+    Crystal::Logger::logNote(__FILE__, __LINE__, __VA_ARGS__)
+#define LOGGER_WARNING(...) \
+    Crystal::Logger::logWarn(__FILE__, __LINE__, __VA_ARGS__)
+#define LOGGER_ERROR(...) \
+    Crystal::Logger::logError(__FILE__, __LINE__, __VA_ARGS__)
 #else
 #define LOGGER_MINIMAL(message)
 #define LOGGER(...)
 #define LOGGER_NOTE(...)
 #define LOGGER_WARNING(...)
-#define LOGGER_ERROR(...) Logger::logError(__FILE__, __LINE__, __VA_ARGS__)
+#define LOGGER_ERROR(...) \
+    Crystal::Logger::logError(__FILE__, __LINE__, __VA_ARGS__)
 #endif
 
 #endif

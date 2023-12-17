@@ -7,12 +7,12 @@
 #include "../Logger/Logger.h"
 
 // Constructor
-http::HTMLTemplate::HTMLTemplate(const std::string &templatePath,
-                                 Json::Json &data) {
+Crystal::HTMLTemplate::HTMLTemplate(const std::string &templatePath,
+                                    Json::Json &data) {
     compileHTMLFromTemplate(templatePath, data);
 }
 
-void http::HTMLTemplate::compileHTMLFromTemplate(
+void Crystal::HTMLTemplate::compileHTMLFromTemplate(
     const std::string &templatePath, Json::Json &data) {
     // Read HTML Template File
     std::string HTMLContent = readHTMLFromFile(templatePath);
@@ -21,7 +21,7 @@ void http::HTMLTemplate::compileHTMLFromTemplate(
     compiledHTML = compileHTMLText(HTMLContent, data);
 }
 
-std::string http::HTMLTemplate::readHTMLFromFile(
+std::string Crystal::HTMLTemplate::readHTMLFromFile(
     const std::string &templatePath) {
     std::ifstream HTMLFile(templatePath);
     if (!HTMLFile.is_open()) {
@@ -40,8 +40,8 @@ std::string http::HTMLTemplate::readHTMLFromFile(
 }
 
 // TODO: Implement HTML compile
-std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
-                                                Json::Json &data) {
+std::string Crystal::HTMLTemplate::compileHTMLText(
+    const std::string &HTMLContent, Json::Json &data) {
     std::string result = "";
 
     // TODO:
@@ -83,4 +83,4 @@ std::string http::HTMLTemplate::compileHTMLText(const std::string &HTMLContent,
 }
 
 // Returns the compiled html
-std::string http::HTMLTemplate::getHtml() { return compiledHTML; }
+std::string Crystal::HTMLTemplate::getHtml() { return compiledHTML; }

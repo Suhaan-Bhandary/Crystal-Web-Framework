@@ -1,9 +1,10 @@
 #include "mainController.h"
-#include "crystal.h"
 
 #include "../db/services/visitors.h"
+#include "crystal.h"
 
-void Controller::getHome(http::Request &request, http::Response &response) {
+void Controller::getHome(Crystal::Request &request,
+                         Crystal::Response &response) {
     // Add visitor time in database
     database::services::addVisitor();
 
@@ -26,16 +27,17 @@ void Controller::getHome(http::Request &request, http::Response &response) {
         response.setCookie("count", "1", 10 * 60);
     }
 
-    Json::Json jsonObject("{}");
+    Crystal::Json::Json jsonObject("{}");
     jsonObject.getData().set("visitorCount", std::to_string(visitorCount));
     response.sendTemplate("home.html", jsonObject);
 }
 
-void Controller::getUser(http::Request &request, http::Response &response) {
+void Controller::getUser(Crystal::Request &request,
+                         Crystal::Response &response) {
     std::string userId = request.pathParams[":id"];
     std::string search = request.searchQueries["search"];
 
-    Json::Json jsonObject("{}");
+    Crystal::Json::Json jsonObject("{}");
     jsonObject.getData().set("id", userId);
     jsonObject.getData().set("search", search);
 
@@ -43,7 +45,8 @@ void Controller::getUser(http::Request &request, http::Response &response) {
     response.sendTemplate("getUser.html", jsonObject);
 }
 
-void Controller::getUserChat(http::Request &request, http::Response &response) {
+void Controller::getUserChat(Crystal::Request &request,
+                             Crystal::Response &response) {
     // Send html response to the client
     std::string htmlContent =
         "<html>"
@@ -58,19 +61,20 @@ void Controller::getUserChat(http::Request &request, http::Response &response) {
     response.sendHTML(htmlContent);
 }
 
-void Controller::getNotFound(http::Request &request, http::Response &response) {
-    Json::Json jsonObject("{}");
+void Controller::getNotFound(Crystal::Request &request,
+                             Crystal::Response &response) {
+    Crystal::Json::Json jsonObject("{}");
 
     response.setStatusCode(404);
     response.sendTemplate("404NotFound.html", jsonObject);
 }
 
-void Controller::saveUserData(http::Request &request,
-                              http::Response &response) {
+void Controller::saveUserData(Crystal::Request &request,
+                              Crystal::Response &response) {
     try {
         auto &bodyNode = request.getJsonData().getData();
 
-        Json::Json responseData("{}");
+        Crystal::Json::Json responseData("{}");
         auto &node = responseData.getData();
 
         if (!bodyNode.contains("name") || !bodyNode.contains("email")) {
@@ -79,19 +83,19 @@ void Controller::saveUserData(http::Request &request,
         }
 
         // Load data from json
-        std::string name = bodyNode.get("name").get<Json::String>();
-        std::string email = bodyNode.get("email").get<Json::String>();
+        std::string name = bodyNode.get("name").get<Crystal::Json::String>();
+        std::string email = bodyNode.get("email").get<Crystal::Json::String>();
 
         node.set("message", "Successful");
         node.set("name", name);
         node.set("email", email);
 
         // Creating a object of colors pairs
-        node.set("colors", Json::Object());
+        node.set("colors", Crystal::Json::Object());
         node.get("colors").set("red", "blue");
 
         // Numbers
-        node.set("languages", Json::Array());
+        node.set("languages", Crystal::Json::Array());
         node.get("languages").push("C++");
         node.get("languages").push("Java");
         node.get("languages").push("Python");
@@ -105,22 +109,24 @@ void Controller::saveUserData(http::Request &request,
     }
 }
 
-void Controller::redirectUserToGoogle(http::Request &request,
-                                      http::Response &response) {
+void Controller::redirectUserToGoogle(Crystal::Request &request,
+                                      Crystal::Response &response) {
     std::string url = request.searchQueries["url"];
     if (url.size() == 0) url = "/";
 
     response.redirect(url);
 }
 
-void Controller::getXOGame(http::Request &request, http::Response &response) {
-    Json::Json jsonObject("{}");
+void Controller::getXOGame(Crystal::Request &request,
+                           Crystal::Response &response) {
+    Crystal::Json::Json jsonObject("{}");
 
     response.setStatusCode(200);
     response.sendTemplate("xo-game.html", jsonObject);
 }
 
-void Controller::getHealth(http::Request &request, http::Response &response) {
+void Controller::getHealth(Crystal::Request &request,
+                           Crystal::Response &response) {
     // Send html response to the client
     std::string htmlContent =
         "<html>"

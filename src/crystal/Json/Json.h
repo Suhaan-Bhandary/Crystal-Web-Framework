@@ -3,7 +3,7 @@
 
 #include "Node/Node.h"
 
-namespace Json {
+namespace Crystal::Json {
 // Wrapper around node
 class Json {
    public:
@@ -27,6 +27,6 @@ class Json {
     Node* data;
 };
 
-}  // namespace Json
+}  // namespace Crystal::Json
 
 #endif

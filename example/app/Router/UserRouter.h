@@ -2,7 +2,7 @@
 #include "crystal.h"
 
 // Path registration
-void userRouterPaths(http::Router &router) {
+void userRouterPaths(Crystal::Router &router) {
     // Register path
     router.get("/", Controller::getHome);
     router.get("/user/:id", Controller::getUser);

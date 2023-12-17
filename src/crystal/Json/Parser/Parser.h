@@ -5,10 +5,10 @@
 #include <string>
 
 #include "../Node/Node.h"
-#include "../Token/Token.h"
 #include "../Scanner/Scanner.h"
+#include "../Token/Token.h"
 
-namespace Json {
+namespace Crystal::Json {
 class Parser {
    public:
     Parser() = delete;
@@ -32,6 +32,6 @@ class Parser {
     char *readFile(const char *path);
 };
 
-}  // namespace Json
+}  // namespace Crystal::Json
 
 #endif

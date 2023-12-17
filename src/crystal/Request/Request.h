@@ -6,7 +6,7 @@
 
 #include "../Json/Json.h"
 
-namespace http {
+namespace Crystal {
 class Request {
     std::unordered_map<std::string, std::string> valueMap;
 
@@ -38,6 +38,6 @@ class Request {
 
     Json::Json &getJsonData();
 };
-}  // namespace http
+}  // namespace Crystal
 
 #endif

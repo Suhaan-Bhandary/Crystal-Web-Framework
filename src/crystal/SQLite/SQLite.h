@@ -7,7 +7,7 @@
 
 #include "../Logger/Logger.h"
 
-namespace database {
+namespace Crystal::Database {
 class SQLite {
    private:
     sqlite3* db;
@@ -21,6 +21,6 @@ class SQLite {
     static SQLite& getInstance();
     sqlite3* getConnection();
 };
-}  // namespace database
+}  // namespace Crystal::Database
 
 #endif

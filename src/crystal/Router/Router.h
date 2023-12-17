@@ -10,10 +10,10 @@
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 
-typedef void (*controller_type)(http::Request &request,
-                                http::Response &response);
+typedef void (*controller_type)(Crystal::Request &request,
+                                Crystal::Response &response);
 
-namespace http {
+namespace Crystal {
 struct PathTrie {
    public:
     std::string value;
@@ -39,7 +39,7 @@ class Router {
 
    public:
     Router();
-    void route(http::Request &request, http::Response &response);
+    void route(Crystal::Request &request, Crystal::Response &response);
 
     void registerPath(const std::string &method, const std::string &path,
                       controller_type controllerFunction);
@@ -70,6 +70,6 @@ class Router {
     void head(const std::string &path, controller_type controllerFunction);
     void options(const std::string &path, controller_type controllerFunction);
 };
-}  // namespace http
+}  // namespace Crystal
 
 #endif

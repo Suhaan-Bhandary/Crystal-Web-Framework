@@ -22,10 +22,10 @@ void Test::JsonTests() {
 
     // silence errors in the fail test
     for (auto &filename : testWithNULLResult) {
-        Logger::isErrorSilenced = true;
+        Crystal::Logger::isErrorSilenced = true;
         std::string src = "tests/JsonTests/official/fail/" + filename;
-        Json::Json jsonObject(src.c_str(), true);
-        Logger::isErrorSilenced = false;
+        Crystal::Json::Json jsonObject(src.c_str(), true);
+        Crystal::Logger::isErrorSilenced = false;
 
         if (!jsonObject.getData().isNull()) {
             totalTestFails += 1;
@@ -33,12 +33,11 @@ void Test::JsonTests() {
         }
     }
 
-
     std::vector<std::string> testToPass = {"pass1.json", "pass2.json",
                                            "pass3.json"};
     for (auto &filename : testToPass) {
         std::string src = "tests/JsonTests/official/pass/" + filename;
-        Json::Json jsonObject(src.c_str(), true);
+        Crystal::Json::Json jsonObject(src.c_str(), true);
 
         if (jsonObject.getData().isNull()) {
             totalTestFails += 1;
@@ -53,17 +52,18 @@ void Test::JsonTests() {
         std::string jsonValue = "[1,2,3,4,5]";
         int compareArray[] = {1, 2, 3, 4, 5};
 
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
             arrayIsSimilar =
-                jsonObject.getData().get<Json::Array>().size() == arrSize;
+                jsonObject.getData().get<Crystal::Json::Array>().size() ==
+                arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                if (jsonObject.getData().get(i).get<Json::Number>() !=
+                if (jsonObject.getData().get(i).get<Crystal::Json::Number>() !=
                     compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
@@ -86,18 +86,20 @@ void Test::JsonTests() {
         std::string jsonValue = "[1.1,2.5,5.6,3.5,4.4,5.8]";
         double compareArray[] = {1.1, 2.5, 5.6, 3.5, 4.4, 5.8};
 
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
             arrayIsSimilar =
-                jsonObject.getData().get<Json::Array>().size() == arrSize;
+                jsonObject.getData().get<Crystal::Json::Array>().size() ==
+                arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                if (jsonObject.getData().get(i).get<Json::Fraction>() !=
-                    compareArray[i]) {
+                if (jsonObject.getData()
+                        .get(i)
+                        .get<Crystal::Json::Fraction>() != compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
                 }
@@ -119,17 +121,18 @@ void Test::JsonTests() {
         std::string jsonValue = "[\"hello\",\"world\",\",\",\"Json\",\"Here\"]";
         std::string compareArray[] = {"hello", "world", ",", "Json", "Here"};
 
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
 
             arrayIsSimilar =
-                jsonObject.getData().get<Json::Array>().size() == arrSize;
+                jsonObject.getData().get<Crystal::Json::Array>().size() ==
+                arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                if (jsonObject.getData().get(i).get<Json::String>() !=
+                if (jsonObject.getData().get(i).get<Crystal::Json::String>() !=
                     compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
@@ -152,16 +155,17 @@ void Test::JsonTests() {
         std::string jsonValue = "[true,false,false,true,true]";
         bool compareArray[] = {true, false, false, true, true};
 
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // Check if array is similar
             bool arrayIsSimilar = true;
             arrayIsSimilar =
-                jsonObject.getData().get<Json::Array>().size() == arrSize;
+                jsonObject.getData().get<Crystal::Json::Array>().size() ==
+                arrSize;
 
             for (int i = 0; i < arrSize; i++) {
-                if (jsonObject.getData().get(i).get<Json::Bool>() !=
+                if (jsonObject.getData().get(i).get<Crystal::Json::Bool>() !=
                     compareArray[i]) {
                     arrayIsSimilar = false;
                     break;
@@ -181,11 +185,13 @@ void Test::JsonTests() {
     // Object as Json
     {
         std::string jsonValue = "{\"language\": \"C++\", \"number\": 1}";
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() != JsonType::OBJECT ||
-            jsonObject.getData().get("language").get<Json::String>() != "C++" ||
-            jsonObject.getData().get("number").get<Json::Number>() != 1) {
+            jsonObject.getData().get("language").get<Crystal::Json::String>() !=
+                "C++" ||
+            jsonObject.getData().get("number").get<Crystal::Json::Number>() !=
+                1) {
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Object as Json");
         }
@@ -196,12 +202,15 @@ void Test::JsonTests() {
         int arrSize = 5;
         std::string jsonValue = "[1,[1,2,3,[6]],3,4,5]";
 
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
         if (jsonObject.getData().getType() == JsonType::ARRAY) {
             // get the value 6
-            if (jsonObject.getData().get(1).get(3).get(0).get<Json::Number>() !=
-                6) {
+            if (jsonObject.getData()
+                    .get(1)
+                    .get(3)
+                    .get(0)
+                    .get<Crystal::Json::Number>() != 6) {
                 totalTestFails += 1;
                 LOGGER_NOTE("Test Failed: Array Array Json");
             }
@@ -214,11 +223,11 @@ void Test::JsonTests() {
     // Complex Json Object from Json File
     {
         // Read json from a file
-        std::string rootDir = Utils::getCurrentDirectory();
+        std::string rootDir = Crystal::Utils::getCurrentDirectory();
 
         // Creating a json object from the json file
         std::string fileSrc = rootDir + "/tests/JsonTests/testData.json";
-        Json::Json jsonObject(fileSrc.c_str(), true);
+        Crystal::Json::Json jsonObject(fileSrc.c_str(), true);
 
         bool isJsonParsedCorrectly = true;
 
@@ -227,13 +236,16 @@ void Test::JsonTests() {
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.getData().get("language").get<Json::String>() != "C++") {
+            jsonObject.getData().get("language").get<Crystal::Json::String>() !=
+                "C++") {
             isJsonParsedCorrectly = false;
         }
 
         if (isJsonParsedCorrectly &&
-            jsonObject.getData().get("tests").get(0).get<Json::String>() !=
-                "trim") {
+            jsonObject.getData()
+                    .get("tests")
+                    .get(0)
+                    .get<Crystal::Json::String>() != "trim") {
             isJsonParsedCorrectly = false;
         }
 
@@ -241,14 +253,15 @@ void Test::JsonTests() {
             jsonObject.getData()
                     .get("project")
                     .get("creator")
-                    .get<Json::String>() != "Suhaan Ramdas Bhandary") {
+                    .get<Crystal::Json::String>() != "Suhaan Ramdas Bhandary") {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.getData()
-                                             .get("project")
-                                             .get("stars")
-                                             .get<Json::Number>() != 6) {
+        if (isJsonParsedCorrectly &&
+            jsonObject.getData()
+                    .get("project")
+                    .get("stars")
+                    .get<Crystal::Json::Number>() != 6) {
             isJsonParsedCorrectly = false;
         }
 
@@ -260,15 +273,16 @@ void Test::JsonTests() {
             jsonObject.getData()
                     .get("project")
                     .get("isInDevelopment")
-                    .get<Json::Bool>() != true) {
+                    .get<Crystal::Json::Bool>() != true) {
             isJsonParsedCorrectly = false;
         }
 
-        if (isJsonParsedCorrectly && jsonObject.getData()
-                                             .get("systems")
-                                             .get(0)
-                                             .get("name")
-                                             .get<Json::String>() != "ubuntu") {
+        if (isJsonParsedCorrectly &&
+            jsonObject.getData()
+                    .get("systems")
+                    .get(0)
+                    .get("name")
+                    .get<Crystal::Json::String>() != "ubuntu") {
             isJsonParsedCorrectly = false;
         }
 
@@ -280,12 +294,12 @@ void Test::JsonTests() {
 
     // Invalid Json
     {
-        Logger::isErrorSilenced = true;
+        Crystal::Logger::isErrorSilenced = true;
 
         std::string jsonValue = "{\"\"}";
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
-        Logger::isErrorSilenced = false;
+        Crystal::Logger::isErrorSilenced = false;
 
         if (jsonObject.getData().getType() != JsonType::NULL_) {
             totalTestFails += 1;
@@ -296,13 +310,13 @@ void Test::JsonTests() {
     // Test for json object creation
     {
         try {
-            Json::Json jsonObject;
-            jsonObject.getData().set(Json::Object());
+            Crystal::Json::Json jsonObject;
+            jsonObject.getData().set(Crystal::Json::Object());
 
             jsonObject.getData().set("name", "suhaan");
             jsonObject.getData().set("email", "suhaan");
 
-            jsonObject.getData().set("colors", Json::Array());
+            jsonObject.getData().set("colors", Crystal::Json::Array());
 
             jsonObject.getData().get("colors").push("red");
             jsonObject.getData().get("colors").push("blue");
@@ -310,8 +324,10 @@ void Test::JsonTests() {
 
             // LOGGER(jsonObject.getJsonString());
 
-            if (jsonObject.getData().get("colors").get(0).get<Json::String>() !=
-                "red") {
+            if (jsonObject.getData()
+                    .get("colors")
+                    .get(0)
+                    .get<Crystal::Json::String>() != "red") {
                 totalTestFails += 1;
                 LOGGER_NOTE("Test Failed: Json Object Creation");
             }
@@ -326,13 +342,14 @@ void Test::JsonTests() {
     // Try copy constructor
     {
         std::string jsonValue = "{\"number\": 100}";
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
-        Json::Json copiedObject = jsonObject;
+        Crystal::Json::Json copiedObject = jsonObject;
 
         if (copiedObject.getData().getType() != JsonType::OBJECT &&
             copiedObject.getData().contains("number") &&
-            copiedObject.getData().get("number").get<Json::Number>() != 100) {
+            copiedObject.getData().get("number").get<Crystal::Json::Number>() !=
+                100) {
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Copy Constructor");
         }
@@ -341,9 +358,9 @@ void Test::JsonTests() {
     // Try empty object
     {
         std::string jsonValue = "{\n   \n  \n \n}";
-        Json::Json jsonObject(jsonValue.c_str());
+        Crystal::Json::Json jsonObject(jsonValue.c_str());
 
-        if(jsonObject.getData().isNull()){
+        if (jsonObject.getData().isNull()) {
             totalTestFails += 1;
             LOGGER_NOTE("Test Failed: Emtpy Object");
         }

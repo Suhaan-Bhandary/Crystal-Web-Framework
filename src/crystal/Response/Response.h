@@ -7,7 +7,7 @@
 
 #include "../Json/Json.h"
 
-namespace http {
+namespace Crystal {
 
 class Cookie {
    public:
@@ -95,6 +95,6 @@ class Response {
     std::string getETagHeader();
     void setETag(std::string);
 };
-}  // namespace http
+}  // namespace Crystal
 
 #endif

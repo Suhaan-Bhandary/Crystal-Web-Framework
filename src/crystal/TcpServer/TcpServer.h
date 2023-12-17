@@ -9,7 +9,7 @@
 
 #include "../Router/Router.h"
 
-namespace http {
+namespace Crystal {
 class TcpServer {
    private:
     int server_socket;
@@ -27,5 +27,5 @@ class TcpServer {
     void closeServer();
     void startListen();
 };
-}  // namespace http
+}  // namespace Crystal
 #endif

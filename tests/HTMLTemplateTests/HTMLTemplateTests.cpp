@@ -2,17 +2,17 @@
 
 #include "../tests.h"
 
-Json::Json getTestJsonData() {
+Crystal::Json::Json getTestJsonData() {
     // First read json data for the template
     // Read json from a file
-    std::string rootDir = Utils::getCurrentDirectory();
+    std::string rootDir = Crystal::Utils::getCurrentDirectory();
     std::ifstream JsonFile(rootDir +
                            "/tests/HTMLTemplateTests/sampleTemplateJson.json");
 
     if (!JsonFile.is_open()) {
         LOGGER_ERROR("Error in opening file!!");
 
-        Json::Json data("{}");
+        Crystal::Json::Json data("{}");
         return data;
     }
 
@@ -23,7 +23,7 @@ Json::Json getTestJsonData() {
     JsonFile.close();
 
     // Creating a json object from the json file
-    Json::Json data(jsonValue);
+    Crystal::Json::Json data(jsonValue);
     return data;
 }
 
@@ -34,13 +34,13 @@ void Test::HTMLTemplateTests() {
     // TODO: Write test
     {
         // Read the file
-        std::string rootDir = Utils::getCurrentDirectory();
+        std::string rootDir = Crystal::Utils::getCurrentDirectory();
         std::string templateURL =
             rootDir + "/tests/HTMLTemplateTests/sampleTemplate.html";
 
         // Read json data and pass to the template
-        Json::Json data = getTestJsonData();
-        http::HTMLTemplate html_template(templateURL, data);
+        Crystal::Json::Json data = getTestJsonData();
+        Crystal::HTMLTemplate html_template(templateURL, data);
 
         // Get the compiled html
         std::string HTMLContent = html_template.getHtml();

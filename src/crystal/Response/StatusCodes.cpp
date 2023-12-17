@@ -1,6 +1,6 @@
 #include "./Response.h"
 
-const std::unordered_map<int, std::string> http::Response::statusCodes = {
+const std::unordered_map<int, std::string> Crystal::Response::statusCodes = {
     {100, "100 Continue"},
     {101, "101 Switching Protocols"},
     {102, "102 Processing"},

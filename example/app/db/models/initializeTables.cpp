@@ -1,4 +1,5 @@
 #include "initializeTables.h"
+
 #include "crystal.h"
 
 void createVisitorsTable(sqlite3 *db) {
@@ -16,7 +17,7 @@ void createVisitorsTable(sqlite3 *db) {
 }
 
 void database::initializeTables() {
-    database::SQLite &databaseInstance = database::SQLite::getInstance();
+    auto &databaseInstance = Crystal::Database::SQLite::getInstance();
     sqlite3 *db = databaseInstance.getConnection();
 
     createVisitorsTable(db);

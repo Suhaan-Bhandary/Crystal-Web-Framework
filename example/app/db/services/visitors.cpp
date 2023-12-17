@@ -1,9 +1,10 @@
-#include "crystal.h"
 #include "visitors.h"
+
+#include "crystal.h"
 
 namespace database::services {
 int getVisitorsCount() {
-    database::SQLite& databaseInstance = database::SQLite::getInstance();
+    auto& databaseInstance = Crystal::Database::SQLite::getInstance();
     sqlite3* db = databaseInstance.getConnection();
 
     int count = -1;
@@ -27,7 +28,7 @@ int getVisitorsCount() {
     return count;
 }
 void addVisitor() {
-    database::SQLite& databaseInstance = database::SQLite::getInstance();
+    auto& databaseInstance = Crystal::Database::SQLite::getInstance();
     sqlite3* db = databaseInstance.getConnection();
 
     const std::string insertSQL =

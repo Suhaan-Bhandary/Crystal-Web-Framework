@@ -5,9 +5,9 @@
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 
-namespace Controller {
-void defaultNotFound(http::Request &request, http::Response &response);
-void getPublicFile(http::Request &request, http::Response &response);
-}  // namespace Controller
+namespace Crystal::Controller {
+void defaultNotFound(Crystal::Request &request, Crystal::Response &response);
+void getPublicFile(Crystal::Request &request, Crystal::Response &response);
+}  // namespace Crystal::Controller
 
 #endif

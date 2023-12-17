@@ -2,17 +2,19 @@
 #define INCLUDED_MAIN_CONTROLLER
 
 #include <iostream>
+
 #include "crystal.h"
 
 namespace Controller {
-void getHome(http::Request &request, http::Response &response);
-void getUser(http::Request &request, http::Response &response);
-void getUserChat(http::Request &request, http::Response &response);
-void getNotFound(http::Request &request, http::Response &response);
-void saveUserData(http::Request &request, http::Response &response);
-void redirectUserToGoogle(http::Request &request, http::Response &response);
-void getXOGame(http::Request &request, http::Response &response);
-void getHealth(http::Request &request, http::Response &response);
+void getHome(Crystal::Request &request, Crystal::Response &response);
+void getUser(Crystal::Request &request, Crystal::Response &response);
+void getUserChat(Crystal::Request &request, Crystal::Response &response);
+void getNotFound(Crystal::Request &request, Crystal::Response &response);
+void saveUserData(Crystal::Request &request, Crystal::Response &response);
+void redirectUserToGoogle(Crystal::Request &request,
+                          Crystal::Response &response);
+void getXOGame(Crystal::Request &request, Crystal::Response &response);
+void getHealth(Crystal::Request &request, Crystal::Response &response);
 };  // namespace Controller
 
 #endif

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace Utils {
+namespace Crystal::Utils {
 std::string trim(const std::string &original);
 std::vector<std::string> split(const std::string &sentence,
                                const std::string &separator);
@@ -20,6 +20,6 @@ std::string getFileETag(const std::string &filePath);
 
 // Function to Clean Query String from special char
 std::string cleanEncodedString(std::string &value);
-}  // namespace Utils
+}  // namespace Crystal::Utils
 
 #endif

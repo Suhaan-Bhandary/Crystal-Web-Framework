@@ -17,7 +17,7 @@ enum JsonType {
     NULL_,
 };
 
-namespace Json {
+namespace Crystal::Json {
 // Forward declaration of Node
 struct Node;
 
@@ -100,8 +100,9 @@ struct Node {
 
    private:
     JsonType type;
-    std::variant<String, Number, UnsignedNumber, Fraction, Bool, Array, Object> value;
+    std::variant<String, Number, UnsignedNumber, Fraction, Bool, Array, Object>
+        value;
 };
-}  // namespace Json
+}  // namespace Crystal::Json
 
 #endif

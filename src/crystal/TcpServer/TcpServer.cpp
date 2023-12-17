@@ -11,7 +11,7 @@
 // Define a size for the request buffer
 #define REQUEST_Buffer_SIZE 2048
 
-namespace http {
+namespace Crystal {
 TcpServer::TcpServer(const std::string &ip_address, int port)
     : server_ip_address(ip_address),
       server_port(port),
@@ -130,8 +130,8 @@ void TcpServer::startListen() {
             continue;
         }
 
-        http::Request request = http::Request(requestBuffer);
-        http::Response response = http::Response(client_socket);
+        Crystal::Request request = Crystal::Request(requestBuffer);
+        Crystal::Response response = Crystal::Response(client_socket);
 
         router.route(request, response);
 
@@ -139,4 +139,4 @@ void TcpServer::startListen() {
         close(client_socket);
     }
 }
-}  // namespace http
+}  // namespace Crystal

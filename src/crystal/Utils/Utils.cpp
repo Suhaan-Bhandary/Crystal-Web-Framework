@@ -8,7 +8,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace Utils {
+namespace Crystal::Utils {
 // The trim is used to all \r\n, \n and " " from both sides
 std::string trim(const std::string &original) {
     int n = original.size();
@@ -165,4 +165,4 @@ std::string cleanEncodedString(std::string &value) {
 
     return result;
 }
-}  // namespace Utils
+}  // namespace Crystal::Utils

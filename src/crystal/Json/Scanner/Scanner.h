@@ -6,12 +6,12 @@
 
 #include "../Token/Token.h"
 
-namespace Json {
+namespace Crystal::Json {
 class Scanner {
    public:
     Scanner() = delete;
     Scanner(const char* source);
-    
+
     Scanner(const Scanner& otherScanner);
     Scanner& operator=(const Scanner& otherScanner);
 
@@ -33,7 +33,8 @@ class Scanner {
     Token numberToken(char firstChar);
     Token identifierToken();
 
-    // trims the characters such as spaces and newline and resets the start and current
+    // trims the characters such as spaces and newline and resets the start and
+    // current
     void trimCharacters();
 
     // Function to create tokens
@@ -52,6 +53,6 @@ class Scanner {
     bool isNumberStart(char ch);
     bool isAlpha(char ch);
 };
-}  // namespace Json
+}  // namespace Crystal::Json
 
 #endif

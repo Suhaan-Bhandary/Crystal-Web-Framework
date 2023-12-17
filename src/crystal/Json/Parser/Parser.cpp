@@ -4,10 +4,10 @@
 #include "../Scanner/Scanner.h"
 #include "../Token/Token.h"
 
-using Token = Json::Token;
-using Scanner = Json::Scanner;
+using Token = Crystal::Json::Token;
+using Scanner = Crystal::Json::Scanner;
 
-Json::Parser::Parser(const char *jsonString, bool isFile) {
+Crystal::Json::Parser::Parser(const char *jsonString, bool isFile) {
     // Initialize variables
     this->isFile = isFile;
 
@@ -21,7 +21,7 @@ Json::Parser::Parser(const char *jsonString, bool isFile) {
     scanner = new Scanner(source);
 }
 
-Json::Parser::~Parser() {
+Crystal::Json::Parser::~Parser() {
     delete scanner;
 
     // freeing the memory allocated by malloc if file was taken as input
@@ -31,45 +31,47 @@ Json::Parser::~Parser() {
 }
 
 // Utility Function to display string for a token
-inline std::string tokenToString(Json::Token &token) {
+inline std::string tokenToString(Crystal::Json::Token &token) {
     switch (token.type) {
-        case Json::TokenType::COMMA:
+        case Crystal::Json::TokenType::COMMA:
             return "COMMA";
-        case Json::TokenType::COLON:
+        case Crystal::Json::TokenType::COLON:
             return "COLON";
-        case Json::TokenType::OPEN_CURL_BRACKET:
+        case Crystal::Json::TokenType::OPEN_CURL_BRACKET:
             return "OPEN_CURL_BRACKET";
-        case Json::TokenType::CLOSE_CURL_BRACKET:
+        case Crystal::Json::TokenType::CLOSE_CURL_BRACKET:
             return "CLOSE_CURL_BRACKET";
-        case Json::TokenType::OPEN_SQUARE_BRACKET:
+        case Crystal::Json::TokenType::OPEN_SQUARE_BRACKET:
             return "OPEN_SQUARE_BRACKET";
-        case Json::TokenType::CLOSE_SQUARE_BRACKET:
+        case Crystal::Json::TokenType::CLOSE_SQUARE_BRACKET:
             return "CLOSE_SQUARE_BRACKET";
-        case Json::TokenType::STRING:
-            return "STRING " + std::get<Json::String>(token.literal);
-        case Json::TokenType::NUMBER:
-            return "NUMBER " +
-                   std::to_string(std::get<Json::Number>(token.literal));
-        case Json::TokenType::UNSIGNED_NUMBER:
+        case Crystal::Json::TokenType::STRING:
+            return "STRING " + std::get<Crystal::Json::String>(token.literal);
+        case Crystal::Json::TokenType::NUMBER:
+            return "NUMBER " + std::to_string(std::get<Crystal::Json::Number>(
+                                   token.literal));
+        case Crystal::Json::TokenType::UNSIGNED_NUMBER:
             return "UNSIGNED_NUMBER " +
-                   std::to_string(std::get<Json::UnsignedNumber>(token.literal));
-        case Json::TokenType::FRACTION:
+                   std::to_string(
+                       std::get<Crystal::Json::UnsignedNumber>(token.literal));
+        case Crystal::Json::TokenType::FRACTION:
             return "FRACTION " +
-                   std::to_string(std::get<Json::Fraction>(token.literal));
-        case Json::TokenType::TRUE:
+                   std::to_string(
+                       std::get<Crystal::Json::Fraction>(token.literal));
+        case Crystal::Json::TokenType::TRUE:
             return "TRUE";
-        case Json::TokenType::FALSE:
+        case Crystal::Json::TokenType::FALSE:
             return "FALSE";
-        case Json::TokenType::NULL_TOKEN:
+        case Crystal::Json::TokenType::NULL_TOKEN:
             return "NULL_TOKEN";
-        case Json::TokenType::EOF_TOKEN:
+        case Crystal::Json::TokenType::EOF_TOKEN:
             return "EOF_TOKEN";
         default:
             return "";
     }
 }
 
-Json::Node *Json::Parser::parse() {
+Crystal::Json::Node *Crystal::Json::Parser::parse() {
     // If tokens is empty then an error has occurred
     Token firstToken = peek();
     if (firstToken.type == INVALID) {
@@ -99,7 +101,7 @@ Json::Node *Json::Parser::parse() {
     return node;
 }
 
-Json::Node *Json::Parser::parseTokens() {
+Crystal::Json::Node *Crystal::Json::Parser::parseTokens() {
     auto token = advance();
 
     switch (token.type) {
@@ -135,7 +137,7 @@ Json::Node *Json::Parser::parseTokens() {
     }
 }
 
-Json::Node *Json::Parser::parseObjectTokens() {
+Crystal::Json::Node *Crystal::Json::Parser::parseObjectTokens() {
     // If the first token is } then it is an empty object
     if (peek().type == CLOSE_CURL_BRACKET) {
         advance();
@@ -203,7 +205,7 @@ Json::Node *Json::Parser::parseObjectTokens() {
     return node;
 }
 
-Json::Node *Json::Parser::parseArrayTokens() {
+Crystal::Json::Node *Crystal::Json::Parser::parseArrayTokens() {
     // If the first token is } then it is an empty object
     if (peek().type == CLOSE_SQUARE_BRACKET) {
         advance();
@@ -248,16 +250,12 @@ Json::Node *Json::Parser::parseArrayTokens() {
 }
 
 // Util functions
-Token Json::Parser::peek() {
-    return scanner->peekToken();
-}
+Token Crystal::Json::Parser::peek() { return scanner->peekToken(); }
 
 // advance if token present, else Returning EOF if is at end
-Token Json::Parser::advance() {
-    return scanner->advanceToken();
-}
+Token Crystal::Json::Parser::advance() { return scanner->advanceToken(); }
 
-char *Json::Parser::readFile(const char *path) {
+char *Crystal::Json::Parser::readFile(const char *path) {
     FILE *file = fopen(path, "rb");
 
     fseek(file, 0L, SEEK_END);

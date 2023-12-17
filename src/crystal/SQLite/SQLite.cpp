@@ -4,7 +4,7 @@
 
 #include "../Logger/Logger.h"
 
-namespace database {
+namespace Crystal::Database {
 std::string SQLite::dbPath = "";
 
 SQLite::SQLite() {
@@ -37,4 +37,4 @@ SQLite& SQLite::getInstance() {
 // To give access to private member db
 sqlite3* SQLite::getConnection() { return db; }
 
-}  // namespace database
+}  // namespace Crystal::Database

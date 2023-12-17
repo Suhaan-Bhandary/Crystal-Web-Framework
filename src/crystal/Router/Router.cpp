@@ -6,20 +6,21 @@
 #include "../Response/Response.h"
 #include "../Utils/Utils.h"
 
-typedef void (*controller_type)(http::Request &request,
-                                http::Response &response);
+typedef void (*controller_type)(Crystal::Request &request,
+                                Crystal::Response &response);
 
 // Constructor
-http::Router::Router() {
+Crystal::Router::Router() {
     // Initialize the root
-    root = new http::PathTrie("ROOT", 0);
+    root = new Crystal::PathTrie("ROOT", 0);
 
     // Register public files
     registerPublicPath();
 }
 
 // The function will contain the routing logic for the application
-void http::Router::route(http::Request &request, http::Response &response) {
+void Crystal::Router::route(Crystal::Request &request,
+                            Crystal::Response &response) {
     // LOGGER("Request:", request.getValue("method"), request.getValue("path"));
 
     std::string method = request.getValue("method");
@@ -39,9 +40,9 @@ void http::Router::route(http::Request &request, http::Response &response) {
 }
 
 // Function to register a path with controller
-void http::Router::registerPath(const std::string &method,
-                                const std::string &path,
-                                controller_type controllerFunction) {
+void Crystal::Router::registerPath(const std::string &method,
+                                   const std::string &path,
+                                   controller_type controllerFunction) {
     // Special path when no other path matches
     if (path == "*") {
         notFoundRoutes[method] = controllerFunction;
@@ -52,18 +53,18 @@ void http::Router::registerPath(const std::string &method,
     std::string triePath = method + path;
 
     // Insert the path in the trie
-    std::vector<std::string> tokens = Utils::split(triePath, "/");
+    std::vector<std::string> tokens = Crystal::Utils::split(triePath, "/");
 
     // remove the last empty ones if any
     while (tokens.size() > 0 && tokens.back() == "") tokens.pop_back();
 
-    http::PathTrie *curr = root;
+    Crystal::PathTrie *curr = root;
     int weight = 0;
     for (auto token : tokens) {
         if (!token.empty() && token[0] == ':') {
             if (curr->pathParamChildrens.count(token) == 0) {
                 curr->pathParamChildrens[token] =
-                    new http::PathTrie(token, weight);
+                    new Crystal::PathTrie(token, weight);
             }
             curr = curr->pathParamChildrens[token];
         } else {
@@ -72,7 +73,7 @@ void http::Router::registerPath(const std::string &method,
 
             if (curr->normalChildrens.count(token) == 0) {
                 curr->normalChildrens[token] =
-                    new http::PathTrie(token, weight);
+                    new Crystal::PathTrie(token, weight);
             }
             curr = curr->normalChildrens[token];
         }
@@ -82,49 +83,49 @@ void http::Router::registerPath(const std::string &method,
     curr->controllerFunction = controllerFunction;
 }
 
-void http::Router::get(const std::string &path,
-                       controller_type controllerFunction) {
+void Crystal::Router::get(const std::string &path,
+                          controller_type controllerFunction) {
     registerPath("GET", path, controllerFunction);
 }
 
-void http::Router::post(const std::string &path,
-                        controller_type controllerFunction) {
+void Crystal::Router::post(const std::string &path,
+                           controller_type controllerFunction) {
     registerPath("POST", path, controllerFunction);
 }
 
-void http::Router::put(const std::string &path,
-                       controller_type controllerFunction) {
+void Crystal::Router::put(const std::string &path,
+                          controller_type controllerFunction) {
     registerPath("PUT", path, controllerFunction);
 }
 
-void http::Router::patch(const std::string &path,
-                         controller_type controllerFunction) {
+void Crystal::Router::patch(const std::string &path,
+                            controller_type controllerFunction) {
     registerPath("PATCH", path, controllerFunction);
 }
 
-void http::Router::delete_(const std::string &path,
-                           controller_type controllerFunction) {
+void Crystal::Router::delete_(const std::string &path,
+                              controller_type controllerFunction) {
     registerPath("DELETE", path, controllerFunction);
 }
 
-void http::Router::head(const std::string &path,
-                        controller_type controllerFunction) {
+void Crystal::Router::head(const std::string &path,
+                           controller_type controllerFunction) {
     registerPath("HEAD", path, controllerFunction);
 }
 
-void http::Router::options(const std::string &path,
-                           controller_type controllerFunction) {
+void Crystal::Router::options(const std::string &path,
+                              controller_type controllerFunction) {
     registerPath("OPTIONS", path, controllerFunction);
 }
 
-void http::Router::displayAllRoutes() {
+void Crystal::Router::displayAllRoutes() {
     LOGGER_MINIMAL("\n----------------------- Paths -----------------------");
     displayAllRoutesCallback(root, "", true);
     LOGGER_MINIMAL("-----------------------------------------------------");
 }
 
-void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
-                                            bool isStart = false) {
+void Crystal::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
+                                               bool isStart = false) {
     if (node->isEnd) {
         LOGGER_MINIMAL(path + node->value + " " + std::to_string(node->weight));
     }
@@ -141,17 +142,17 @@ void http::Router::displayAllRoutesCallback(PathTrie *node, std::string path,
     }
 }
 
-controller_type http::Router::getControllerFromPathTrie(
+controller_type Crystal::Router::getControllerFromPathTrie(
     const std::string &method, const std::string &path,
     std::unordered_map<std::string, std::string> &pathParams) {
     std::string triePath = method + path;
 
     // get tokens for the trie path
-    std::vector<std::string> tokens = Utils::split(triePath, "/");
+    std::vector<std::string> tokens = Crystal::Utils::split(triePath, "/");
 
     // Clean tokens
     for (int i = 0; i < tokens.size(); i++) {
-        tokens[i] = Utils::cleanEncodedString(tokens[i]);
+        tokens[i] = Crystal::Utils::cleanEncodedString(tokens[i]);
     }
 
     // remove the last empty ones if any
@@ -169,12 +170,13 @@ controller_type http::Router::getControllerFromPathTrie(
     return getNotFoundRoute(method);
 }
 
-controller_type http::Router::getNotFoundRoute(const std::string &method) {
-    if (notFoundRoutes.count(method) == 0) return Controller::defaultNotFound;
+controller_type Crystal::Router::getNotFoundRoute(const std::string &method) {
+    if (notFoundRoutes.count(method) == 0)
+        return Crystal::Controller::defaultNotFound;
     return notFoundRoutes[method];
 }
 
-void http::Router::getControllerFromPathTrieCallback(
+void Crystal::Router::getControllerFromPathTrieCallback(
     int idx, const std::vector<std::string> &tokens, PathTrie *node,
     controller_type &controllerFunction, int &minWeight,
     std::unordered_map<std::string, std::string> &pathParams,
@@ -209,27 +211,27 @@ void http::Router::getControllerFromPathTrieCallback(
     }
 }
 
-void http::Router::registerPublicPath() {
+void Crystal::Router::registerPublicPath() {
     LOGGER_MINIMAL("\nRegistering Public Paths");
     std::vector<std::string> publicFilesPath;
     std::string path =
-        Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH;
-    Utils::listFiles(path, publicFilesPath);
+        Crystal::Utils::getCurrentDirectory() + Crystal::Config::PUBLIC_DIR_PATH;
+    Crystal::Utils::listFiles(path, publicFilesPath);
 
     // register each file
     for (auto filePath : publicFilesPath) {
-        std::vector<std::string> tokens = Utils::split(filePath, path);
+        std::vector<std::string> tokens = Crystal::Utils::split(filePath, path);
         if (tokens.size() < 2) continue;
 
         std::string relativePath = "/" + tokens[1];
         LOGGER_MINIMAL(relativePath);
 
-        registerPath("GET", relativePath, Controller::getPublicFile);
+        registerPath("GET", relativePath, Crystal::Controller::getPublicFile);
     }
 }
 
 // Trie Definition
-http::PathTrie::PathTrie(const std::string &value, int weight) {
+Crystal::PathTrie::PathTrie(const std::string &value, int weight) {
     this->value = value;
     this->isEnd = false;
     this->weight = weight;

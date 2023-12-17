@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-void Logger::log(const std::string& message) {
+void Crystal::Logger::log(const std::string& message) {
     std::cout << message << std::endl;
 }
 
 // TODO: output file
-std::string Logger::__filename = "";
+std::string Crystal::Logger::__filename = "";
 
 // Variable to silence errors
-bool Logger::isErrorSilenced = false;
+bool Crystal::Logger::isErrorSilenced = false;

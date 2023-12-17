@@ -7,7 +7,7 @@
 
 #include "../Json/Json.h"
 
-namespace http {
+namespace Crystal {
 class HTMLTemplate {
     // Compiled html will be stored in this variable
     std::string compiledHTML;
@@ -29,6 +29,6 @@ class HTMLTemplate {
     // Function returns the compiled html file from the template
     std::string getHtml();
 };
-}  // namespace http
+}  // namespace Crystal
 
 #endif

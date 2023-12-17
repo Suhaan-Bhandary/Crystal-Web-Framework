@@ -7,22 +7,22 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "../Config/Config.h"
 #include "../HTMLTemplate/HTMLTemplate.h"
 #include "../Json/Json.h"
 #include "../Logger/Logger.h"
 #include "../Utils/Utils.h"
-#include "../Config/Config.h"
 
-http::Response::Response(int client_socket) {
+Crystal::Response::Response(int client_socket) {
     this->client_socket = client_socket;
 }
 
-void http::Response::sendHTML(const std::string& html) {
+void Crystal::Response::sendHTML(const std::string& html) {
     // Send Response
     sendResponse(html, "text/html");
 }
 
-void http::Response::send404() {
+void Crystal::Response::send404() {
     std::string response_body = "Page Not Found!!";
 
     // Send Response
@@ -30,14 +30,15 @@ void http::Response::send404() {
     sendResponse(response_body, "text/plain");
 }
 
-void http::Response::sendTemplate(const std::string& templateName,
-                                  Json::Json& data) {
+void Crystal::Response::sendTemplate(const std::string& templateName,
+                                     Json::Json& data) {
     // Read the file
-    std::string rootDir = Utils::getCurrentDirectory();
-    std::string templateURL = rootDir + http::Config::TEMPLATE_DIR_PATH + templateName;
+    std::string rootDir = Crystal::Utils::getCurrentDirectory();
+    std::string templateURL =
+        rootDir + Crystal::Config::TEMPLATE_DIR_PATH + templateName;
 
     // Create template object
-    http::HTMLTemplate html_template(templateURL, data);
+    Crystal::HTMLTemplate html_template(templateURL, data);
 
     std::string HTMLContent = html_template.getHtml();
 
@@ -45,12 +46,14 @@ void http::Response::sendTemplate(const std::string& templateName,
     sendResponse(HTMLContent, "text/html");
 }
 
-void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
-    std::string absoluteFilePath =
-        Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH + relativePathToPublic;
+void Crystal::Response::sendPublicFile(
+    const std::string& relativePathToPublic) {
+    std::string absoluteFilePath = Crystal::Utils::getCurrentDirectory() +
+                                   Crystal::Config::PUBLIC_DIR_PATH +
+                                   relativePathToPublic;
 
     // Find the type of the file
-    std::string extension = Utils::split(relativePathToPublic, ".")[1];
+    std::string extension = Crystal::Utils::split(relativePathToPublic, ".")[1];
 
     std::string response_type = "application/octet-stream";
 
@@ -79,13 +82,13 @@ void http::Response::sendPublicFile(const std::string& relativePathToPublic) {
     sendResponse(response_body, response_type);
 }
 
-void http::Response::sendJson(const std::string& jsonString) {
+void Crystal::Response::sendJson(const std::string& jsonString) {
     std::string response_type = "application/json";
     sendResponse(jsonString, response_type);
 }
 
-void http::Response::sendResponse(const std::string& response_body,
-                                  const std::string& response_type) {
+void Crystal::Response::sendResponse(const std::string& response_body,
+                                     const std::string& response_type) {
     // Get the status code, if not found out of range exception
     std::string response_status = statusCodes.at(statusCode);
 
@@ -106,9 +109,9 @@ void http::Response::sendResponse(const std::string& response_body,
     send(client_socket, httpResponse.c_str(), httpResponse.length(), 0);
 }
 
-void http::Response::setStatusCode(int status) { statusCode = status; }
+void Crystal::Response::setStatusCode(int status) { statusCode = status; }
 
-void http::Response::redirect(const std::string& redirect_url) {
+void Crystal::Response::redirect(const std::string& redirect_url) {
     std::string httpResponse = "";
 
     // Add header to define redirect
@@ -124,13 +127,13 @@ void http::Response::redirect(const std::string& redirect_url) {
 }
 
 // Cookie function
-void http::Response::setCookie(const std::string& name,
-                               const std::string& value,
-                               const std::string& expires,
-                               const std::string& domain, bool isHttpOnly,
-                               bool isSecure, bool isPartitioned,
-                               const std::string& path,
-                               const std::string& sameSite) {
+void Crystal::Response::setCookie(const std::string& name,
+                                  const std::string& value,
+                                  const std::string& expires,
+                                  const std::string& domain, bool isHttpOnly,
+                                  bool isSecure, bool isPartitioned,
+                                  const std::string& path,
+                                  const std::string& sameSite) {
     // Creating a cookie
     Cookie cookie(name, value, expires, 0, domain, isHttpOnly, isSecure,
                   isPartitioned, path, sameSite);
@@ -143,12 +146,12 @@ void http::Response::setCookie(const std::string& name,
     cookieData.insert({name, cookie});
 }
 
-void http::Response::setCookie(const std::string& name,
-                               const std::string& value, int maxAgeInSeconds,
-                               const std::string& domain, bool isHttpOnly,
-                               bool isSecure, bool isPartitioned,
-                               const std::string& path,
-                               const std::string& sameSite) {
+void Crystal::Response::setCookie(const std::string& name,
+                                  const std::string& value, int maxAgeInSeconds,
+                                  const std::string& domain, bool isHttpOnly,
+                                  bool isSecure, bool isPartitioned,
+                                  const std::string& path,
+                                  const std::string& sameSite) {
     Cookie cookie(name, value, "", maxAgeInSeconds, domain, isHttpOnly,
                   isSecure, isPartitioned, path, sameSite);
 
@@ -160,11 +163,11 @@ void http::Response::setCookie(const std::string& name,
     cookieData.insert({name, cookie});
 }
 
-void http::Response::clearCookie(const std::string& name) {
+void Crystal::Response::clearCookie(const std::string& name) {
     setCookie(name, "", 0);
 }
 
-std::string http::Response::getCookiesHeader() {
+std::string Crystal::Response::getCookiesHeader() {
     std::string cookieHeader = "";
 
     for (auto p : cookieData) {
@@ -175,11 +178,11 @@ std::string http::Response::getCookiesHeader() {
 }
 
 // Cookie
-http::Cookie::Cookie(const std::string& name, const std::string& value,
-                     const std::string& expires, int maxAge,
-                     const std::string& domain, bool isHttpOnly, bool isSecure,
-                     bool isPartitioned, const std::string& path,
-                     const std::string& sameSite)
+Crystal::Cookie::Cookie(const std::string& name, const std::string& value,
+                        const std::string& expires, int maxAge,
+                        const std::string& domain, bool isHttpOnly,
+                        bool isSecure, bool isPartitioned,
+                        const std::string& path, const std::string& sameSite)
     : name(name),
       value(value),
       expires(expires),
@@ -191,7 +194,7 @@ http::Cookie::Cookie(const std::string& name, const std::string& value,
       path(path),
       sameSite(sameSite) {}
 
-std::string http::Cookie::getHeader() {
+std::string Crystal::Cookie::getHeader() {
     std::string header = "Set-Cookie: ";
 
     std::string separator = "; ";
@@ -250,9 +253,9 @@ std::string http::Cookie::getHeader() {
 }
 
 // Etag
-std::string http::Response::getETagHeader() {
+std::string Crystal::Response::getETagHeader() {
     if (eTag == "") return "";
     return "ETag: " + eTag + "\r\n";
 }
 
-void http::Response::setETag(std::string eTagValue) { eTag = eTagValue; }
+void Crystal::Response::setETag(std::string eTagValue) { eTag = eTagValue; }

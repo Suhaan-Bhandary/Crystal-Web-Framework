@@ -4,12 +4,12 @@
 
 #include <string>
 
-namespace http {
+namespace Crystal {
 class Config {
-public:
+   public:
     static std::string TEMPLATE_DIR_PATH;
     static std::string PUBLIC_DIR_PATH;
 };
-}  // namespace http
+}  // namespace Crystal
 
 #endif
