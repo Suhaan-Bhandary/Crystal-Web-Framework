@@ -13,7 +13,10 @@
 
 namespace http {
 TcpServer::TcpServer(const std::string &ip_address, int port)
-    : server_ip_address(ip_address), server_port(port), server_socketAddress() {
+    : server_ip_address(ip_address),
+      server_port(port),
+      server_socketAddress(),
+      router() {
     // Creating  a socket address to bind with socket
     server_socketAddress.sin_family = AF_INET;
     server_socketAddress.sin_port = htons(server_port);
@@ -80,8 +83,7 @@ void TcpServer::startListen() {
                 (std::string)inet_ntoa(server_socketAddress.sin_addr));
     LOGGER_NOTE("Port: " + std::to_string(server_port));
 
-    // Router to handle request
-    http::Router router = http::Router();
+    // Using to display the route which are registered
     router.displayAllRoutes();
 
     // Infinite loop to keep on listening

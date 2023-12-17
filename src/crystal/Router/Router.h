@@ -39,7 +39,6 @@ class Router {
 
    public:
     Router();
-    void userRouterPaths();
     void route(http::Request &request, http::Response &response);
 
     void registerPath(const std::string &method, const std::string &path,
@@ -61,6 +60,15 @@ class Router {
     controller_type getNotFoundRoute(const std::string &method);
 
     void registerPublicPath();
+
+    // Methods to register paths in RestApi
+    void get(const std::string &path, controller_type controllerFunction);
+    void post(const std::string &path, controller_type controllerFunction);
+    void put(const std::string &path, controller_type controllerFunction);
+    void patch(const std::string &path, controller_type controllerFunction);
+    void delete_(const std::string &path, controller_type controllerFunction);
+    void head(const std::string &path, controller_type controllerFunction);
+    void options(const std::string &path, controller_type controllerFunction);
 };
 }  // namespace http
 

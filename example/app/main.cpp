@@ -1,5 +1,6 @@
-#include "crystal.h"
+#include "./Router/UserRouter.h"
 #include "./db/models/initializeTables.h"
+#include "crystal.h"
 
 int main() {
     // Set public and template folder path relative to the root folder
@@ -14,6 +15,9 @@ int main() {
 
     // Creating TCP/IP Server
     http::TcpServer server = http::TcpServer("127.0.0.1", 8080);
+    userRouterPaths(server.router);
+
+    // Start the server
     server.startListen();
 
     return 0;

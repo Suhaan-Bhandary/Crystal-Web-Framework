@@ -1,10 +1,10 @@
 #include "./Router.h"
 
+#include "../Config/Config.h"
 #include "../Logger/Logger.h"
 #include "../Request/Request.h"
 #include "../Response/Response.h"
 #include "../Utils/Utils.h"
-#include "../Config/Config.h"
 
 typedef void (*controller_type)(http::Request &request,
                                 http::Response &response);
@@ -16,9 +16,6 @@ http::Router::Router() {
 
     // Register public files
     registerPublicPath();
-
-    // Register path
-    userRouterPaths();
 }
 
 // The function will contain the routing logic for the application
@@ -83,6 +80,41 @@ void http::Router::registerPath(const std::string &method,
 
     curr->isEnd = true;
     curr->controllerFunction = controllerFunction;
+}
+
+void http::Router::get(const std::string &path,
+                       controller_type controllerFunction) {
+    registerPath("GET", path, controllerFunction);
+}
+
+void http::Router::post(const std::string &path,
+                        controller_type controllerFunction) {
+    registerPath("POST", path, controllerFunction);
+}
+
+void http::Router::put(const std::string &path,
+                       controller_type controllerFunction) {
+    registerPath("PUT", path, controllerFunction);
+}
+
+void http::Router::patch(const std::string &path,
+                         controller_type controllerFunction) {
+    registerPath("PATCH", path, controllerFunction);
+}
+
+void http::Router::delete_(const std::string &path,
+                           controller_type controllerFunction) {
+    registerPath("DELETE", path, controllerFunction);
+}
+
+void http::Router::head(const std::string &path,
+                        controller_type controllerFunction) {
+    registerPath("HEAD", path, controllerFunction);
+}
+
+void http::Router::options(const std::string &path,
+                           controller_type controllerFunction) {
+    registerPath("OPTIONS", path, controllerFunction);
 }
 
 void http::Router::displayAllRoutes() {
@@ -180,7 +212,8 @@ void http::Router::getControllerFromPathTrieCallback(
 void http::Router::registerPublicPath() {
     LOGGER_MINIMAL("\nRegistering Public Paths");
     std::vector<std::string> publicFilesPath;
-    std::string path = Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH;
+    std::string path =
+        Utils::getCurrentDirectory() + http::Config::PUBLIC_DIR_PATH;
     Utils::listFiles(path, publicFilesPath);
 
     // register each file

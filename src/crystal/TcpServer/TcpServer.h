@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include "../Router/Router.h"
+
 namespace http {
 class TcpServer {
    private:
@@ -16,6 +18,8 @@ class TcpServer {
     struct sockaddr_in server_socketAddress;
 
    public:
+    Router router;
+
     TcpServer(const std::string &ip_address, int port);
     ~TcpServer();
 
