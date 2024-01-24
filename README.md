@@ -44,31 +44,33 @@ Currently, this project only runs on Linux, but I plan to add support for Window
 Clone the project
 
 ```bash
-  git clone https://github.com/Suhaan-Bhandary/HTTP-Server-CPP
+  git clone https://github.com/Suhaan-Bhandary/Crystal-Web-Framework
 ```
 
 Go to the project directory
 
 ```bash
-  cd HTTP-Server-CPP
+  cd Crystal-Web-Framework
 ```
 
-Run Tests
+Install Dependencies
 
 ```bash
-  make testProject
+  sudo ./ubuntu_setup.sh # select option 1 for install
 ```
 
 Compile the Server
 
 ```bash
-  make
+  rm -rf ./build
+  ./scripts/debug_configure.sh
+  ./scripts/build.sh
 ```
 
 Run the Server
 
 ```bash
-  ./server
+  ./scripts/run_example.sh
 ```
 
 You will see the below output after running
@@ -101,7 +103,10 @@ To run the server on Docker
 To run tests, run the following command
 
 ```bash
-  make testProject
+  rm -rf ./build
+  ./scripts/debug_configure.sh
+  ./scripts/build.sh
+  ./scripts/run_test.sh
 ```
 
 ## Usage/Examples
