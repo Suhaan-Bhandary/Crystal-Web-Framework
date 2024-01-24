@@ -1,7 +1,8 @@
 {
   "outputFileName": "httpScratchServer",
   "scripts": {
-    "clean": "rm -rf build && ./scripts/debug_configure.sh",
+    "clean": "rm -rf build",
+    "configure": "./scripts/debug_configure.sh",
     "build": "./scripts/build.sh",
     "run": "./scripts/run_example.sh"
   },

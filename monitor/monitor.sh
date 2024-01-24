@@ -4,6 +4,7 @@ server_output=$(jq -r '.outputFileName' .monitor)
 serverStartCommand=$(jq -r '.scripts.run' .monitor)
 buildCommand=$(jq -r '.scripts.build' .monitor)
 cleanCommand=$(jq -r '.scripts.clean' .monitor)
+configureCommand=$(jq -r '.scripts.configure' .monitor)
 excludeList=($(jq -r '.exclude[]' .monitor))
 
 # Defining colors
@@ -86,6 +87,12 @@ function restartServer() {
 function monitor() {
     echo -e "${BLUE}Monitoring Started${NC}"
 
+    # Check if build is present or not
+    if [ ! -d "./build" ]; then
+        $configureCommand
+    fi
+
+
     echo $'\n'
     createServer
     echo $'\n'
@@ -122,6 +129,7 @@ while getopts 'c' OPTION; do
     case "$OPTION" in
     c)
         $cleanCommand
+        $configureCommand
         ;;
     \?) # Invalid option
         echo "Error: Invalid option"
