@@ -1,10 +1,10 @@
 {
-  "outputFileName": "httpScratchServer",
+  "outputFileName": "CRYSTAL_HOME",
   "scripts": {
     "clean": "rm -rf build",
     "configure": "./scripts/debug_configure.sh",
     "build": "./scripts/build.sh",
-    "run": "./scripts/run_example.sh"
+    "run": "./build/example/CRYSTAL_HOME"
   },
   "exclude": [
     "build",
