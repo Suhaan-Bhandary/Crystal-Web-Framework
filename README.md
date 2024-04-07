@@ -1,4 +1,4 @@
-# Server in C++
+# Crystal: A C++ Framework
 
 ```
 C++ Web Application Framework created from scratch. Inspired by Express and Django.
